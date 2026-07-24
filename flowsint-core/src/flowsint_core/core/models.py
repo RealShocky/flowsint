@@ -129,7 +129,7 @@ class Scan(Base):
         nullable=True,
     )
     status = Column(SQLEnum(EventLevel), default=EventLevel.PENDING)
-    started_at = Column(DateTime, default=datetime.utcnow)
+    started_at = Column(DateTime, default=lambda: datetime.now(timezone.utc))
     completed_at = Column(DateTime, nullable=True)
     error = Column(Text, nullable=True)
     details = Column(JSON, nullable=True)
