@@ -74,11 +74,16 @@ class IpToFraudScore(Enricher):
         self.ip_risk_mapping = []
 
         api_username = self.get_secret("SCAMLYTICS_USERNAME", os.getenv("SCAMLYTICS_USERNAME")) 
-        api_key = self.get_secret("SCAMLYTICS_API_KEY", os.getenv("SCAMLYTICS_API_KEY")) 
+        api_key = self.get_secret("SCAMLYTICS_API_KEY", os.getenv("SCAMLYTICS_API_KEY"))
+        # Scamalytics assigns each account a numbered API node (api11, api12,
+        # ...); a hardcoded host 404s for every account that is not on it.
+        api_host = self.get_secret(
+            "SCAMLYTICS_API_HOST", os.getenv("SCAMLYTICS_API_HOST", "api12")
+        )
 
         for ip in data:
             try:
-                api_request = requests.get(f'https://api12.scamalytics.com/v3/{api_username}/?key={api_key}&ip={ip.address}', timeout=30)
+                api_request = requests.get(f'https://{api_host}.scamalytics.com/v3/{api_username}/?key={api_key}&ip={ip.address}', timeout=30)
                 
                 if api_request.status_code != 200:
                     Logger.error(

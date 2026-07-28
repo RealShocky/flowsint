@@ -1,4 +1,5 @@
 import json
+import shlex
 from typing import List
 from ..dockertool import DockerTool
 
@@ -109,14 +110,20 @@ class DnsxTool(DockerTool):
             flags.append("-aaaa")
         flags += ["-json", "-silent"]
 
-        command = f"-d {domain} {' '.join(flags)}"
+        # dnsx >= 1.2 treats `-d` as "bruteforce this domain" and refuses to
+        # run without a `-w` wordlist, so a plain `-d example.com` exits with
+        # "missing wordlist(w) flag required with domain(d) input" and the
+        # enricher silently returns nothing. Feeding the single target on
+        # stdin is the supported invocation.
+        inner = f"dnsx {' '.join(flags)}"
+        command = ["-c", f"echo {shlex.quote(domain)} | {inner}"]
 
         env = {}
         if api_key:
             env["PDCP_API_KEY"] = api_key
 
         try:
-            result = super().launch(command, environment=env)
+            result = super().launch(command, environment=env, entrypoint="sh")
         except Exception as e:
             raise RuntimeError(
                 f"Error running dnsx: {str(e)}. Output: {getattr(e, 'output', 'No output')}"
