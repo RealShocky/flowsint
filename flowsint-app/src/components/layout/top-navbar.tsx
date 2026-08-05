@@ -181,7 +181,12 @@ export function InvestigationMenu({
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
         <DropdownMenuItem>
-          <a className="h-full w-full" target="_blank" href="https://github.com/reconurge/flowsint">
+          <a
+            className="h-full w-full"
+            target="_blank"
+            rel="noopener noreferrer"
+            href="https://github.com/reconurge/flowsint"
+          >
             GitHub
           </a>
         </DropdownMenuItem>
@@ -189,6 +194,7 @@ export function InvestigationMenu({
           <a
             className="h-full w-full"
             target="_blank"
+            rel="noopener noreferrer"
             href="https://github.com/reconurge/flowsint/issues"
           >
             Support
