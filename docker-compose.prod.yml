@@ -57,10 +57,11 @@ services:
     networks:
       - flowsint_network
     healthcheck:
-      test: cypher-shell -u ${NEO4J_USERNAME} -p ${NEO4J_PASSWORD} "RETURN 1"
-      interval: 5s
-      timeout: 5s
+      test: ["CMD-SHELL", "cypher-shell -u ${NEO4J_USERNAME} -p ${NEO4J_PASSWORD} \"RETURN 1\""]
+      interval: 10s
+      timeout: 20s
       retries: 10
+      start_period: 30s
 
   api:
     image: ghcr.io/reconurge/flowsint-api:${FLOWSINT_VERSION:-latest}
