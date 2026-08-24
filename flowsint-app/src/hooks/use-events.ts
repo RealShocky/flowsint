@@ -22,10 +22,13 @@ export function useEvents(sketch_id: string | undefined) {
     setLiveLogs([]) // Pour éviter les doublons dans les logs live
   }
 
-  // Reset live logs when sketch_id changes
-  useEffect(() => {
+  // Reset live logs when sketch_id changes — adjusted during render rather
+  // than in an effect.
+  const [prevSketchId, setPrevSketchId] = useState(sketch_id)
+  if (sketch_id !== prevSketchId) {
+    setPrevSketchId(sketch_id)
     setLiveLogs([])
-  }, [sketch_id])
+  }
 
   useEffect(() => {
     if (!sketch_id || !token) return

@@ -139,15 +139,12 @@ export const ImageViewBlock: React.FC<NodeViewProps> = ({
     [initiateResize]
   )
 
-  const handleResizeEnd = React.useCallback(() => {
-    setActiveResizeHandle(null)
-  }, [])
-
-  React.useEffect(() => {
-    if (!isResizing) {
-      handleResizeEnd()
-    }
-  }, [isResizing, handleResizeEnd])
+  // Adjusted during render rather than in an effect.
+  const [prevIsResizing, setPrevIsResizing] = React.useState(isResizing)
+  if (isResizing !== prevIsResizing) {
+    setPrevIsResizing(isResizing)
+    if (!isResizing) setActiveResizeHandle(null)
+  }
 
   React.useEffect(() => {
     const handleImage = async () => {

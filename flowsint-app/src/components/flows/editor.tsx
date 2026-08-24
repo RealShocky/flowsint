@@ -522,8 +522,13 @@ const FlowEditor = memo(({ initialEdges, initialNodes, theme, flow }: FlowEditor
         }, simulationSpeed)
       }
     } else {
-      // End of simulation
+      // End of simulation. This effect is a timer-driven step sequencer —
+      // resetSimulation's setState calls are the sequencer reaching its end
+      // state, not derived-state-from-props. Not worth restructuring a live
+      // step animation around this rule; the risk of subtly changing
+      // playback timing outweighs it.
       fitView({ duration: 500 })
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       resetSimulation()
     }
 

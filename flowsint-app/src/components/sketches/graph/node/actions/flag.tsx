@@ -1,4 +1,4 @@
-import { useCallback, useState, useEffect } from 'react'
+import { useCallback, useState } from 'react'
 import { Button } from '@/components/ui/button'
 import {
   DropdownMenu,
@@ -28,10 +28,14 @@ export function NodeFlag({ sketchId, node }: { sketchId: string; node: GraphNode
   const nodeId = node.id
   const [flagValue, setFlagValue] = useState<flagColor | null>(node.nodeFlag)
 
-  // Synchronize local state when props change (new node selected)
-  useEffect(() => {
+  // Synchronize local state when props change (new node selected) —
+  // adjusted during render rather than in an effect.
+  const [prevKey, setPrevKey] = useState(`${nodeId}:${node.nodeFlag}`)
+  const syncKey = `${nodeId}:${node.nodeFlag}`
+  if (syncKey !== prevKey) {
+    setPrevKey(syncKey)
     setFlagValue(node.nodeFlag)
-  }, [nodeId, node.nodeFlag])
+  }
 
   const handleUpdateFlag = useCallback(
     async (value: string) => {

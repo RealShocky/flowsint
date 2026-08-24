@@ -64,6 +64,11 @@ export function TutorialProvider({ children }: TutorialProviderProps) {
     setStepIndex(0)
   }, [])
 
+  // Not restructured like the rest of this pass: <Joyride> is never actually
+  // rendered below (see the no-unused-vars fix elsewhere in this file), so
+  // this whole effect is dead in practice. Not worth the risk of subtly
+  // changing timing on a feature nobody can currently see run.
+  /* eslint-disable react-hooks/set-state-in-effect */
   useEffect(() => {
     const currentPath = location.pathname
     const routeSteps = getStepsForRoute(currentPath)
@@ -82,6 +87,7 @@ export function TutorialProvider({ children }: TutorialProviderProps) {
       setRun(false)
     }
   }, [location.pathname, getCompletedRoutes])
+  /* eslint-enable react-hooks/set-state-in-effect */
 
   const handleJoyrideCallback = useCallback(
     (data: CallBackProps) => {

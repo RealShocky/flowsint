@@ -1,4 +1,4 @@
-import { forwardRef, useEffect, useImperativeHandle, useState } from 'react'
+import { forwardRef, useImperativeHandle, useState } from 'react'
 import { cn } from '@/lib/utils'
 import { ItemType } from '@/stores/node-display-settings'
 import { useIcon } from '@/hooks/use-icon'
@@ -43,7 +43,14 @@ const MentionList = forwardRef<MentionListRef, MentionListProps>((props, ref) =>
     selectItem(selectedIndex)
   }
 
-  useEffect(() => setSelectedIndex(0), [props.items])
+  // Adjusted during render rather than in an effect — same "reset on items
+  // change" behavior (items gets a new reference each time the parent
+  // recomputes it), one fewer render pass.
+  const [prevItems, setPrevItems] = useState(props.items)
+  if (props.items !== prevItems) {
+    setPrevItems(props.items)
+    setSelectedIndex(0)
+  }
 
   useImperativeHandle(ref, () => ({
     onKeyDown: ({ event }: { event: KeyboardEvent }) => {

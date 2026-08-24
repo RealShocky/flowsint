@@ -111,9 +111,12 @@ function TitleInput({ value, onChange }: { value: string; onChange: (val: string
   const [draft, setDraft] = useState(value)
   const inputRef = useRef<HTMLInputElement>(null)
 
-  useEffect(() => {
+  // Adjusted during render rather than in an effect.
+  const [prevValue, setPrevValue] = useState(value)
+  if (value !== prevValue) {
+    setPrevValue(value)
     setDraft(value)
-  }, [value])
+  }
 
   useEffect(() => {
     if (editing) inputRef.current?.focus()
@@ -217,9 +220,12 @@ function PropertyInput({
 }) {
   const [draft, setDraft] = useState(value)
 
-  useEffect(() => {
+  // Adjusted during render rather than in an effect.
+  const [prevValue, setPrevValue] = useState(value)
+  if (value !== prevValue) {
+    setPrevValue(value)
     setDraft(value)
-  }, [value])
+  }
 
   return (
     <input
@@ -292,8 +298,11 @@ const DetailsPanel = memo(() => {
     nodeImage: node?.nodeImage
   })
 
-  // Sync form when selected node changes
-  useEffect(() => {
+  // Sync form when selected node changes — adjusted during render rather
+  // than in an effect.
+  const [prevNode, setPrevNode] = useState(node)
+  if (node !== prevNode) {
+    setPrevNode(node)
     if (node) {
       const {
         nodeLabel,
@@ -323,7 +332,7 @@ const DetailsPanel = memo(() => {
       nodeSizeRef.current = ns ?? 0
       setNodeSize(ns ?? 0)
     }
-  }, [node])
+  }
 
   const queryClient = useQueryClient()
 

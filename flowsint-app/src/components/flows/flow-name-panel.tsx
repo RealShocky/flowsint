@@ -44,12 +44,16 @@ export const FlowNamePanel = ({ flow, onUpdate, disabled = false }: FlowNamePane
     }
   })
 
-  useEffect(() => {
+  // Adjusted during render (React's documented pattern for resetting state
+  // when a prop changes) rather than in an effect.
+  const [prevFlow, setPrevFlow] = useState(flow)
+  if (flow !== prevFlow) {
+    setPrevFlow(flow)
     if (flow) {
       setName(flow.name || 'My flow')
       setDescription(flow.description || '')
     }
-  }, [flow])
+  }
 
   useEffect(() => {
     if (isEditingName && nameInputRef.current) {

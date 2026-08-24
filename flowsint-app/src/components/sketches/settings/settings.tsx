@@ -215,9 +215,12 @@ function NodeColorsSection() {
   const debounceTimers = useRef<Map<ItemType, NodeJS.Timeout>>(new Map())
 
   // Sync local state with store when store changes externally (e.g., reset)
-  useEffect(() => {
+  // — adjusted during render rather than in an effect.
+  const [prevStoreColors, setPrevStoreColors] = useState(storeColors)
+  if (storeColors !== prevStoreColors) {
+    setPrevStoreColors(storeColors)
     setLocalColors(storeColors)
-  }, [storeColors])
+  }
 
   // Debounced color update function
   const handleColorChange = useCallback(
@@ -451,8 +454,11 @@ export default function GlobalSettings() {
     status: 'active'
   })
 
-  // Update form data when sketch data changes
-  useEffect(() => {
+  // Update form data when sketch data changes — adjusted during render
+  // rather than in an effect.
+  const [prevSketch, setPrevSketch] = useState(sketch)
+  if (sketch !== prevSketch) {
+    setPrevSketch(sketch)
     if (sketch) {
       setFormData({
         title: sketch.title || '',
@@ -460,7 +466,7 @@ export default function GlobalSettings() {
         status: sketch.status || 'active'
       })
     }
-  }, [sketch])
+  }
 
   const updateMutation = useMutation({
     mutationFn: async (updated: Partial<Sketch>) => {

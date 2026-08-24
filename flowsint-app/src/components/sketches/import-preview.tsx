@@ -54,10 +54,13 @@ const DebouncedInput = memo(
     const [localValue, setLocalValue] = useState(value)
     const timeoutRef = useRef<NodeJS.Timeout>(null)
 
-    // Sync from parent when value changes externally
-    useEffect(() => {
+    // Sync from parent when value changes externally — adjusted during
+    // render rather than in an effect.
+    const [prevValue, setPrevValue] = useState(value)
+    if (value !== prevValue) {
+      setPrevValue(value)
       setLocalValue(value)
-    }, [value])
+    }
 
     const handleChange = useCallback(
       (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -384,9 +387,10 @@ export function ImportPreview({
   const [mappingIdsByType, setMappingIdsByType] = useState<Record<string, string[]>>({})
   const [isInitialized, setIsInitialized] = useState(false)
 
-  useEffect(() => {
-    if (!actionItems || isInitialized) return
-
+  // One-time derivation once actionItems is available, guarded by
+  // isInitialized — a pure computation from already-available data, so it's
+  // adjusted during render rather than run as an effect.
+  if (actionItems && !isInitialized) {
     const newMappingsById = new Map<string, EntityMapping>()
     const newMappingIdsByType: Record<string, string[]> = {}
 
@@ -420,7 +424,7 @@ export function ImportPreview({
     setMappingsById(newMappingsById)
     setMappingIdsByType(newMappingIdsByType)
     setIsInitialized(true)
-  }, [actionItems, analysisResult.entities, fieldsByType, isInitialized])
+  }
 
   const [paginationByType, setPaginationByType] = useState<
     Record<string, { page: number; perPage: number }>
@@ -566,12 +570,10 @@ export function ImportPreview({
   const typeNames = useMemo(() => Object.keys(mappingIdsByType), [mappingIdsByType])
   const [activeTab, setActiveTab] = useState('')
 
-  // Set initial active tab when types are loaded
-  useEffect(() => {
-    if (typeNames.length > 0 && !activeTab) {
-      setActiveTab(typeNames[0])
-    }
-  }, [typeNames, activeTab])
+  // Set initial active tab when types are loaded — adjusted during render.
+  if (typeNames.length > 0 && !activeTab) {
+    setActiveTab(typeNames[0])
+  }
 
   const includedCount = useMemo(() => {
     let count = 0

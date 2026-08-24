@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useEffect, useLayoutEffect, useState, useRef } from 'react'
+import React, { useCallback, useMemo, useEffect, useState, useRef } from 'react'
 import { useShallow } from 'zustand/react/shallow'
 import ForceGraph2D from 'react-force-graph-2d'
 import { useGraphControls } from '@/stores/graph-controls-store'
@@ -391,13 +391,25 @@ const GraphViewer: React.FC<GraphViewerProps> = ({
   // Bumped whenever render context deps change, to force cache invalidation in
   // getOrCreateRC below even when globalScale alone doesn't. This used to be a
   // ref mutated straight in a useMemo body — invalid (refs can't be written
-  // during render) and only worked by accident. Real state + a layout effect
-  // gets the same "one value per deps change" behavior the correct way.
+  // during render). Adjusted during render instead of via an effect: compare
+  // against the previous deps tuple and bump synchronously when they differ,
+  // same "one value per deps change" behavior, no extra render pass.
   const [rcDepsVersion, setRcDepsVersion] = useState(0)
-  useLayoutEffect(() => {
+  const [prevRcDeps, setPrevRcDeps] = useState([
+    highlightNodes,
+    highlightLinks,
+    selectedEdges,
+    theme
+  ])
+  if (
+    highlightNodes !== prevRcDeps[0] ||
+    highlightLinks !== prevRcDeps[1] ||
+    selectedEdges !== prevRcDeps[2] ||
+    theme !== prevRcDeps[3]
+  ) {
+    setPrevRcDeps([highlightNodes, highlightLinks, selectedEdges, theme])
     setRcDepsVersion((v) => v + 1)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [highlightNodes, highlightLinks, selectedEdges, theme])
+  }
 
   const getOrCreateRC = useCallback(
     (globalScale: number): RenderContext => {

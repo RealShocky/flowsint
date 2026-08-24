@@ -1,5 +1,5 @@
 import { createFileRoute } from '@tanstack/react-router'
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { authService } from '@/api/auth-service'
 import { Button } from '@/components/ui/button'
@@ -31,7 +31,10 @@ function ProfilePage() {
     avatar_url: ''
   })
 
-  useEffect(() => {
+  // Adjusted during render rather than in an effect.
+  const [prevProfile, setPrevProfile] = useState(profile)
+  if (profile !== prevProfile) {
+    setPrevProfile(profile)
     if (profile) {
       setForm({
         first_name: profile.first_name ?? '',
@@ -39,7 +42,7 @@ function ProfilePage() {
         avatar_url: profile.avatar_url ?? ''
       })
     }
-  }, [profile])
+  }
 
   const queryClient = useQueryClient()
 

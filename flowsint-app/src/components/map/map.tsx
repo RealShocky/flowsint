@@ -78,23 +78,30 @@ function resolveMapStyle(
   return VECTOR_STYLES[variant][theme]
 }
 
+const resolveSystemTheme = () =>
+  window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
+
 function useResolvedTheme() {
   const { theme } = useTheme()
-  const [resolved, setResolved] = useState<'dark' | 'light'>(() => {
-    if (theme === 'system') {
-      return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
-    }
-    return theme
-  })
+  const [resolved, setResolved] = useState<'dark' | 'light'>(() =>
+    theme === 'system' ? resolveSystemTheme() : theme
+  )
 
+  // Recompute synchronously whenever theme changes — adjusted during render
+  // rather than in an effect (both branches are plain sync computations, no
+  // need to wait a frame for either).
+  const [prevTheme, setPrevTheme] = useState(theme)
+  if (theme !== prevTheme) {
+    setPrevTheme(theme)
+    setResolved(theme === 'system' ? resolveSystemTheme() : theme)
+  }
+
+  // The only thing that actually needs an effect: subscribing to OS-level
+  // preference changes while theme === 'system'.
   useEffect(() => {
-    if (theme !== 'system') {
-      setResolved(theme)
-      return
-    }
+    if (theme !== 'system') return
     const mq = window.matchMedia('(prefers-color-scheme: dark)')
     const handler = (e: MediaQueryListEvent) => setResolved(e.matches ? 'dark' : 'light')
-    setResolved(mq.matches ? 'dark' : 'light')
     mq.addEventListener('change', handler)
     return () => mq.removeEventListener('change', handler)
   }, [theme])
@@ -201,10 +208,10 @@ export const MapFromAddress: React.FC<MapFromAddressProps> = ({
     validLocations.forEach((loc) => {
       if (loc.nodeType) uniqueTypes.add(loc.nodeType)
     })
-    if (uniqueTypes.size === 0) {
-      setIconsReady(true)
-      return
-    }
+    // Nothing to preload — no re-render needed, so no setState here (this
+    // flag has no readers besides forcing icon-cache re-checks after preload
+    // actually resolves something).
+    if (uniqueTypes.size === 0) return
     Promise.all(Array.from(uniqueTypes).map((t) => preloadImage(t, '#ffffff')))
       .then(() => setIconsReady(true))
       .catch(() => setIconsReady(true))

@@ -231,17 +231,22 @@ export const AnalysisEditor = ({
     }
   }
 
-  // Update non-editor UI when analysis changes (avoid resetting content on same doc)
+  // Update non-editor UI when analysis changes (avoid resetting content on same doc).
+  // Adjusted during render (React's documented pattern for "reset state when a
+  // prop changes") rather than in an effect — this used to setState directly
+  // in an effect body, causing an extra render pass every time.
+  const [prevAnalysisId, setPrevAnalysisId] = useState(analysis?.id ?? null)
+  if ((analysis?.id ?? null) !== prevAnalysisId) {
+    setPrevAnalysisId(analysis?.id ?? null)
+    setTitleValue(analysis?.title || '')
+    setSaveStatus('saved')
+  }
+
+  // Clearing the editor's content is an external-system update (TipTap), not
+  // React state — an effect is the right place for it.
   useEffect(() => {
-    if (analysis) {
-      setTitleValue(analysis.title || '')
-      setSaveStatus('saved')
-    } else {
-      setTitleValue('')
-      setSaveStatus('saved')
-      if (editor) {
-        editor.commands.setContent('')
-      }
+    if (!analysis && editor) {
+      editor.commands.setContent('')
     }
   }, [analysis, editor])
 

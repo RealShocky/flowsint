@@ -1,6 +1,6 @@
 import { createFileRoute, useNavigate } from '@tanstack/react-router'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useCallback } from 'react'
 import { Button } from '@/components/ui/button'
 import { customTypeService, CustomType } from '@/api/custom-type-service'
 import { toast } from 'sonner'
@@ -47,6 +47,23 @@ function CustomTypeEditor() {
   const [fields, setFields] = useState<SchemaField[]>([])
   const [showPreview, setShowPreview] = useState(true)
 
+  const parseSchemaToFields = (schema: any) => {
+    const properties = schema.properties || {}
+    const required = schema.required || []
+    const parsedFields: SchemaField[] = Object.entries(properties).map(
+      ([key, value]: [string, any]) => ({
+        id: Math.random().toString(36).substr(2, 9),
+        key,
+        title: value.title || key,
+        type: value.type || 'string',
+        format: value.format,
+        description: value.description,
+        required: required.includes(key)
+      })
+    )
+    setFields(parsedFields)
+  }
+
   // Hooks
   const { actionItems, isLoading: actionLoading } = useActionItems()
 
@@ -73,9 +90,12 @@ function CustomTypeEditor() {
     ])
   }, [])
 
-  useEffect(() => {
+  // Adjusted during render rather than in an effect.
+  const [prevExistingType, setPrevExistingType] = useState(existingType)
+  if (existingType !== prevExistingType) {
+    setPrevExistingType(existingType)
     if (existingType) {
-      setName(existingType.name)
+      setName(existingType.name.replaceAll(' ', ''))
       setDescription(existingType.description || '')
       setStatus(existingType.status === 'archived' ? 'draft' : existingType.status)
       setCategory(existingType.category || 'custom_types_category')
@@ -85,27 +105,6 @@ function CustomTypeEditor() {
     } else if (isNew) {
       addField()
     }
-  }, [existingType, isNew, addField])
-
-  useEffect(() => {
-    setName(name.replaceAll(' ', ''))
-  }, [name])
-
-  const parseSchemaToFields = (schema: any) => {
-    const properties = schema.properties || {}
-    const required = schema.required || []
-    const parsedFields: SchemaField[] = Object.entries(properties).map(
-      ([key, value]: [string, any]) => ({
-        id: Math.random().toString(36).substr(2, 9),
-        key,
-        title: value.title || key,
-        type: value.type || 'string',
-        format: value.format,
-        description: value.description,
-        required: required.includes(key)
-      })
-    )
-    setFields(parsedFields)
   }
 
   const fieldsToSchema = () => {
@@ -279,7 +278,7 @@ function CustomTypeEditor() {
                 <div className="flex-1 space-y-2 min-w-0">
                   <input
                     value={name}
-                    onChange={(e) => setName(e.target.value)}
+                    onChange={(e) => setName(e.target.value.replaceAll(' ', ''))}
                     placeholder="Untitled type"
                     className="w-full text-3xl font-bold bg-transparent border-none outline-none placeholder:text-muted-foreground/30 text-foreground tracking-tight"
                   />
