@@ -319,7 +319,7 @@ export function DynamicForm({
             <Controller
               control={control}
               name={field.name}
-              render={({ field: { onChange, value } }) => (
+              render={({ field: { onChange, value, ref } }) => (
                 <Select onValueChange={onChange} value={value || ''} defaultValue={value || ''}>
                   <SelectTrigger
                     ref={ref}

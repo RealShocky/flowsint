@@ -325,7 +325,7 @@ function ActionCard({ item, onSelect }: ActionCardProps) {
     >
       <CardContent className="p-2 relative flex flex-col items-center text-center h-full">
         <div className="w-8 h-8 rounded-full flex items-center justify-center mb-3 mt-2">
-          <IconComponent />
+          {IconComponent({})}
         </div>
         <div className="font-medium text-sm">{item.label}</div>
         {!item.children && <div className="text-sm mt-2 opacity-60">{item.description}</div>}

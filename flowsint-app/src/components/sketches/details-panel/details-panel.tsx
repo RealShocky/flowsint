@@ -484,12 +484,10 @@ const DetailsPanel = memo(() => {
               onClick={() => setOpenIconPicker(true)}
               className="shrink-0 mt-1.5 hover:opacity-70 transition-opacity"
             >
-              <IconComponent size={24} />
+              {IconComponent({ size: 24 })}
             </button>
           ) : (
-            <div className="shrink-0 mt-1.5">
-              <IconComponent size={24} />
-            </div>
+            <div className="shrink-0 mt-1.5">{IconComponent({ size: 24 })}</div>
           )}
           {canEdit ? (
             <TitleInput value={formData.nodeLabel} onChange={handleLabelCommit} />

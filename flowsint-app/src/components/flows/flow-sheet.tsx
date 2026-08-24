@@ -198,7 +198,7 @@ const EnricherItem = memo(({ enricher, onClick }: { enricher: Enricher; onClick:
           <div className="flex items-start gap-2 grow truncate text-ellipsis">
             <div className="space-y-1 truncate text-left">
               <div className="flex items-center gap-2 truncate text-ellipsis">
-                {Icon && <Icon size={24} />}
+                {Icon && Icon({ size: 24 })}
                 <h3 className="text-sm font-medium truncate text-ellipsis">
                   {enricher.class_name}
                 </h3>

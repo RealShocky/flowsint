@@ -109,7 +109,7 @@ const MentionListItem = ({ item, index, selectedIndex, selectItem }: MentionItem
       onClick={() => selectItem(index)}
       type="button"
     >
-      {SourceIcon && <SourceIcon size={14} />}
+      {SourceIcon && SourceIcon({ size: 14 })}
       <span className="flex-1 text-left truncate text-ellipsis">{item.nodeLabel}</span>
     </button>
   )

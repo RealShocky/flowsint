@@ -85,7 +85,7 @@ function RelationshipItem({
           {/* Source Node */}
           <div className="flex items-center gap-2 flex-1 min-w-0 max-w-[35%]">
             <div className="flex items-center justify-center w-7 h-7 rounded-full bg-muted shrink-0">
-              <SourceIcon size={16} />
+              {SourceIcon({ size: 16 })}
             </div>
             <button
               onClick={handleNodeClickSource}
@@ -125,7 +125,7 @@ function RelationshipItem({
               </span>
             </button>
             <div className="flex items-center justify-center w-7 h-7 rounded-full bg-muted shrink-0">
-              <TargetIcon size={16} />
+              {TargetIcon({ size: 16 })}
             </div>
           </div>
         </CardContent>

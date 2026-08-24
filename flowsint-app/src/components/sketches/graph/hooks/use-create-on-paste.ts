@@ -32,7 +32,7 @@ export function useCreateOnPaste(sketchId: string) {
         }
 
         await createNode(nodeWithTempId, sketchId, addNode, replaceNode)
-      } catch {
+      } catch (e) {
         toast.error(e.message)
       }
     },
@@ -62,7 +62,7 @@ export function useCreateOnPaste(sketchId: string) {
           nodeMetadata: {}
         }
         await createNode(nodeWithTempId, sketchId, addNode, replaceNode)
-      } catch {
+      } catch (e) {
         toast.error(e.message)
       }
     },

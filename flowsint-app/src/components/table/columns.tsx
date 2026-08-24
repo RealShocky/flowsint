@@ -19,7 +19,7 @@ import { GraphNode } from '@/types'
 // Memoized icon component to prevent unnecessary re-renders
 const MemoizedIcon = memo(({ type, size = 16 }: { type: string; size?: number }) => {
   const IconComponent = useIcon(type)
-  return <IconComponent size={size} />
+  return IconComponent({ size })
 })
 MemoizedIcon.displayName = 'MemoizedIcon'
 
