@@ -1,10 +1,11 @@
+from typing import List
+
 import requests
-from typing import List, Union
 from flowsint_core.core.enricher_base import Enricher
+from flowsint_core.core.logger import Logger
+from flowsint_core.utils import is_valid_domain
 from flowsint_enrichers.registry import flowsint_enricher
 from flowsint_types.domain import Domain
-from flowsint_core.utils import is_valid_domain
-from flowsint_core.core.logger import Logger
 from tools.network.subfinder import SubfinderTool
 
 
@@ -89,7 +90,9 @@ class SubdomainEnricher(Enricher):
             )
         return subdomains
 
-    def postprocess(self, results: List[OutputType], original_input: List[InputType]) -> List[OutputType]:
+    def postprocess(
+        self, results: List[OutputType], original_input: List[InputType]
+    ) -> List[OutputType]:
         output: List[OutputType] = []
         for domain_obj in results:
             if not self._graph_service:
@@ -107,7 +110,9 @@ class SubdomainEnricher(Enricher):
                 self.create_node(subdomain_obj)
 
                 # Create relationship from parent domain to subdomain
-                self.create_relationship(parent_domain_obj, subdomain_obj, "HAS_SUBDOMAIN")
+                self.create_relationship(
+                    parent_domain_obj, subdomain_obj, "HAS_SUBDOMAIN"
+                )
 
             self.log_graph_message(
                 f"{domain_obj['domain']} -> {len(domain_obj['subdomains'])} subdomain(s) found."

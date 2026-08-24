@@ -4,7 +4,6 @@ from typing import Any, Optional, Set
 from urllib.parse import urlparse
 
 import yaml
-
 from flowsint_core.core.graph.serializer import TypeResolver
 from flowsint_core.templates.types import Template
 
@@ -44,13 +43,9 @@ BLOCKED_HOSTNAMES: Set[str] = {
 class SSRFError(Exception):
     """Raised when a URL is blocked due to SSRF protection."""
 
-    pass
-
 
 class TemplateRenderError(Exception):
     """Raised when template rendering fails."""
-
-    pass
 
 
 def is_ip_blocked(ip_str: str) -> bool:
@@ -134,7 +129,10 @@ class YamlLoader:
             raise ValueError("Missing 'input.type' property in the yaml.")
 
         if not type_resolver:
-            from flowsint_core.core.services.type_registry_service import local_type_resolver
+            from flowsint_core.core.services.type_registry_service import (
+                local_type_resolver,
+            )
+
             type_resolver = local_type_resolver
         DetectedType = type_resolver(input_type)
 
@@ -221,9 +219,11 @@ class YamlLoader:
                 result[key] = YamlLoader.render_dict(value, values, sanitize)
             elif isinstance(value, list):
                 result[key] = [
-                    YamlLoader.render_template(item, values, sanitize)
-                    if isinstance(item, str)
-                    else item
+                    (
+                        YamlLoader.render_template(item, values, sanitize)
+                        if isinstance(item, str)
+                        else item
+                    )
                     for item in value
                 ]
             else:

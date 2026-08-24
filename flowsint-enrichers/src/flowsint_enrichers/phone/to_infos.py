@@ -1,11 +1,12 @@
 import asyncio
-from typing import Dict, Any, List, Union
-from flowsint_core.core.enricher_base import Enricher
-from flowsint_enrichers.registry import flowsint_enricher
-from flowsint_core.utils import is_valid_number
-from flowsint_core.core.logger import Logger
-from flowsint_types.phone import Phone
+from typing import Any, Dict, List
+
 import httpx
+from flowsint_core.core.enricher_base import Enricher
+from flowsint_core.core.logger import Logger
+from flowsint_core.utils import is_valid_number
+from flowsint_enrichers.registry import flowsint_enricher
+from flowsint_types.phone import Phone
 
 
 @flowsint_enricher
@@ -38,7 +39,9 @@ class IgnorantEnricher(Enricher):
                     result = await self._perform_ignorant_research(phone_obj.number)
                     results.append(result)
                 else:
-                    results.append({"number": phone_obj.number, "error": "Invalid phone number"})
+                    results.append(
+                        {"number": phone_obj.number, "error": "Invalid phone number"}
+                    )
             except Exception as e:
                 results.append(
                     {
@@ -78,7 +81,9 @@ class IgnorantEnricher(Enricher):
         except Exception as e:
             return {"number": phone, "error": f"Error in Ignorant research: {str(e)}"}
 
-    def postprocess(self, results: List[OutputType], original_input: List[InputType]) -> List[OutputType]:
+    def postprocess(
+        self, results: List[OutputType], original_input: List[InputType]
+    ) -> List[OutputType]:
         """
         Create Neo4j relationships for found phone accounts.
         """

@@ -10,14 +10,12 @@ from uuid import UUID
 from sqlalchemy.orm import Session
 
 from ..graph import GraphNode, create_graph_service
-from ..graph.types import GraphData
 from ..models import Sketch
 from ..repositories import InvestigationRepository, SketchRepository
 from .base import BaseService
 from .exceptions import (
     DatabaseError,
     NotFoundError,
-    PermissionDeniedError,
     ValidationError,
 )
 
@@ -115,7 +113,7 @@ class SketchService(BaseService):
     def get_graph(
         self, sketch_id: UUID, user_id: UUID, format: Optional[str] = None
     ) -> Dict[str, Any]:
-        sketch = self._get_sketch_with_permission(sketch_id, user_id, ["read"])
+        self._get_sketch_with_permission(sketch_id, user_id, ["read"])
 
         resolver = (
             self._type_registry.build_type_resolver(user_id)

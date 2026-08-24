@@ -1,6 +1,7 @@
 from typing import Any, Dict, List, Optional
-from flowsint_core.core.logger import Logger
+
 from flowsint_core.core.enricher_base import Enricher
+from flowsint_core.core.logger import Logger
 from flowsint_enrichers.registry import flowsint_enricher
 from flowsint_types.domain import Domain
 from flowsint_types.ip import Ip

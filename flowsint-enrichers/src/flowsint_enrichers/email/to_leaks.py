@@ -1,13 +1,14 @@
 import os
-from typing import Any, Dict, List, Optional, Union
-import requests
+from typing import Any, Dict, List, Optional
 from urllib.parse import urljoin
-from flowsint_core.core.enricher_base import Enricher
-from flowsint_enrichers.registry import flowsint_enricher
-from flowsint_core.core.logger import Logger
-from flowsint_types.email import Email
-from flowsint_types.breach import Breach
+
+import requests
 from dotenv import load_dotenv
+from flowsint_core.core.enricher_base import Enricher
+from flowsint_core.core.logger import Logger
+from flowsint_enrichers.registry import flowsint_enricher
+from flowsint_types.breach import Breach
+from flowsint_types.email import Email
 
 # Load environment variables
 load_dotenv()
@@ -75,7 +76,9 @@ class EmailToBreachesEnricher(Enricher):
     async def scan(self, data: List[InputType]) -> List[OutputType]:
         results: List[OutputType] = []
         api_key = self.get_secret("HIBP_API_KEY", os.getenv("HIBP_API_KEY"))
-        api_url = self.get_params().get("HIBP_API_URL", "https://haveibeenpwned.com/api/v3/breachedaccount/")
+        api_url = self.get_params().get(
+            "HIBP_API_URL", "https://haveibeenpwned.com/api/v3/breachedaccount/"
+        )
         headers = {"hibp-api-key": api_key, "User-Agent": "FlowsInt-Enricher"}
 
         for email in data:
@@ -130,7 +133,9 @@ class EmailToBreachesEnricher(Enricher):
 
         return results
 
-    def postprocess(self, results: List[OutputType], original_input: List[InputType]) -> List[OutputType]:
+    def postprocess(
+        self, results: List[OutputType], original_input: List[InputType]
+    ) -> List[OutputType]:
         # Create email nodes first
         for email_obj in original_input:
             if not self._graph_service:
@@ -143,7 +148,7 @@ class EmailToBreachesEnricher(Enricher):
                 continue
 
             # Create breach node
-            breach_key = f"{breach_obj.name}_{self.sketch_id}"
+            f"{breach_obj.name}_{self.sketch_id}"
             self.create_node(breach_obj)
 
             # Create relationship between the specific email and this breach

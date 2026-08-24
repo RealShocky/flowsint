@@ -1,6 +1,9 @@
 """Tests for LogRepository."""
-from datetime import datetime, timedelta, timezone
+
+from datetime import datetime
 from uuid import uuid4
+
+from flowsint_core.core.repositories import LogRepository
 
 from tests.factories import (
     InvestigationFactory,
@@ -8,7 +11,6 @@ from tests.factories import (
     ProfileFactory,
     SketchFactory,
 )
-from flowsint_core.core.repositories import LogRepository
 
 
 class TestLogRepository:

@@ -1,15 +1,13 @@
-from urllib.parse import urlparse
-import phonenumbers
-import ipaddress
-from phonenumbers import NumberParseException
-from pydantic import TypeAdapter, BaseModel
-from urllib.parse import urlparse
-import re
-import ssl
-import socket
-from typing import Dict, Any, List, Type
 import inspect
-from typing import Any, Dict, Type
+import ipaddress
+import re
+import socket
+import ssl
+from typing import Any, Dict, List, Type
+from urllib.parse import urlparse
+
+import phonenumbers
+from phonenumbers import NumberParseException
 from pydantic import BaseModel, TypeAdapter
 
 
@@ -48,7 +46,7 @@ def is_valid_domain(url_or_domain: str) -> str:
             return False
 
         return True
-    except Exception as e:
+    except Exception:
         return False
 
 
@@ -289,6 +287,7 @@ def get_inline_relationships(nodes: List[Any], edges: List[Any]) -> List[str]:
 def to_json_serializable(obj):
     """Convert any object to a JSON-serializable format."""
     import json
+
     from pydantic import BaseModel
 
     try:

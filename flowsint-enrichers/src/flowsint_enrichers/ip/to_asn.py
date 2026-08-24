@@ -1,12 +1,11 @@
-import json
 import os
-from typing import Any, Dict, List, Optional, Union
+from typing import Any, Dict, List, Optional
+
 from flowsint_core.core.enricher_base import Enricher
-from flowsint_enrichers.registry import flowsint_enricher
-from flowsint_types.ip import Ip
-from flowsint_types.asn import ASN
-from flowsint_core.utils import is_valid_ip
 from flowsint_core.core.logger import Logger
+from flowsint_enrichers.registry import flowsint_enricher
+from flowsint_types.asn import ASN
+from flowsint_types.ip import Ip
 from tools.network.asnmap import AsnmapTool
 
 

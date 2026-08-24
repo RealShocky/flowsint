@@ -5,9 +5,8 @@ from typing import Any, Dict, List, Optional, Set, Union
 from dotenv import load_dotenv
 from flowsint_core.core.enricher_base import Enricher
 from flowsint_core.core.logger import Logger
-from flowsint_types import Domain, Email, Individual, Location, Phone
-
 from flowsint_enrichers.registry import flowsint_enricher
+from flowsint_types import Domain, Email, Individual, Location, Phone
 from tools.network.whoxy import WhoxyTool
 
 load_dotenv()
@@ -257,7 +256,7 @@ class IndividualToDomainsEnricher(Enricher):
         for extracted_info in self._extracted_data:
             individual = extracted_info["individual"]
             domain = extracted_info["domain"]
-            domain_data = extracted_info["domain_data"]
+            extracted_info["domain_data"]
             contacts = extracted_info["contacts"]
 
             domain_name = domain.domain

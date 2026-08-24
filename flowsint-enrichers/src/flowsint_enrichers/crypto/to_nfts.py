@@ -1,11 +1,11 @@
 import os
-from typing import List, Dict, Any, Optional, Union
+from typing import Any, Dict, List, Optional
+
 import requests
+from dotenv import load_dotenv
 from flowsint_core.core.enricher_base import Enricher
 from flowsint_enrichers.registry import flowsint_enricher
-from flowsint_types.wallet import CryptoWallet, CryptoNFT
-from flowsint_core.core.logger import Logger
-from dotenv import load_dotenv
+from flowsint_types.wallet import CryptoNFT, CryptoWallet
 
 load_dotenv()
 
@@ -117,7 +117,9 @@ class CryptoWalletAddressToNFTs(Enricher):
             )
         return nfts
 
-    def postprocess(self, results: List[OutputType], original_input: List[InputType]) -> List[OutputType]:
+    def postprocess(
+        self, results: List[OutputType], original_input: List[InputType]
+    ) -> List[OutputType]:
         if not self._graph_service:
             return results
 
@@ -126,7 +128,7 @@ class CryptoWalletAddressToNFTs(Enricher):
                 # Create or update wallet node
                 self.create_node(nft.wallet)
                 # Create or update NFT node
-                nft_key = f"{nft.contract_address}_{nft.token_id}"
+                f"{nft.contract_address}_{nft.token_id}"
                 self.create_node(nft)
                 # Create relationship from wallet to NFT
                 wallet_obj = CryptoWallet(address=nft.wallet.address)

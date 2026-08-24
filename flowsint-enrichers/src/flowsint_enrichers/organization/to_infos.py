@@ -1,10 +1,11 @@
-from typing import List, Dict, Any, Union
+from typing import Dict, List
+
 from flowsint_core.core.enricher_base import Enricher
+from flowsint_core.core.logger import Logger
 from flowsint_enrichers.registry import flowsint_enricher
-from flowsint_types.organization import Organization
 from flowsint_types.address import Location
 from flowsint_types.individual import Individual
-from flowsint_core.core.logger import Logger
+from flowsint_types.organization import Organization
 from tools.organizations.sirene import SireneTool
 
 
@@ -246,7 +247,9 @@ class OrgToInfosEnricher(Enricher):
             )
             return None
 
-    def postprocess(self, results: List[OutputType], original_input: List[InputType]) -> List[OutputType]:
+    def postprocess(
+        self, results: List[OutputType], original_input: List[InputType]
+    ) -> List[OutputType]:
         if not self._graph_service:
             return results
 
@@ -265,7 +268,9 @@ class OrgToInfosEnricher(Enricher):
                 for dirigeant in org.dirigeants:
                     self.create_node(dirigeant)
                     self.create_relationship(org, dirigeant, "HAS_LEADER")
-                    self.log_graph_message(f"{org.name}: HAS_LEADER -> {dirigeant.full_name}")
+                    self.log_graph_message(
+                        f"{org.name}: HAS_LEADER -> {dirigeant.full_name}"
+                    )
 
             # Add siege address as Location node if available
             if org.siege_geo_adresse:
@@ -292,11 +297,15 @@ class OrgToInfosEnricher(Enricher):
 
             # Log activity codes
             if org.activite_principale:
-                self.log_graph_message(f"{org.name}: HAS_ACTIVITY -> {org.activite_principale}")
+                self.log_graph_message(
+                    f"{org.name}: HAS_ACTIVITY -> {org.activite_principale}"
+                )
 
             # Log legal nature
             if org.nature_juridique:
-                self.log_graph_message(f"{org.name}: HAS_LEGAL_NATURE -> {org.nature_juridique}")
+                self.log_graph_message(
+                    f"{org.name}: HAS_LEGAL_NATURE -> {org.nature_juridique}"
+                )
 
         return results
 

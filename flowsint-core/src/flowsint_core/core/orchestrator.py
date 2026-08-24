@@ -1,15 +1,17 @@
-from typing import List, Dict, Any
-from datetime import datetime
-import time
-from pydantic import ValidationError
-from .enricher_base import Enricher
-from flowsint_enrichers import ENRICHER_REGISTRY
-from .types import FlowBranch, FlowStep
-from .logger import Logger
-from ..utils import to_json_serializable
 import asyncio
 import json
 import os
+import time
+from datetime import datetime
+from typing import Any, Dict, List
+
+from flowsint_enrichers import ENRICHER_REGISTRY
+from pydantic import ValidationError
+
+from ..utils import to_json_serializable
+from .enricher_base import Enricher
+from .logger import Logger
+from .types import FlowBranch, FlowStep
 
 
 class FlowOrchestrator(Enricher):
@@ -356,7 +358,7 @@ class FlowOrchestrator(Enricher):
         # Cache for enricher results to avoid recomputation
         enricher_results_cache = {}
 
-        total_steps = sum(len(branch.steps) for branch in self.enricher_branches)
+        sum(len(branch.steps) for branch in self.enricher_branches)
         completed_steps = 0
 
         # Process each branch

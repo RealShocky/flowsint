@@ -1,6 +1,10 @@
 """Tests for ChatRepository."""
+
 from datetime import datetime, timezone
 from uuid import uuid4
+
+from flowsint_core.core.models import ChatMessage
+from flowsint_core.core.repositories import ChatRepository
 
 from tests.factories import (
     ChatFactory,
@@ -8,8 +12,6 @@ from tests.factories import (
     InvestigationFactory,
     ProfileFactory,
 )
-from flowsint_core.core.models import ChatMessage
-from flowsint_core.core.repositories import ChatRepository
 
 
 class TestChatRepository:

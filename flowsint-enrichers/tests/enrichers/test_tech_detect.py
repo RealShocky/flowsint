@@ -1,5 +1,4 @@
 import pytest
-
 from flowsint_enrichers import ENRICHER_REGISTRY
 from flowsint_enrichers.website.to_technologies import TechDetectEnricher
 from flowsint_types.technology import Technology

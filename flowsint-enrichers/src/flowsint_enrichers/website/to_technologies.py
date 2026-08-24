@@ -1,9 +1,10 @@
 from typing import Any, Dict, List, Optional
-from flowsint_core.core.logger import Logger
+
 from flowsint_core.core.enricher_base import Enricher
+from flowsint_core.core.logger import Logger
 from flowsint_enrichers.registry import flowsint_enricher
-from flowsint_types.website import Website
 from flowsint_types.technology import Technology
+from flowsint_types.website import Website
 from tools.network.httpx import HttpxTool
 
 

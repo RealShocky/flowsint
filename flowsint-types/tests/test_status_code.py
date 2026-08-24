@@ -1,5 +1,5 @@
-from flowsint_types.website import Website
 import pytest
+from flowsint_types.website import Website
 
 
 def test_website_valid_status_code():

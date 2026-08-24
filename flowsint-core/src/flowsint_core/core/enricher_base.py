@@ -212,7 +212,6 @@ class Enricher(ABC):
     @abstractmethod
     def key(cls) -> str:
         """Primary key on which the enricher operates (e.g. domain, IP, etc.)"""
-        pass
 
     @classmethod
     def documentation(cls) -> str:

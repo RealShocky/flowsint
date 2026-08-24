@@ -2,11 +2,16 @@ import json
 import uuid
 from datetime import datetime, timezone
 
+from flowsint_core.core.enums import EventLevel
+from flowsint_core.core.types import Role
 from sqlalchemy import (
     JSON,
     Boolean,
     Column,
     DateTime,
+)
+from sqlalchemy import Enum as SQLEnum
+from sqlalchemy import (
     Float,
     ForeignKey,
     Index,
@@ -17,14 +22,8 @@ from sqlalchemy import (
     Uuid,
     func,
 )
-from sqlalchemy import (
-    Enum as SQLEnum,
-)
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship
 from sqlalchemy.types import TypeDecorator
-
-from flowsint_core.core.enums import EventLevel
-from flowsint_core.core.types import Role
 
 
 class RoleListType(TypeDecorator):

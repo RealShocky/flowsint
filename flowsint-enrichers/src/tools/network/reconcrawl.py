@@ -28,7 +28,7 @@ class ReconCrawlTool(Tool):
 
     def is_installed(self) -> bool:
         try:
-            import reconcrawl
+            pass
 
             return True
         except ImportError:

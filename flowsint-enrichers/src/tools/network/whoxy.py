@@ -40,7 +40,7 @@ class WhoxyTool(Tool):
                 )
 
                 if resp.status_code == 429:
-                    delay = self.INITIAL_DELAY * (2 ** attempt)
+                    delay = self.INITIAL_DELAY * (2**attempt)
                     time.sleep(delay)
                     continue
 
@@ -56,7 +56,7 @@ class WhoxyTool(Tool):
             except requests.exceptions.HTTPError as e:
                 if resp.status_code in (429, 502, 503, 504):
                     last_exception = e
-                    delay = self.INITIAL_DELAY * (2 ** attempt)
+                    delay = self.INITIAL_DELAY * (2**attempt)
                     time.sleep(delay)
                     continue
                 raise RuntimeError(f"{str(e)}")
@@ -64,8 +64,10 @@ class WhoxyTool(Tool):
                 raise
             except Exception as e:
                 last_exception = e
-                delay = self.INITIAL_DELAY * (2 ** attempt)
+                delay = self.INITIAL_DELAY * (2**attempt)
                 time.sleep(delay)
                 continue
 
-        raise RuntimeError(f"Whoxy API failed after {self.MAX_RETRIES} retries: {str(last_exception)}")
+        raise RuntimeError(
+            f"Whoxy API failed after {self.MAX_RETRIES} retries: {str(last_exception)}"
+        )

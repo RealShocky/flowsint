@@ -1,19 +1,20 @@
-from fastapi import APIRouter, Depends, HTTPException, Request
-from sqlalchemy.orm import Session
-from sse_starlette.sse import EventSourceResponse
-import json
 import asyncio
+import json
 from datetime import datetime
 
-from flowsint_core.core.postgre_db import get_db
+from fastapi import APIRouter, Depends, HTTPException, Request
 from flowsint_core.core.events import event_emitter
 from flowsint_core.core.models import Profile
+from flowsint_core.core.postgre_db import get_db
 from flowsint_core.core.services import (
-    create_log_service,
+    DatabaseError,
     NotFoundError,
     PermissionDeniedError,
-    DatabaseError,
+    create_log_service,
 )
+from sqlalchemy.orm import Session
+from sse_starlette.sse import EventSourceResponse
+
 from app.api.deps import get_current_user
 
 router = APIRouter()
@@ -130,7 +131,9 @@ async def stream_sketch_status(
         channel = f"{sketch_id}_status"
         await event_emitter.subscribe(channel)
         try:
-            yield json.dumps({"event": "connected", "data": "Connected to status stream"})
+            yield json.dumps(
+                {"event": "connected", "data": "Connected to status stream"}
+            )
 
             while True:
                 if await request.is_disconnected():
@@ -145,7 +148,9 @@ async def stream_sketch_status(
                 await asyncio.sleep(0.1)
 
         except asyncio.CancelledError:
-            print(f"[EventEmitter] Client disconnected from status stream for sketch_id: {sketch_id}")
+            print(
+                f"[EventEmitter] Client disconnected from status stream for sketch_id: {sketch_id}"
+            )
         except Exception as e:
             print(f"[EventEmitter] Error in stream_sketch_status: {str(e)}")
         finally:

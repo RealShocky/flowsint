@@ -16,9 +16,9 @@ from flowsint_core.core.services import (
 from flowsint_core.core.template_enricher import TemplateEnricher
 from flowsint_core.core.vault import Vault
 from flowsint_core.templates.types import Template
+from flowsint_types.registry import get_type as get_type_from_registry
+from flowsint_types.registry import load_all_types
 from sqlalchemy.orm import Session
-
-from flowsint_types.registry import get_type as get_type_from_registry, load_all_types
 
 from app.api.deps import get_current_user
 from app.api.schemas.enricher_template import (

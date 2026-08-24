@@ -1,10 +1,11 @@
 import os
-from typing import Any, Dict, List, Optional, Union
+from typing import Any, Dict, List, Optional
+
 from flowsint_core.core.enricher_base import Enricher
+from flowsint_core.core.logger import Logger
 from flowsint_enrichers.registry import flowsint_enricher
 from flowsint_types.cidr import CIDR
 from flowsint_types.ip import Ip
-from flowsint_core.core.logger import Logger
 from tools.network.mapcidr import MapcidrTool
 
 
@@ -110,7 +111,9 @@ class CidrToIpsEnricher(Enricher):
 
         return ips
 
-    def postprocess(self, results: List[OutputType], original_input: List[InputType]) -> List[OutputType]:
+    def postprocess(
+        self, results: List[OutputType], original_input: List[InputType]
+    ) -> List[OutputType]:
         # Create Neo4j relationships between CIDRs and their corresponding IPs
         # Use the mapping from scan if available, else fallback to zip
         cidr_to_ips = getattr(self, "_cidr_to_ips_map", None)

@@ -1,5 +1,4 @@
 import pytest
-
 from flowsint_types.domain import Domain
 
 

@@ -11,14 +11,13 @@ from typing import Any, Dict, Optional
 from uuid import UUID
 
 import yaml
+from flowsint_core.templates.types import Template
 from sqlalchemy.orm import Session
 
 from ..llm import ChatMessage, MessageRole, create_llm_provider
 from .base import BaseService
 from .exceptions import ValidationError
 from .vault_service import VaultService
-from flowsint_core.templates.types import Template
-
 
 _SYSTEM_PROMPT = """\
 You are a YAML template generator for Flowsint enrichers. Given a user's description, \

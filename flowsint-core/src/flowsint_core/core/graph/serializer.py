@@ -7,10 +7,9 @@ into Neo4j-compatible primitive types, following the Single Responsibility Princ
 
 from typing import Any, Callable, Dict, List, Optional, Type
 
+from flowsint_core.utils import flatten, unflatten
 from flowsint_types import FlowsintType
 from pydantic import BaseModel, ValidationError
-
-from flowsint_core.utils import flatten, unflatten
 
 from .types import GraphEdge, GraphNode, NodeMetadata
 
@@ -39,9 +38,11 @@ class GraphSerializer:
                     cleaned[key] = cleaned_nested
             elif isinstance(value, list):
                 cleaned_list = [
-                    GraphSerializer._clean_empty_values(item)
-                    if isinstance(item, dict)
-                    else item
+                    (
+                        GraphSerializer._clean_empty_values(item)
+                        if isinstance(item, dict)
+                        else item
+                    )
                     for item in value
                     if item != "" and item is not None
                 ]
