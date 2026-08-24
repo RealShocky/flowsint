@@ -59,6 +59,13 @@ disallow_untyped_defs = true
 # Test fixtures (MockEnricher etc.) use the same InputType/OutputType
 # class-attribute pattern real enrichers do — see the matching override
 # and its rationale in flowsint-enrichers/pyproject.toml.
+#
+# disallow_untyped_defs off for tests: pytest fixture params carry types
+# from conftest.py fixtures scattered across the tree, not the function
+# signature — fully annotating every test function's fixture params for
+# marginal safety on non-public test code isn't worth the churn. src/
+# stays strict; this is a deliberate, scoped relaxation, not a blanket one.
 [[tool.mypy.overrides]]
 module = "tests.*"
 disable_error_code = ["valid-type", "attr-defined", "name-defined"]
+disallow_untyped_defs = false

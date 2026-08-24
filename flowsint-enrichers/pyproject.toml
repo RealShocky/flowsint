@@ -69,3 +69,9 @@ disallow_untyped_defs = true
 [[tool.mypy.overrides]]
 module = "flowsint_enrichers.*"
 disable_error_code = ["valid-type", "attr-defined", "name-defined"]
+
+# See the matching override's rationale in flowsint-core/pyproject.toml:
+# pytest fixture params aren't worth fully annotating for test-only code.
+[[tool.mypy.overrides]]
+module = "tests.*"
+disallow_untyped_defs = false
