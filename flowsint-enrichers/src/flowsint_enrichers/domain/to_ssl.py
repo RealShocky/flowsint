@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Optional
 
 from tools.network.httpx import HttpxTool
 
@@ -80,7 +80,7 @@ class DomainToTLS(Enricher):
         return results
 
     def postprocess(
-        self, results: List[OutputType], input_data: List[InputType] = None
+        self, results: List[OutputType], input_data: Optional[List[InputType]] = None
     ) -> List[OutputType]:
         if not self._graph_service:
             return results

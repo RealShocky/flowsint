@@ -41,8 +41,11 @@ def run_migrations_offline() -> None:
 
 def run_migrations_online() -> None:
     """Run migrations in 'online' mode."""
+    # config_ini_section always resolves to a real section for this
+    # project's alembic.ini — standard alembic-generated boilerplate,
+    # not narrowed further upstream either.
     connectable = engine_from_config(
-        config.get_section(config.config_ini_section),
+        config.get_section(config.config_ini_section),  # type: ignore[arg-type]
         prefix="sqlalchemy.",
         poolclass=pool.NullPool,
     )

@@ -1,3 +1,5 @@
+from typing import Any, Dict, Optional
+
 from docker import from_env
 from docker.errors import APIError, DockerException, ImageNotFound
 
@@ -5,7 +7,13 @@ from .base import Tool
 
 
 class DockerTool(Tool):
-    def __init__(self, image: str, default_tag: str = "latest"):
+    # Subclasses (SubfinderTool, NaabuTool, ...) set this as a class
+    # attribute with the bare image name — get_image() below reads that,
+    # while __init__ below sets self.image to an instance-level
+    # "name:tag" shadow used for the actual docker calls.
+    image: str
+
+    def __init__(self, image: str, default_tag: str = "latest") -> None:
         self.image = f"{image}:{default_tag}"
         try:
             self.client = from_env()
@@ -18,7 +26,7 @@ class DockerTool(Tool):
     def get_image(cls) -> str:
         return cls.image
 
-    def install(self):
+    def install(self) -> None:
         try:
             print(f"[DockerTool] Pulling image: {self.image}")
             self.client.images.pull(self.image)
@@ -36,7 +44,7 @@ class DockerTool(Tool):
                 detach=False,
                 tty=False,
             )
-            return output.decode().strip()
+            return str(output.decode().strip())
         except Exception as e:
             return f"unknown (error: {str(e)})"
 
@@ -49,12 +57,12 @@ class DockerTool(Tool):
 
     def launch(
         self,
-        command,
-        volumes: dict = None,
+        command: str,
+        volumes: Optional[Dict[str, Any]] = None,
         timeout: int = 30,
-        environment: dict = None,
-        entrypoint=None,
-    ):
+        environment: Optional[Dict[str, Any]] = None,
+        entrypoint: Optional[str] = None,
+    ) -> str:
         self.install()
         # Merge default environment with custom environment
         env = {"TERM": "dumb"}  # Set terminal type to avoid TTY issues
@@ -79,7 +87,7 @@ class DockerTool(Tool):
             if entrypoint is not None:
                 run_kwargs["entrypoint"] = entrypoint
             result = self.client.containers.run(self.image, **run_kwargs)
-            return result.decode()
+            return str(result.decode())
         except ImageNotFound:
             raise RuntimeError(f"Image {self.image} not found. Did you run install()?")
         except DockerException as e:
@@ -109,7 +117,7 @@ class DockerTool(Tool):
                         environment=env,
                     )
                     # If we get here, the command actually worked
-                    return test_result.decode()
+                    return str(test_result.decode())
                 except DockerException as test_e:
                     error_detail = f"{str(e)} - Test run also failed: {str(test_e)}"
 

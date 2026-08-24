@@ -120,7 +120,9 @@ def downgrade() -> None:
     op.alter_column("scans", "status_old", new_column_name="status")
 
     # Update other columns
-    op.drop_constraint(None, "scans", type_="foreignkey")
+    # None lets alembic auto-detect the constraint name at the DB level;
+    # alembic's stub declares the param as required str, this still works.
+    op.drop_constraint(None, "scans", type_="foreignkey")  # type: ignore[arg-type]
     op.create_foreign_key(
         "scans_sketch_id_fkey",
         "scans",

@@ -1,6 +1,7 @@
 from uuid import UUID
 
 from fastapi import HTTPException
+from sqlalchemy.orm import Session
 
 from flowsint_core.core.models import InvestigationUserRole
 from flowsint_core.core.types import Role
@@ -22,8 +23,8 @@ def can_user(roles: list[Role], actions: list[str]) -> bool:
 
 
 def check_investigation_permission(
-    user_id: UUID, investigation_id: str, actions: list[str], db
-):
+    user_id: UUID, investigation_id: str, actions: list[str], db: Session
+) -> bool:
     role_entry = (
         db.query(InvestigationUserRole)
         .filter_by(user_id=user_id, investigation_id=investigation_id)

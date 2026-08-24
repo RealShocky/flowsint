@@ -62,7 +62,12 @@ plugins = ["pydantic.mypy"]
 
 # Test fixtures (MockEnricher etc.) use the same InputType/OutputType
 # class-attribute pattern real enrichers do — see the matching override
-# and its rationale in flowsint-enrichers/pyproject.toml.
+# and its rationale in flowsint-enrichers/pyproject.toml. assignment:
+# reassigning InputType/OutputType to a concrete type at the class level
+# (the pattern itself) trips it, since the base declares them as
+# NotImplemented. override: scan()/postprocess() signatures are meant to
+# vary per subclass by design (real params/types keyed off InputType/
+# OutputType), same as flowsint_enrichers.* below.
 #
 # disallow_untyped_defs off for tests: pytest fixture params carry types
 # from conftest.py fixtures scattered across the tree, not the function
@@ -71,5 +76,11 @@ plugins = ["pydantic.mypy"]
 # stays strict; this is a deliberate, scoped relaxation, not a blanket one.
 [[tool.mypy.overrides]]
 module = "tests.*"
-disable_error_code = ["valid-type", "attr-defined", "name-defined"]
+disable_error_code = [
+    "valid-type",
+    "attr-defined",
+    "name-defined",
+    "assignment",
+    "override",
+]
 disallow_untyped_defs = false
