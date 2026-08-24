@@ -34,6 +34,11 @@ target-version = ['py311']
 [tool.isort]
 profile = "black"
 multi_line_output = 3
+# Explicit, not auto-detected: isort's first-party detection depends on which
+# files it's invoked with, so "flowsint_enrichers" gets grouped differently
+# when sorted alone vs alongside the other packages (as CI/make lint does).
+# Same list must be kept in sync across all 4 packages' pyproject.toml.
+known_first_party = ["flowsint_core", "flowsint_types", "flowsint_enrichers", "flowsint_api"]
 
 [tool.mypy]
 python_version = "3.11"

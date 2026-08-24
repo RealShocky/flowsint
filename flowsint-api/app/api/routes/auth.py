@@ -2,6 +2,11 @@ from typing import List
 
 from fastapi import APIRouter, Depends, HTTPException, Query
 from fastapi.security import OAuth2PasswordRequestForm
+from sqlalchemy.exc import SQLAlchemyError
+from sqlalchemy.orm import Session
+
+from app.api.deps import get_current_user
+from app.api.schemas.profile import ProfileCreate, ProfileRead, ProfileUpdate
 from flowsint_core.core.models import Profile
 from flowsint_core.core.postgre_db import get_db
 from flowsint_core.core.services import (
@@ -10,11 +15,6 @@ from flowsint_core.core.services import (
     DatabaseError,
     create_auth_service,
 )
-from sqlalchemy.exc import SQLAlchemyError
-from sqlalchemy.orm import Session
-
-from app.api.deps import get_current_user
-from app.api.schemas.profile import ProfileCreate, ProfileRead, ProfileUpdate
 
 router = APIRouter()
 

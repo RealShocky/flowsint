@@ -1,7 +1,6 @@
 """Tests for SketchRepository."""
 
 from flowsint_core.core.repositories import SketchRepository
-
 from tests.factories import InvestigationFactory, ProfileFactory, SketchFactory
 
 

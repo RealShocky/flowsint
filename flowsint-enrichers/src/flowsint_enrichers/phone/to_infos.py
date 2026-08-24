@@ -2,6 +2,7 @@ import asyncio
 from typing import Any, Dict, List
 
 import httpx
+
 from flowsint_core.core.enricher_base import Enricher
 from flowsint_core.core.logger import Logger
 from flowsint_core.utils import is_valid_number

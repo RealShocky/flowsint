@@ -1,12 +1,13 @@
 import os
 from typing import Any, Dict, List, Optional
 
+from tools.network.asnmap import AsnmapTool
+
 from flowsint_core.core.enricher_base import Enricher
 from flowsint_core.core.logger import Logger
 from flowsint_enrichers.registry import flowsint_enricher
 from flowsint_types.asn import ASN
 from flowsint_types.organization import Organization
-from tools.network.asnmap import AsnmapTool
 
 
 @flowsint_enricher

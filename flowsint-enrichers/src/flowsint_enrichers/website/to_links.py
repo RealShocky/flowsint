@@ -1,12 +1,13 @@
 from typing import List
 from urllib.parse import urlparse
 
+from reconspread import Crawler
+
 from flowsint_core.core.enricher_base import Enricher
 from flowsint_core.core.logger import Logger
 from flowsint_enrichers.registry import flowsint_enricher
 from flowsint_types.domain import Domain
 from flowsint_types.website import Website
-from reconspread import Crawler
 
 
 @flowsint_enricher

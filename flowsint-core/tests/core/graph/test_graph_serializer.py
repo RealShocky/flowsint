@@ -1,7 +1,6 @@
 from datetime import datetime
 
 import pytest
-from flowsint_types import Domain, Ip
 
 from flowsint_core.core.graph import (
     GraphEdge,
@@ -9,6 +8,7 @@ from flowsint_core.core.graph import (
     GraphSerializer,
     NodeMetadata,
 )
+from flowsint_types import Domain, Ip
 
 
 def test_serializer():

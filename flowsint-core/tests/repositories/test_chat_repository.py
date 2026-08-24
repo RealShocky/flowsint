@@ -5,7 +5,6 @@ from uuid import uuid4
 
 from flowsint_core.core.models import ChatMessage
 from flowsint_core.core.repositories import ChatRepository
-
 from tests.factories import (
     ChatFactory,
     ChatMessageFactory,

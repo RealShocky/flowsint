@@ -1,12 +1,13 @@
 from typing import Any, Dict, List, Optional
 
+from recontrack import TrackingCodeExtractor
+
 from flowsint_core.core.enricher_base import Enricher
 from flowsint_core.core.logger import Logger
 from flowsint_core.core.vault import VaultProtocol
 from flowsint_enrichers.registry import flowsint_enricher
 from flowsint_types.web_tracker import WebTracker
 from flowsint_types.website import Website
-from recontrack import TrackingCodeExtractor
 
 
 @flowsint_enricher

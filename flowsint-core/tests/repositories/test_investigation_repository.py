@@ -5,7 +5,6 @@ from uuid import uuid4
 from flowsint_core.core.models import InvestigationUserRole
 from flowsint_core.core.repositories import InvestigationRepository
 from flowsint_core.core.types import Role
-
 from tests.factories import (
     InvestigationFactory,
     InvestigationUserRoleFactory,

@@ -5,6 +5,7 @@ from typing import Any, Dict, List
 from unittest.mock import Mock
 
 import pytest
+
 from flowsint_core.core.enricher_base import Enricher
 
 

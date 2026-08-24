@@ -2,7 +2,6 @@
 
 from flowsint_core.core.repositories import ScanRepository
 from flowsint_core.core.types import Role
-
 from tests.factories import (
     InvestigationFactory,
     InvestigationUserRoleFactory,

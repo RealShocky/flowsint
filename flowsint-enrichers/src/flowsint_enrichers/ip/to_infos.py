@@ -1,6 +1,7 @@
 from typing import Any, Dict, List
 
 import requests
+
 from flowsint_core.core.enricher_base import Enricher
 from flowsint_enrichers.registry import flowsint_enricher
 from flowsint_types.ip import Ip

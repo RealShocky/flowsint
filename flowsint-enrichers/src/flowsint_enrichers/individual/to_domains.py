@@ -3,11 +3,12 @@ import re
 from typing import Any, Dict, List, Optional, Set, Union
 
 from dotenv import load_dotenv
+from tools.network.whoxy import WhoxyTool
+
 from flowsint_core.core.enricher_base import Enricher
 from flowsint_core.core.logger import Logger
 from flowsint_enrichers.registry import flowsint_enricher
 from flowsint_types import Domain, Email, Individual, Location, Phone
-from tools.network.whoxy import WhoxyTool
 
 load_dotenv()
 

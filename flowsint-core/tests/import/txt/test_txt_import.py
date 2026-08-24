@@ -4,6 +4,7 @@ Tests automatic entity detection and parsing of plain text files.
 """
 
 import pytest
+
 from flowsint_core.imports import parse_import_file
 from flowsint_core.imports.txt.parse_txt import parse_txt
 from flowsint_types import Domain, Email, Ip

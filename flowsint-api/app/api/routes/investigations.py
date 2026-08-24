@@ -2,16 +2,6 @@ from typing import List
 from uuid import UUID
 
 from fastapi import APIRouter, Depends, HTTPException, status
-from flowsint_core.core.models import Profile
-from flowsint_core.core.postgre_db import get_db
-from flowsint_core.core.services import (
-    ConflictError,
-    DatabaseError,
-    NotFoundError,
-    PermissionDeniedError,
-    create_investigation_service,
-)
-from flowsint_core.core.types import Role
 from sqlalchemy.orm import Session
 
 from app.api.deps import get_current_user
@@ -24,6 +14,16 @@ from app.api.schemas.investigation import (
     InvestigationUpdate,
 )
 from app.api.schemas.sketch import SketchRead
+from flowsint_core.core.models import Profile
+from flowsint_core.core.postgre_db import get_db
+from flowsint_core.core.services import (
+    ConflictError,
+    DatabaseError,
+    NotFoundError,
+    PermissionDeniedError,
+    create_investigation_service,
+)
+from flowsint_core.core.types import Role
 
 router = APIRouter()
 

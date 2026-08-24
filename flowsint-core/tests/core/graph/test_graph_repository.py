@@ -3,6 +3,7 @@
 from unittest.mock import MagicMock, patch
 
 import pytest
+
 from flowsint_core.core.graph import Neo4jGraphRepository
 
 

@@ -2,6 +2,10 @@ from typing import List
 from uuid import UUID
 
 from fastapi import APIRouter, Depends, HTTPException, status
+from sqlalchemy.orm import Session
+
+from app.api.deps import get_current_user
+from app.api.schemas.analysis import AnalysisCreate, AnalysisRead, AnalysisUpdate
 from flowsint_core.core.models import Profile
 from flowsint_core.core.postgre_db import get_db
 from flowsint_core.core.services import (
@@ -9,10 +13,6 @@ from flowsint_core.core.services import (
     PermissionDeniedError,
     create_analysis_service,
 )
-from sqlalchemy.orm import Session
-
-from app.api.deps import get_current_user
-from app.api.schemas.analysis import AnalysisCreate, AnalysisRead, AnalysisUpdate
 
 router = APIRouter()
 

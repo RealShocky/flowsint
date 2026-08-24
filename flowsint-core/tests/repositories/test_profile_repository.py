@@ -3,7 +3,6 @@
 from uuid import uuid4
 
 from flowsint_core.core.repositories import ProfileRepository
-
 from tests.factories import ProfileFactory
 
 

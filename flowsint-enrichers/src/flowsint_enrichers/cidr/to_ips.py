@@ -1,12 +1,13 @@
 import os
 from typing import Any, Dict, List, Optional
 
+from tools.network.mapcidr import MapcidrTool
+
 from flowsint_core.core.enricher_base import Enricher
 from flowsint_core.core.logger import Logger
 from flowsint_enrichers.registry import flowsint_enricher
 from flowsint_types.cidr import CIDR
 from flowsint_types.ip import Ip
-from tools.network.mapcidr import MapcidrTool
 
 
 @flowsint_enricher

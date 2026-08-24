@@ -3,6 +3,10 @@ import json
 from datetime import datetime
 
 from fastapi import APIRouter, Depends, HTTPException, Request
+from sqlalchemy.orm import Session
+from sse_starlette.sse import EventSourceResponse
+
+from app.api.deps import get_current_user
 from flowsint_core.core.events import event_emitter
 from flowsint_core.core.models import Profile
 from flowsint_core.core.postgre_db import get_db
@@ -12,10 +16,6 @@ from flowsint_core.core.services import (
     PermissionDeniedError,
     create_log_service,
 )
-from sqlalchemy.orm import Session
-from sse_starlette.sse import EventSourceResponse
-
-from app.api.deps import get_current_user
 
 router = APIRouter()
 

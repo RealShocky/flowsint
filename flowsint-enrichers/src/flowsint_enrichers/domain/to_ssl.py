@@ -1,11 +1,12 @@
 from typing import List
 
+from tools.network.httpx import HttpxTool
+
 from flowsint_core.core.enricher_base import Enricher
 from flowsint_core.core.logger import Logger
 from flowsint_enrichers.registry import flowsint_enricher
 from flowsint_types.domain import Domain
 from flowsint_types.website import Website
-from tools.network.httpx import HttpxTool
 
 
 @flowsint_enricher

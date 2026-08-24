@@ -1,6 +1,7 @@
 from uuid import UUID
 
 from fastapi import HTTPException
+
 from flowsint_core.core.models import InvestigationUserRole
 from flowsint_core.core.types import Role
 

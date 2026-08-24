@@ -3,6 +3,7 @@ from typing import Any, Dict, List, Optional
 
 import requests
 from dotenv import load_dotenv
+
 from flowsint_core.core.enricher_base import Enricher
 from flowsint_enrichers.registry import flowsint_enricher
 from flowsint_types.wallet import CryptoNFT, CryptoWallet

@@ -1,6 +1,10 @@
 from typing import List, Optional
 
 from fastapi import APIRouter, Depends, HTTPException, Query
+from pydantic import BaseModel
+from sqlalchemy.orm import Session
+
+from app.api.deps import get_current_user
 from flowsint_core.core.celery import celery
 from flowsint_core.core.graph import create_graph_service
 from flowsint_core.core.models import Profile
@@ -13,10 +17,6 @@ from flowsint_core.core.services.type_registry_service import (
     create_type_registry_service,
 )
 from flowsint_enrichers import ENRICHER_REGISTRY, load_all_enrichers
-from pydantic import BaseModel
-from sqlalchemy.orm import Session
-
-from app.api.deps import get_current_user
 
 load_all_enrichers()
 

@@ -1,11 +1,12 @@
 from typing import Dict, List, Set, Union
 
+from tools.organizations.sirene import SireneTool
+
 from flowsint_core.core.enricher_base import Enricher
 from flowsint_core.core.logger import Logger
 from flowsint_enrichers.registry import flowsint_enricher
 from flowsint_types.individual import Individual
 from flowsint_types.organization import Organization
-from tools.organizations.sirene import SireneTool
 
 
 @flowsint_enricher

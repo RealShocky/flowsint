@@ -1,12 +1,12 @@
 """Tests for EnricherTemplateService."""
 
 import pytest
+
 from flowsint_core.core.repositories import EnricherTemplateRepository
 from flowsint_core.core.services.enricher_template_service import (
     EnricherTemplateService,
 )
 from flowsint_core.core.services.exceptions import ConflictError, NotFoundError
-
 from tests.factories import EnricherTemplateFactory, ProfileFactory
 
 

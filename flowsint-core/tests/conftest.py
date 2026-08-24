@@ -3,9 +3,10 @@
 from unittest.mock import MagicMock
 
 import pytest
-from flowsint_core.core.models import Base
 from sqlalchemy import create_engine, event
 from sqlalchemy.orm import sessionmaker
+
+from flowsint_core.core.models import Base
 
 
 @pytest.fixture(autouse=True)

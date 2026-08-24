@@ -1,11 +1,11 @@
 from fastapi import APIRouter, Depends
-from flowsint_core.core.models import Profile
-from flowsint_core.core.postgre_db import get_db
-from flowsint_core.core.services import create_type_registry_service
 from pydantic import BaseModel
 from sqlalchemy.orm import Session
 
 from app.api.deps import get_current_user
+from flowsint_core.core.models import Profile
+from flowsint_core.core.postgre_db import get_db
+from flowsint_core.core.services import create_type_registry_service
 
 router = APIRouter()
 

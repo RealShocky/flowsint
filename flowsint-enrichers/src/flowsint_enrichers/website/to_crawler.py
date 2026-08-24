@@ -1,14 +1,15 @@
 from typing import List, Optional
 from urllib.parse import urlparse
 
+from pydantic import BaseModel
+from tools.network.reconcrawl import ReconCrawlTool
+
 from flowsint_core.core.enricher_base import Enricher
 from flowsint_core.core.logger import Logger
 from flowsint_enrichers.registry import flowsint_enricher
 from flowsint_types.email import Email
 from flowsint_types.phone import Phone
 from flowsint_types.website import Website
-from pydantic import BaseModel
-from tools.network.reconcrawl import ReconCrawlTool
 
 
 class ReturnType(BaseModel):

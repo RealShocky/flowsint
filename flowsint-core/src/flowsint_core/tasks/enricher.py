@@ -3,9 +3,10 @@ import uuid
 from typing import List, Optional
 
 from celery import states
+from sqlalchemy.orm import Session
+
 from flowsint_core.utils import to_json_serializable
 from flowsint_enrichers import ENRICHER_REGISTRY, load_all_enrichers
-from sqlalchemy.orm import Session
 
 from ..core.celery import celery
 from ..core.enums import EventLevel

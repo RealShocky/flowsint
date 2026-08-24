@@ -1,7 +1,6 @@
 """Tests for KeyRepository."""
 
 from flowsint_core.core.repositories import KeyRepository
-
 from tests.factories import KeyFactory, ProfileFactory
 
 

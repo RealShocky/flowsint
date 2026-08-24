@@ -2,7 +2,6 @@
 
 from flowsint_core.core.repositories import AnalysisRepository
 from flowsint_core.core.types import Role
-
 from tests.factories import (
     AnalysisFactory,
     InvestigationFactory,

@@ -4,6 +4,8 @@ import time
 from typing import Any, Dict, List, Optional, Set
 
 from dotenv import load_dotenv
+from tools.network.whoxy import WhoxyTool
+
 from flowsint_core.core.enricher_base import Enricher
 from flowsint_core.core.logger import Logger
 from flowsint_enrichers.registry import flowsint_enricher
@@ -13,7 +15,6 @@ from flowsint_types.email import Email
 from flowsint_types.individual import Individual
 from flowsint_types.organization import Organization
 from flowsint_types.phone import Phone
-from tools.network.whoxy import WhoxyTool
 
 load_dotenv()
 

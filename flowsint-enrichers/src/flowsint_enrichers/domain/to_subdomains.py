@@ -1,12 +1,13 @@
 from typing import List
 
 import requests
+from tools.network.subfinder import SubfinderTool
+
 from flowsint_core.core.enricher_base import Enricher
 from flowsint_core.core.logger import Logger
 from flowsint_core.utils import is_valid_domain
 from flowsint_enrichers.registry import flowsint_enricher
 from flowsint_types.domain import Domain
-from tools.network.subfinder import SubfinderTool
 
 
 @flowsint_enricher

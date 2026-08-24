@@ -3,6 +3,7 @@
 from pathlib import Path
 
 import pytest
+
 from flowsint_core.templates.loader.yaml_loader import (
     SSRFError,
     TemplateRenderError,

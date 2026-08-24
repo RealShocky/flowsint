@@ -11,6 +11,12 @@ from fastapi import (
     UploadFile,
     status,
 )
+from pydantic import BaseModel, Field
+from sqlalchemy.orm import Session
+
+from app.api.deps import get_current_user
+from app.api.schemas.sketch import SketchCreate, SketchRead, SketchUpdate
+from app.api.sketch_utils import update_sketch_timestamp
 from flowsint_core.core.graph import GraphNode, create_graph_service
 from flowsint_core.core.models import Profile
 from flowsint_core.core.postgre_db import get_db
@@ -29,12 +35,6 @@ from flowsint_core.imports import (
     FileParseResult,
     create_import_service,
 )
-from pydantic import BaseModel, Field
-from sqlalchemy.orm import Session
-
-from app.api.deps import get_current_user
-from app.api.schemas.sketch import SketchCreate, SketchRead, SketchUpdate
-from app.api.sketch_utils import update_sketch_timestamp
 
 router = APIRouter()
 

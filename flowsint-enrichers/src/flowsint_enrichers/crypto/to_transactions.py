@@ -5,6 +5,7 @@ from typing import Any, Dict, List, Optional
 import requests
 import requests.exceptions
 from dotenv import load_dotenv
+
 from flowsint_core.core.enricher_base import Enricher
 from flowsint_core.core.logger import Logger
 from flowsint_enrichers.registry import flowsint_enricher

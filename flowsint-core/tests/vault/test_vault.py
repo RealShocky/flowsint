@@ -4,6 +4,7 @@ import uuid
 from unittest.mock import MagicMock, Mock
 
 import pytest
+
 from flowsint_core.core.models import Key
 from flowsint_core.core.vault import Vault
 

@@ -1,7 +1,6 @@
 """Tests for FlowRepository."""
 
 from flowsint_core.core.repositories import FlowRepository
-
 from tests.factories import FlowFactory
 
 

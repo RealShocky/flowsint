@@ -2,6 +2,7 @@ from typing import List
 
 import requests
 from bs4 import BeautifulSoup
+
 from flowsint_core.core.enricher_base import Enricher
 from flowsint_enrichers.registry import flowsint_enricher
 from flowsint_types.phrase import Phrase

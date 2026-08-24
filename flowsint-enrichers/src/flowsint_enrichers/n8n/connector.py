@@ -2,6 +2,7 @@ import json
 from typing import Any, Dict, List, Optional
 
 import aiohttp
+
 from flowsint_core.core.enricher_base import Enricher
 from flowsint_core.core.logger import Logger
 from flowsint_enrichers.registry import flowsint_enricher

@@ -4,6 +4,7 @@ from unittest.mock import AsyncMock, MagicMock, patch
 from uuid import uuid4
 
 import pytest
+
 from flowsint_core.core.services.exceptions import ValidationError
 from flowsint_core.core.services.template_generator_service import (
     TemplateGeneratorService,

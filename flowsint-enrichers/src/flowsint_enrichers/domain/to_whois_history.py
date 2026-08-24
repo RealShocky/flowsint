@@ -3,6 +3,8 @@ import re
 from typing import Any, Dict, List, Optional, Set
 
 from dotenv import load_dotenv
+from tools.network.whoisxml import WhoisXmlTool
+
 from flowsint_core.core.enricher_base import Enricher
 from flowsint_core.core.logger import Logger
 from flowsint_enrichers.registry import flowsint_enricher
@@ -12,7 +14,6 @@ from flowsint_types.email import Email
 from flowsint_types.individual import Individual
 from flowsint_types.organization import Organization
 from flowsint_types.whois import Whois
-from tools.network.whoisxml import WhoisXmlTool
 
 load_dotenv()
 

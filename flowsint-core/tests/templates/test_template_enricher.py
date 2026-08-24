@@ -5,6 +5,7 @@ from typing import Optional
 
 import httpx
 import pytest
+
 from flowsint_core.core.template_enricher import (
     TemplateEnricher,
 )

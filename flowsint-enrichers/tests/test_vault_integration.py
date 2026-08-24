@@ -4,6 +4,7 @@ import uuid
 from unittest.mock import Mock
 
 import pytest
+
 from flowsint_enrichers.crypto.to_nfts import CryptoWalletAddressToNFTs
 from flowsint_enrichers.crypto.to_transactions import CryptoWalletAddressToTransactions
 from flowsint_enrichers.domain.to_history import DomainToHistoryEnricher

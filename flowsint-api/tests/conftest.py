@@ -11,12 +11,12 @@ os.environ.setdefault(
 
 import pytest  # noqa: E402
 from fastapi.testclient import TestClient  # noqa: E402
-from flowsint_core.core.models import Base  # noqa: E402
-from flowsint_core.core.postgre_db import get_db  # noqa: E402
 from sqlalchemy import create_engine  # noqa: E402
 from sqlalchemy.orm import sessionmaker  # noqa: E402
 
 from app.main import app  # noqa: E402
+from flowsint_core.core.models import Base  # noqa: E402
+from flowsint_core.core.postgre_db import get_db  # noqa: E402
 
 
 @pytest.fixture

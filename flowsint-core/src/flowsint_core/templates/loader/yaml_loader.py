@@ -4,6 +4,7 @@ from typing import Any, Optional, Set
 from urllib.parse import urlparse
 
 import yaml
+
 from flowsint_core.core.graph.serializer import TypeResolver
 from flowsint_core.templates.types import Template
 

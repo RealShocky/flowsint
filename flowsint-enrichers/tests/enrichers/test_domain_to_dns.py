@@ -1,8 +1,9 @@
 import pytest
+from tools.network.dnsx import DnsxTool
+
 from flowsint_enrichers import ENRICHER_REGISTRY
 from flowsint_enrichers.domain.to_dns import DomainToDnsEnricher
 from flowsint_types.ip import Ip
-from tools.network.dnsx import DnsxTool
 
 
 # ---------------------------------------------------------------------------

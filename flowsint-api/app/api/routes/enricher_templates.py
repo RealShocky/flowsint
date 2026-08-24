@@ -4,6 +4,19 @@ from typing import List
 from uuid import UUID
 
 from fastapi import APIRouter, Depends, HTTPException, Query, status
+from sqlalchemy.orm import Session
+
+from app.api.deps import get_current_user
+from app.api.schemas.enricher_template import (
+    EnricherTemplateCreate,
+    EnricherTemplateGenerateRequest,
+    EnricherTemplateGenerateResponse,
+    EnricherTemplateList,
+    EnricherTemplateRead,
+    EnricherTemplateTestRequest,
+    EnricherTemplateTestResponse,
+    EnricherTemplateUpdate,
+)
 from flowsint_core.core.models import Profile
 from flowsint_core.core.postgre_db import get_db
 from flowsint_core.core.services import (
@@ -18,19 +31,6 @@ from flowsint_core.core.vault import Vault
 from flowsint_core.templates.types import Template
 from flowsint_types.registry import get_type as get_type_from_registry
 from flowsint_types.registry import load_all_types
-from sqlalchemy.orm import Session
-
-from app.api.deps import get_current_user
-from app.api.schemas.enricher_template import (
-    EnricherTemplateCreate,
-    EnricherTemplateGenerateRequest,
-    EnricherTemplateGenerateResponse,
-    EnricherTemplateList,
-    EnricherTemplateRead,
-    EnricherTemplateTestRequest,
-    EnricherTemplateTestResponse,
-    EnricherTemplateUpdate,
-)
 
 router = APIRouter()
 

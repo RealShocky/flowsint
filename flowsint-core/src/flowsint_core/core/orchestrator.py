@@ -5,8 +5,9 @@ import time
 from datetime import datetime
 from typing import Any, Dict, List
 
-from flowsint_enrichers import ENRICHER_REGISTRY
 from pydantic import ValidationError
+
+from flowsint_enrichers import ENRICHER_REGISTRY
 
 from ..utils import to_json_serializable
 from .enricher_base import Enricher

@@ -16,6 +16,7 @@ from unittest.mock import Mock, patch
 from uuid import uuid4
 
 import pytest
+
 from flowsint_core.core.enums import EventLevel
 from flowsint_core.core.logger import LoggerSingleton
 

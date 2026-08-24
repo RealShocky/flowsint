@@ -4,7 +4,6 @@ from datetime import datetime
 from uuid import uuid4
 
 from flowsint_core.core.repositories import LogRepository
-
 from tests.factories import (
     InvestigationFactory,
     LogFactory,

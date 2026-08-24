@@ -1,11 +1,12 @@
 from typing import Any, Dict, List, Optional
 
+from tools.network.naabu import NaabuTool
+
 from flowsint_core.core.enricher_base import Enricher
 from flowsint_core.core.logger import Logger
 from flowsint_enrichers.registry import flowsint_enricher
 from flowsint_types.ip import Ip
 from flowsint_types.port import Port
-from tools.network.naabu import NaabuTool
 
 
 @flowsint_enricher

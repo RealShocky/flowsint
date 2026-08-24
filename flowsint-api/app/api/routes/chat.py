@@ -3,17 +3,17 @@ from uuid import UUID
 
 from fastapi import APIRouter, Depends, HTTPException, status
 from fastapi.responses import StreamingResponse
+from pydantic import BaseModel
+from sqlalchemy.orm import Session
+
+from app.api.deps import get_current_user
+from app.api.schemas.chat import ChatCreate, ChatRead
 from flowsint_core.core.models import Profile
 from flowsint_core.core.postgre_db import get_db
 from flowsint_core.core.services import (
     NotFoundError,
     create_chat_service,
 )
-from pydantic import BaseModel
-from sqlalchemy.orm import Session
-
-from app.api.deps import get_current_user
-from app.api.schemas.chat import ChatCreate, ChatRead
 
 router = APIRouter()
 

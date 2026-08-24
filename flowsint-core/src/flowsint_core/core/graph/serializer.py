@@ -7,9 +7,10 @@ into Neo4j-compatible primitive types, following the Single Responsibility Princ
 
 from typing import Any, Callable, Dict, List, Optional, Type
 
+from pydantic import BaseModel, ValidationError
+
 from flowsint_core.utils import flatten, unflatten
 from flowsint_types import FlowsintType
-from pydantic import BaseModel, ValidationError
 
 from .types import GraphEdge, GraphNode, NodeMetadata
 

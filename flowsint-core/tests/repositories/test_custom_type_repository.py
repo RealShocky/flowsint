@@ -1,7 +1,6 @@
 """Tests for CustomTypeRepository."""
 
 from flowsint_core.core.repositories import CustomTypeRepository
-
 from tests.factories import CustomTypeFactory, ProfileFactory
 
 
