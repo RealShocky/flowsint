@@ -81,6 +81,7 @@ export function NodeFlag({ sketchId, node }: { sketchId: string; node: GraphNode
         >
           {(Object.keys(flagColors) as flagColor[]).map((key) => (
             <DropdownMenuRadioItem
+              key={key}
               onClick={(e) => e.stopPropagation()}
               className="w-7 flex items-center justify-center gap-1"
               value={key}

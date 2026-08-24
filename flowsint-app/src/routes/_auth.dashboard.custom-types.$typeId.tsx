@@ -328,7 +328,7 @@ function CustomTypeEditor() {
                     <SelectContent>
                       {!actionLoading &&
                         actionItems.map((item) => (
-                          <SelectItem value={item.type}>
+                          <SelectItem key={item.type} value={item.type}>
                             <div className="flex items-center gap-2">{item.label}</div>
                           </SelectItem>
                         ))}

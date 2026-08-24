@@ -40,6 +40,7 @@ const InvestigationList = () => {
         <div className="space-y-0.5">
           {data.map((caseItem: Investigation) => (
             <Link
+              key={caseItem.id}
               to="/dashboard/investigations/$investigationId"
               params={{
                 investigationId: caseItem.id

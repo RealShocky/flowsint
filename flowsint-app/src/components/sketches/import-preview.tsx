@@ -738,8 +738,8 @@ type EdgesPanelProps = {
 const EdgesPanel = ({ edges }: EdgesPanelProps) => {
   return (
     <div>
-      {edges.map((edge) => (
-        <div>
+      {edges.map((edge, index) => (
+        <div key={`${edge.from_id}-${edge.label}-${edge.to_id}-${index}`}>
           <Badge variant="outline">{edge.from_obj.label}</Badge> - {edge.label} -{' '}
           <Badge variant="outline">{edge.to_obj.label}</Badge>
         </div>

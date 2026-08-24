@@ -14,7 +14,7 @@ const TypeFilters = ({ filters, toggleTypeFilter }: TypeFiltersProps) => {
       ) : (
         <ul className="grid grid-cols-3 gap-2">
           {filters.types.map((filter) => (
-            <li>
+            <li key={filter.type}>
               <div className="flex items-center gap-1">
                 <Checkbox
                   checked={filter.checked}

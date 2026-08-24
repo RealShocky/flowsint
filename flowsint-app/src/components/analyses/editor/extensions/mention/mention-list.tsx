@@ -79,6 +79,7 @@ const MentionList = forwardRef<MentionListRef, MentionListProps>((props, ref) =>
         <div className="overflow-y-auto max-h-[300px]">
           {props.items.map((item, index) => (
             <MentionListItem
+              key={item.nodeId}
               item={item}
               index={index}
               selectedIndex={selectedIndex}

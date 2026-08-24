@@ -8,7 +8,7 @@ import {
   PopoverTitle,
   PopoverTrigger
 } from '@/components/ui/popover'
-import { memo, useState, useEffect, useCallback, useRef } from 'react'
+import { memo, useState, useEffect, useLayoutEffect, useCallback, useRef } from 'react'
 import { cn } from '@/lib/utils'
 import { FieldType, FormField, findActionItemByKey } from '@/lib/action-items'
 import { CopyButton } from '@/components/copy'
@@ -288,9 +288,18 @@ const DetailsPanel = memo(() => {
   })
   const [nodeSize, setNodeSize] = useState<number>(0)
 
-  // Refs to always read latest values without stale closures
+  // Refs to always read latest values without stale closures. Handlers below
+  // also write these synchronously so a value is available immediately
+  // within the same call (before the next render); this effect is the
+  // general-purpose fallback that keeps them in sync for every path that
+  // updates the state, including the node-sync block below, which cannot
+  // write refs directly since it runs during render.
   const formDataRef = useRef(formData)
   const nodeSizeRef = useRef(nodeSize)
+  useLayoutEffect(() => {
+    formDataRef.current = formData
+    nodeSizeRef.current = nodeSize
+  })
 
   const IconComponent = useIcon(node?.nodeType as string, {
     nodeColor: node?.nodeColor,
@@ -327,9 +336,7 @@ const DetailsPanel = memo(() => {
         nodeSize: ns,
         notes: (nodeMetadata?.notes as string) || ''
       }
-      formDataRef.current = fd
       setFormData(fd)
-      nodeSizeRef.current = ns ?? 0
       setNodeSize(ns ?? 0)
     }
   }

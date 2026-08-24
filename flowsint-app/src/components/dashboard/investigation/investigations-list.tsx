@@ -131,6 +131,7 @@ export function InvestigationsList({
             {filteredInvestigations.length === 0 && <div>No investigation found.</div>}
             {filteredInvestigations.map((inv) => (
               <Link
+                key={inv.id}
                 to="/dashboard/investigations/$investigationId"
                 params={{ investigationId: inv.id }}
                 className="block p-4 border border-border rounded-lg hover:border-muted-foreground/30 transition-colors group"
