@@ -135,8 +135,10 @@ const NodesPanel = memo(({ nodes, isLoading }: { nodes: GraphNode[]; isLoading?:
   const setSelectedNodes = useGraphStore((state) => state.setSelectedNodes)
   const selectedNodes = useGraphStore((state) => state.selectedNodes || [])
   const centerOnNode = useGraphControls((state) => state.centerOnNode)
+  // getSettingValue returns number | boolean | undefined (generic getter
+  // over any category/key pair) — this setting is always boolean-valued.
   const autoZoomOnCurrentNode = useGraphSettingsStore((s) =>
-    s.getSettingValue('general', 'autoZoomOnCurrentNode')
+    Boolean(s.getSettingValue('general', 'autoZoomOnCurrentNode'))
   )
   const [searchQuery, setSearchQuery] = useState<string>('')
   const [filters, setFilters] = useState<string[] | null>(null)

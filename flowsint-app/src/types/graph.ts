@@ -51,36 +51,6 @@ export type GraphEdge = {
   confidence_level?: number | string
 }
 
-export type ForceGraphSetting = {
-  value: any
-  min?: number
-  max?: number
-  step?: number
-  type?: string
-  description?: string
-}
-
-export type GeneralSetting = {
-  value: any
-  options?: any[]
-  description?: string
-}
-
-// Extended setting types for the centralized store
-export type ExtendedSetting = {
-  value: any
-  type: string
-  min?: number
-  max?: number
-  step?: number
-  options?: { value: string; label: string }[]
-  description?: string
-}
-
-export type Settings = {
-  [key: string]: ExtendedSetting
-}
-
 export type PathNode = {
   id: string
   label: string

@@ -82,18 +82,24 @@ const GraphViewer: React.FC<GraphViewerProps> = ({
   const customIcons = useNodesDisplaySettings((s) => s.customIcons)
   const setActions = useGraphControls((s) => s.setActions)
   const setCurrentLayoutType = useGraphControls((s) => s.setCurrentLayoutType)
+  // getSettingValue returns number | boolean | undefined (generic getter
+  // over any category/key pair) — this setting is always boolean-valued.
   const autoColorLinksByNodeType = useGraphSettingsStore((s) =>
-    s.getSettingValue('general', 'autoColorLinksByNodeType')
+    Boolean(s.getSettingValue('general', 'autoColorLinksByNodeType'))
   )
+  // getSettingValue returns number | boolean | undefined (it's a generic
+  // getter over any category/key pair) — this specific setting is always
+  // boolean-valued, so coerce rather than widen the prop types below to
+  // match the getter.
   const autoZoomOnCurrentNode = useGraphSettingsStore((s) =>
-    s.getSettingValue('general', 'autoZoomOnCurrentNode')
+    Boolean(s.getSettingValue('general', 'autoZoomOnCurrentNode'))
   )
   const showBackgroundSetting = useGraphSettingsStore((s) =>
-    s.getSettingValue('general', 'showBackground')
+    Boolean(s.getSettingValue('general', 'showBackground'))
   )
 
   const showMinimapSetting = useGraphSettingsStore((s) =>
-    s.getSettingValue('general', 'showMinimap')
+    Boolean(s.getSettingValue('general', 'showMinimap'))
   )
   const forceSettings = useGraphSettingsStore((s) => s.forceSettings)
   const setImportModalOpen = useGraphSettingsStore((s) => s.setImportModalOpen)
@@ -557,7 +563,6 @@ const GraphViewer: React.FC<GraphViewerProps> = ({
         d3AlphaDecay={forceSettings.d3AlphaDecay.value}
         d3AlphaMin={forceSettings.d3AlphaMin.value}
         d3VelocityDecay={forceSettings.d3VelocityDecay.value}
-        warmupTicks={forceSettings?.warmupTicks?.value ?? 0}
         dagLevelDistance={forceSettings.dagLevelDistance.value}
         backgroundColor={backgroundColor}
         linkCanvasObject={renderLinkCallback}
