@@ -24,7 +24,7 @@ export function NavUser() {
   const logout = useCallback(() => {
     authService.logout()
     navigate({ to: '/login' })
-  }, [])
+  }, [navigate])
 
   return (
     <DropdownMenu>

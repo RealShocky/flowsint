@@ -156,36 +156,40 @@ export const MapFromAddress: React.FC<MapFromAddressProps> = ({
   })
 
   // Combine all locations with their coordinates
-  const processedLocations = locations.map((location) => {
-    if (location.lat !== undefined && location.lon !== undefined) {
-      return {
-        ...location,
-        coordinates: { lat: location.lat, lon: location.lon },
-        isLoading: false,
-        isError: false
-      }
-    }
-    const geocodeIndex = locationsToGeocode.findIndex((loc) => loc.address === location.address)
-    if (geocodeIndex !== -1 && geocodeQuery.data) {
-      const geocoded = geocodeQuery.data[geocodeIndex]
-      return {
-        ...location,
-        coordinates: geocoded,
-        isLoading: geocodeQuery.isLoading,
-        isError: geocodeQuery.isError
-      }
-    }
-    return {
-      ...location,
-      coordinates: null,
-      isLoading: geocodeQuery.isLoading,
-      isError: geocodeQuery.isError
-    }
-  })
+  const processedLocations = useMemo(
+    () =>
+      locations.map((location) => {
+        if (location.lat !== undefined && location.lon !== undefined) {
+          return {
+            ...location,
+            coordinates: { lat: location.lat, lon: location.lon },
+            isLoading: false,
+            isError: false
+          }
+        }
+        const geocodeIndex = locationsToGeocode.findIndex((loc) => loc.address === location.address)
+        if (geocodeIndex !== -1 && geocodeQuery.data) {
+          const geocoded = geocodeQuery.data[geocodeIndex]
+          return {
+            ...location,
+            coordinates: geocoded,
+            isLoading: geocodeQuery.isLoading,
+            isError: geocodeQuery.isError
+          }
+        }
+        return {
+          ...location,
+          coordinates: null,
+          isLoading: geocodeQuery.isLoading,
+          isError: geocodeQuery.isError
+        }
+      }),
+    [locations, locationsToGeocode, geocodeQuery.data, geocodeQuery.isLoading, geocodeQuery.isError]
+  )
 
   const validLocations = useMemo(
     () => processedLocations.filter((l) => l.coordinates),
-    [JSON.stringify(processedLocations)]
+    [processedLocations]
   )
 
   const DEFAULT_MARKER_COLOR = '#6366f1'

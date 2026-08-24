@@ -284,7 +284,7 @@ const FlowEditor = memo(({ initialEdges, initialNodes, theme, flow }: FlowEditor
         zoom: 1.5
       })
     },
-    [reactFlowInstance, nodes, setNodes, setCenter]
+    [reactFlowInstance, nodes, setNodes, setCenter, colors]
   )
 
   // #### Node Interaction Handlers ####
@@ -299,7 +299,7 @@ const FlowEditor = memo(({ initialEdges, initialNodes, theme, flow }: FlowEditor
       //     zoom: 1.5,
       // })
     },
-    [setCenter, setSelectedNode]
+    [setSelectedNode]
   )
 
   const onPaneClick = useCallback(() => {
@@ -409,7 +409,7 @@ const FlowEditor = memo(({ initialEdges, initialNodes, theme, flow }: FlowEditor
     } finally {
       setLoading(false)
     }
-  }, [flowId, nodes, edges, computeFlowMutation, setLoading])
+  }, [flowId, nodes, edges, computeFlowMutation, setLoading, handleSaveFlow])
 
   // #### Simulation State Management ####
   // Update the updateNodeState function with proper types
@@ -437,6 +437,35 @@ const FlowEditor = memo(({ initialEdges, initialNodes, theme, flow }: FlowEditor
     },
     [setCenter]
   )
+
+  const resetSimulation = useCallback(() => {
+    setIsSimulating(false)
+    setCurrentStepIndex(0)
+
+    // Reset all nodes
+    setNodes((nds: FlowNode[]) =>
+      nds.map((node) => ({
+        ...node,
+        data: {
+          ...node.data,
+          computationState: undefined
+        }
+      }))
+    )
+
+    // Reset all edges
+    setEdges((eds: FlowEdge[]) =>
+      eds.map((edge) => ({
+        ...edge,
+        style: {
+          ...edge.style,
+          stroke: '#64748b',
+          strokeWidth: 1
+        },
+        animated: false
+      }))
+    )
+  }, [setIsSimulating, setCurrentStepIndex, setNodes, setEdges])
 
   // #### Simulation Effect ####
   useEffect(() => {
@@ -507,7 +536,11 @@ const FlowEditor = memo(({ initialEdges, initialNodes, theme, flow }: FlowEditor
     loading,
     flowBranches,
     updateNodeState,
-    setCurrentStepIndex
+    setCurrentStepIndex,
+    setNodes,
+    setEdges,
+    fitView,
+    resetSimulation
   ])
 
   // #### Simulation Control Functions ####
@@ -573,35 +606,6 @@ const FlowEditor = memo(({ initialEdges, initialNodes, theme, flow }: FlowEditor
 
     const totalSteps = flowBranches.reduce((sum, branch) => sum + branch.steps.length, 0)
     setCurrentStepIndex(totalSteps)
-  }
-
-  const resetSimulation = () => {
-    setIsSimulating(false)
-    setCurrentStepIndex(0)
-
-    // Reset all nodes
-    setNodes((nds: FlowNode[]) =>
-      nds.map((node) => ({
-        ...node,
-        data: {
-          ...node.data,
-          computationState: undefined
-        }
-      }))
-    )
-
-    // Reset all edges
-    setEdges((eds: FlowEdge[]) =>
-      eds.map((edge) => ({
-        ...edge,
-        style: {
-          ...edge.style,
-          stroke: '#64748b',
-          strokeWidth: 1
-        },
-        animated: false
-      }))
-    )
   }
 
   // #### Render ####
@@ -689,7 +693,7 @@ const FlowEditor = memo(({ initialEdges, initialNodes, theme, flow }: FlowEditor
           <MiniMap className="bg-background" position="bottom-left" pannable zoomable />
         </ReactFlow>
       </div>
-      <FlowSheet onLayout={onLayout} />
+      <FlowSheet />
       <SaveModal
         open={showModal}
         onOpenChange={setShowModal}

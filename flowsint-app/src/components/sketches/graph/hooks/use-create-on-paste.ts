@@ -36,7 +36,7 @@ export function useCreateOnPaste(sketchId: string) {
         toast.error(e.message)
       }
     },
-    [sketchId]
+    [sketchId, addNode, replaceNode]
   )
 
   const onImage = useCallback(
@@ -66,7 +66,7 @@ export function useCreateOnPaste(sketchId: string) {
         toast.error(e.message)
       }
     },
-    [sketchId]
+    [sketchId, addNode, replaceNode]
   )
   return usePasteListener(
     {

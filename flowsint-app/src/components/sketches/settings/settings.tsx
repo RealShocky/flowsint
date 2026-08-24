@@ -247,7 +247,7 @@ function NodeColorsSection() {
 
   const handleRandomizeColors = useCallback(() => {
     randomizeColors()
-  }, [])
+  }, [randomizeColors])
 
   const handleIconSelect = (iconType: string, iconName: string) => {
     // @ts-ignore
@@ -265,9 +265,10 @@ function NodeColorsSection() {
 
   // Cleanup timers on unmount
   useEffect(() => {
+    const timers = debounceTimers.current
     return () => {
-      debounceTimers.current.forEach((timer) => clearTimeout(timer))
-      debounceTimers.current.clear()
+      timers.forEach((timer) => clearTimeout(timer))
+      timers.clear()
     }
   }, [])
 

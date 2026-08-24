@@ -108,17 +108,20 @@ const ChatItem = ({
   deleteChatMutation: any
   switchToChat: any
 }) => {
-  const handleDeleteChat = useCallback(async (e: { stopPropagation: () => void }) => {
-    e.stopPropagation()
-    if (
-      await confirm({
-        title: 'Are you sure you want to delete this chat?',
-        message: 'This action is irreversible.'
-      })
-    ) {
-      await deleteChatMutation.mutateAsync(chat.id)
-    }
-  }, [])
+  const handleDeleteChat = useCallback(
+    async (e: { stopPropagation: () => void }) => {
+      e.stopPropagation()
+      if (
+        await confirm({
+          title: 'Are you sure you want to delete this chat?',
+          message: 'This action is irreversible.'
+        })
+      ) {
+        await deleteChatMutation.mutateAsync(chat.id)
+      }
+    },
+    [chat.id, confirm, deleteChatMutation]
+  )
   return (
     <button
       onClick={() => switchToChat(chat.id)}

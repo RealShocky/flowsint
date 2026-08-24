@@ -346,7 +346,7 @@ const GraphViewer: React.FC<GraphViewerProps> = ({
         graphRef.current.zoomToFit(400)
       }
     }
-  }, [sketchId])
+  }, [])
 
   // reset hasPerformedInitialZoom on sketch change
   useEffect(() => {

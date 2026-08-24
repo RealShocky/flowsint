@@ -94,7 +94,15 @@ const LaunchEnricherOrFlowPanel = memo(
         }
         handleCloseModal()
       }
-    }, [selectedEnricher, activeTab, launchEnricher, launchFlow, values, sketch_id])
+    }, [
+      selectedEnricher,
+      activeTab,
+      launchEnricher,
+      launchFlow,
+      values,
+      sketch_id,
+      handleCloseModal
+    ])
 
     if (disabled) return <>{children}</>
     return (

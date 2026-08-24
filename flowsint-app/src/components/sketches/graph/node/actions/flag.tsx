@@ -52,7 +52,7 @@ export function NodeFlag({ sketchId, node }: { sketchId: string; node: GraphNode
         // toast.error(e.message)
       }
     },
-    [nodeId, flagValue, updateNode]
+    [nodeId, flagValue, updateNode, node, sketchId]
   )
 
   return (

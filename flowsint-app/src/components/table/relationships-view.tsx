@@ -59,10 +59,10 @@ function RelationshipItem({
 
   const handleNodeClickSource = useCallback(() => {
     onNodeClick(relationship.source)
-  }, [])
+  }, [onNodeClick, relationship.source])
   const handleNodeClickTarget = useCallback(() => {
     onNodeClick(relationship.target)
-  }, [])
+  }, [onNodeClick, relationship.target])
 
   const handleCheckboxChange = useCallback(
     (checked: boolean) => {

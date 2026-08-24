@@ -121,7 +121,8 @@ const GraphMain = () => {
       setCurrentNodeId,
       clearSelectedNodes,
       clearSelectedEdges,
-      setCurrentEdgeId
+      setCurrentEdgeId,
+      canCreate
     ]
   )
 
@@ -163,7 +164,7 @@ const GraphMain = () => {
         onClick: stableBackgroundClick
       })
     },
-    [selectedNodes]
+    [selectedNodes, stableBackgroundClick]
   )
 
   const onEdgeContextMenu = useCallback(
@@ -198,25 +199,28 @@ const GraphMain = () => {
       setNodeMenu(null)
       setBackgroundMenu(null)
     },
-    [selectedEdges, handleBackgroundClick]
+    [selectedEdges, stableBackgroundClick]
   )
 
-  const onBackgroundContextMenu = useCallback((event: MouseEvent) => {
-    if (!containerRef.current) return
-    const pane = containerRef.current.getBoundingClientRect()
-    const relativeX = event.clientX - pane.left
-    const relativeY = event.clientY - pane.top
+  const onBackgroundContextMenu = useCallback(
+    (event: MouseEvent) => {
+      if (!containerRef.current) return
+      const pane = containerRef.current.getBoundingClientRect()
+      const relativeX = event.clientX - pane.left
+      const relativeY = event.clientY - pane.top
 
-    setBackgroundMenu({
-      nodes: selectedNodes,
-      rawTop: relativeY,
-      rawLeft: relativeX,
-      wrapperWidth: pane.width,
-      wrapperHeight: pane.height,
-      setMenu: setBackgroundMenu,
-      onClick: stableBackgroundClick
-    })
-  }, [])
+      setBackgroundMenu({
+        nodes: selectedNodes,
+        rawTop: relativeY,
+        rawLeft: relativeX,
+        wrapperWidth: pane.width,
+        wrapperHeight: pane.height,
+        setMenu: setBackgroundMenu,
+        onClick: stableBackgroundClick
+      })
+    },
+    [selectedNodes, stableBackgroundClick]
+  )
 
   // On link creation complete: create edge in store, then open edge context menu
   const handleCompleteLinking = useCallback(
@@ -238,7 +242,7 @@ const GraphMain = () => {
         onDismissNew: dismissNewEdge
       })
     },
-    [completeLinking, handleBackgroundClick, submitNewEdge, dismissNewEdge]
+    [completeLinking, stableBackgroundClick, submitNewEdge, dismissNewEdge]
   )
 
   const linkCreationProp = useMemo(

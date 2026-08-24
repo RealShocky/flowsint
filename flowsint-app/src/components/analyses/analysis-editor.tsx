@@ -96,41 +96,6 @@ export const AnalysisEditor = ({
 
   const createMutation = useCreateAnalysis(routeInvestigationId, onAnalysisCreate)
 
-  const debouncedSave = useCallback(
-    debounce(() => {
-      if (analysis) {
-        setSaveStatus('saving')
-        saveMutation.mutate({})
-      }
-    }, 1000), // 1 second delay
-    [analysis?.id]
-  )
-
-  // Handle editor content changes
-  const handleEditorChange = useCallback(
-    (value: any) => {
-      editorContentRef.current = value
-      if (analysis) {
-        setSaveStatus('unsaved')
-        debouncedSave()
-      }
-    },
-    [analysis?.id, debouncedSave]
-  )
-
-  // Debounce function
-  function debounce(func: Function, wait: number) {
-    let timeout: NodeJS.Timeout
-    return function executedFunction(...args: any[]) {
-      const later = () => {
-        clearTimeout(timeout)
-        func(...args)
-      }
-      clearTimeout(timeout)
-      timeout = setTimeout(later, wait)
-    }
-  }
-
   const saveMutation = useMutation({
     mutationFn: async (updated: Partial<Analysis>) => {
       if (!analysis) return
@@ -162,6 +127,33 @@ export const AnalysisEditor = ({
       setSaveStatus('unsaved')
     }
   })
+
+  // Debounced save — ref-based timer so useCallback gets a plain inline
+  // function (react-hooks requires it; a wrapped debounce() call defeated
+  // its own dependency tracking).
+  const saveDebounceRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined)
+
+  const debouncedSave = useCallback(() => {
+    if (saveDebounceRef.current) clearTimeout(saveDebounceRef.current)
+    saveDebounceRef.current = setTimeout(() => {
+      if (analysis) {
+        setSaveStatus('saving')
+        saveMutation.mutate({})
+      }
+    }, 1000)
+  }, [analysis, saveMutation])
+
+  // Handle editor content changes
+  const handleEditorChange = useCallback(
+    (value: any) => {
+      editorContentRef.current = value
+      if (analysis) {
+        setSaveStatus('unsaved')
+        debouncedSave()
+      }
+    },
+    [analysis, debouncedSave]
+  )
 
   const deleteMutation = useMutation({
     mutationFn: async (id: string) => {
@@ -251,7 +243,7 @@ export const AnalysisEditor = ({
         editor.commands.setContent('')
       }
     }
-  }, [analysis?.id, analysis?.title, editor])
+  }, [analysis, editor])
 
   useKeyboardShortcut({
     key: 's',

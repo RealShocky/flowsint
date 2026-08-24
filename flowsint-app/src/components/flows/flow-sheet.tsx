@@ -17,7 +17,7 @@ import { Alert, AlertDescription } from '../ui/alert'
 import { useIcon } from '@/hooks/use-icon'
 import { flowService } from '@/api/flow-service'
 
-const FlowSheet = ({ onLayout }: { onLayout: () => void }) => {
+const FlowSheet = () => {
   const openFlowSheet = useFlowStore((state) => state.openFlowSheet)
   const setOpenFlowSheet = useFlowStore((state) => state.setOpenFlowSheet)
   const selectedNode = useFlowStore((state) => state.selectedNode)
@@ -95,7 +95,7 @@ const FlowSheet = ({ onLayout }: { onLayout: () => void }) => {
       // onLayout && onLayout()
       setOpenFlowSheet(false)
     },
-    [selectedNode, setNodes, setEdges, onLayout, setOpenFlowSheet]
+    [selectedNode, setNodes, setEdges, setOpenFlowSheet, colors]
   )
 
   return (

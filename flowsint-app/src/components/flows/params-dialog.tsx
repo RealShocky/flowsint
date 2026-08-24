@@ -32,7 +32,7 @@ const ParamsDialog = () => {
       setParams(selectedNode.data.params)
     }
     if (selectedNode?.data.settings) {
-      setSettings({ ...settings, ...selectedNode.data.settings })
+      setSettings((prev) => ({ ...prev, ...selectedNode.data.settings }))
     }
   }, [selectedNode])
 

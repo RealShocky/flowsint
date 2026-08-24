@@ -1,6 +1,6 @@
 import { createFileRoute, useNavigate } from '@tanstack/react-router'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { Button } from '@/components/ui/button'
 import { customTypeService, CustomType } from '@/api/custom-type-service'
 import { toast } from 'sonner'
@@ -57,6 +57,22 @@ function CustomTypeEditor() {
     enabled: !isNew
   })
 
+  // Stable (functional state update, no closure over `fields`) so it's
+  // safe to depend on below without re-running this effect after every
+  // field it adds.
+  const addField = useCallback(() => {
+    setFields((prev) => [
+      ...prev,
+      {
+        id: Math.random().toString(36).substr(2, 9),
+        key: '',
+        title: '',
+        type: 'string',
+        required: false
+      }
+    ])
+  }, [])
+
   useEffect(() => {
     if (existingType) {
       setName(existingType.name)
@@ -69,7 +85,7 @@ function CustomTypeEditor() {
     } else if (isNew) {
       addField()
     }
-  }, [existingType, isNew])
+  }, [existingType, isNew, addField])
 
   useEffect(() => {
     setName(name.replaceAll(' ', ''))
@@ -104,19 +120,6 @@ function CustomTypeEditor() {
       if (field.required) required.push(field.key)
     })
     return { title: name || 'MyCustomType', type: 'object', properties, required }
-  }
-
-  const addField = () => {
-    setFields([
-      ...fields,
-      {
-        id: Math.random().toString(36).substr(2, 9),
-        key: '',
-        title: '',
-        type: 'string',
-        required: false
-      }
-    ])
   }
 
   const updateField = (id: string, updates: Partial<SchemaField>) => {

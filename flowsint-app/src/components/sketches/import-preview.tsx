@@ -561,7 +561,7 @@ export function ImportPreview({
       setIsImporting(false)
       toast.error(error?.message)
     }
-  }, [mappingsById, sketchId, onSuccess, refetchGraph])
+  }, [mappingsById, sketchId, onSuccess, refetchGraph, edges, regenerateLayout, currentLayoutType])
 
   const typeNames = useMemo(() => Object.keys(mappingIdsByType), [mappingIdsByType])
   const [activeTab, setActiveTab] = useState('')

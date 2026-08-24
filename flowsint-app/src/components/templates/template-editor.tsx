@@ -110,7 +110,10 @@ export function TemplateEditor({ templateId, initialContent, importedYaml }: Tem
   const hasChanges = content !== savedContent
   const hasErrors = !validationResult.valid || editorErrors.some((e) => e.severity >= 8)
   const templateName = validationResult.data?.name || 'Untitled'
-  const templateParams = validationResult.data?.request?.params || {}
+  const templateParams = useMemo(
+    () => validationResult.data?.request?.params || {},
+    [validationResult.data]
+  )
   const paramKeys = Object.keys(templateParams)
 
   const stateRef = useRef({ hasErrors, hasChanges, data: validationResult.data, content })

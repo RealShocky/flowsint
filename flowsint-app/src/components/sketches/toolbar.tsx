@@ -217,7 +217,7 @@ export const Toolbar = memo(function Toolbar({ isLoading }: { isLoading: boolean
         )
       }
     },
-    [sketchId, exportToPNG]
+    [sketchId]
   )
 
   const areExactlyTwoSelected = selectedNodes.length === 2

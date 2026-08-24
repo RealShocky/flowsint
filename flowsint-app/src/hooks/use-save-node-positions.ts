@@ -77,7 +77,7 @@ export function useSaveNodePositions(sketchId?: string) {
         setSaveStatus('pending')
       }
     },
-    [sketchId]
+    [sketchId, setNodes, setSaveStatus]
   )
 
   /**

@@ -47,7 +47,7 @@ const NeighborsGraph = memo(
     )
     const handleRefetch = useCallback(() => {
       refetch()
-    }, [])
+    }, [refetch])
 
     if (error)
       return (

@@ -221,7 +221,7 @@ const NodesPanel = memo(({ nodes, isLoading }: { nodes: GraphNode[]; isLoading?:
         setSelectedNodes(filteredNodes)
       } else setSelectedNodes(nodes)
     },
-    [nodes, filteredNodes, filters, searchQuery, selectedNodes, setSelectedNodes]
+    [nodes, filteredNodes, filters, searchQuery, setSelectedNodes]
   )
 
   const handleCheckboxChange = useCallback(
