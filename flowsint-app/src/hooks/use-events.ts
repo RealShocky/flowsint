@@ -4,6 +4,7 @@ import { logService } from '@/api/log-service'
 import { queryKeys } from '@/api/query-keys'
 import { useAuthStore } from '@/stores/auth-store'
 import { connectSSE } from '@/api/sse'
+import type { Event } from '@/types/event'
 
 const API_URL = import.meta.env.VITE_API_URL ?? ''
 
