@@ -70,7 +70,7 @@ const NodeItem = memo(function NodeItem({
   const formatNodeData = useCallback((data: any) => {
     if (!data) return ''
     const entries = Object.entries(data)
-      .map(([key, value]) => `${key}:${Boolean(value) ? value : 'N/A'}`)
+      .map(([key, value]) => `${key}:${value ? value : 'N/A'}`)
       .join(', ')
     return entries
   }, [])
@@ -80,7 +80,9 @@ const NodeItem = memo(function NodeItem({
       <div
         className="grid items-center h-14 gap-3 text-sm border-b last:border-b-0"
         style={{
-          gridTemplateColumns: canEdit ? '24px 32px auto 1fr 140px 160px 32px' : '32px auto 1fr 140px 160px 32px'
+          gridTemplateColumns: canEdit
+            ? '24px 32px auto 1fr 140px 160px 32px'
+            : '32px auto 1fr 140px 160px 32px'
         }}
       >
         {/* Checkbox */}
@@ -290,7 +292,11 @@ export default function NodesTable({ nodes }: NodesTableProps) {
       {/* Table Header */}
       <div
         className="grid items-center h-11 px-4 bg-muted/50 p-2 rounded-t-md border text-sm font-medium text-muted-foreground"
-        style={{ gridTemplateColumns: canEdit ? '24px 32px auto 1fr 140px 160px 32px' : '32px auto 1fr 140px 160px 32px' }}
+        style={{
+          gridTemplateColumns: canEdit
+            ? '24px 32px auto 1fr 140px 160px 32px'
+            : '32px auto 1fr 140px 160px 32px'
+        }}
       >
         {canEdit && (
           <div className="flex items-center">

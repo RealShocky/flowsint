@@ -12,7 +12,7 @@ import { getDisplayName } from '@/lib/user-display'
 import { SESSION_QUERY_KEY } from '@/hooks/use-auth'
 
 export const Route = createFileRoute('/_auth/dashboard/profile')({
-  component: ProfilePage,
+  component: ProfilePage
 })
 
 function ProfilePage() {
@@ -22,13 +22,13 @@ function ProfilePage() {
 
   const { data: profile, isLoading } = useQuery({
     queryKey: ['profile', 'me'],
-    queryFn: authService.getCurrentUser,
+    queryFn: authService.getCurrentUser
   })
 
   const [form, setForm] = useState({
     first_name: '',
     last_name: '',
-    avatar_url: '',
+    avatar_url: ''
   })
 
   useEffect(() => {
@@ -36,7 +36,7 @@ function ProfilePage() {
       setForm({
         first_name: profile.first_name ?? '',
         last_name: profile.last_name ?? '',
-        avatar_url: profile.avatar_url ?? '',
+        avatar_url: profile.avatar_url ?? ''
       })
     }
   }, [profile])
@@ -54,12 +54,12 @@ function ProfilePage() {
           first_name: data.first_name ?? undefined,
           last_name: data.last_name ?? undefined,
           avatar_url: data.avatar_url ?? undefined,
-          username: [data.first_name, data.last_name].filter(Boolean).join(' ') || authUser.email,
+          username: [data.first_name, data.last_name].filter(Boolean).join(' ') || authUser.email
         })
       }
       toast.success('Profile updated')
     },
-    onError: () => toast.error('Failed to update profile'),
+    onError: () => toast.error('Failed to update profile')
   })
 
   const handleSubmit = (e: React.FormEvent) => {

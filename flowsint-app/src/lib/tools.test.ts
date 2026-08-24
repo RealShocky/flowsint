@@ -16,7 +16,7 @@ const makeNode = (id: string, overrides?: Partial<GraphNode>): GraphNode => ({
   nodeMetadata: {},
   x: 0,
   y: 0,
-  ...overrides,
+  ...overrides
 })
 
 describe('getListOfAllChildrenFromNodes', () => {
@@ -29,7 +29,9 @@ describe('getListOfAllChildrenFromNodes', () => {
   })
 
   it('should handle multiple nodes', () => {
-    expect(getListOfAllChildrenFromNodes([makeNode('node-1'), makeNode('node-2')])).toEqual(undefined)
+    expect(getListOfAllChildrenFromNodes([makeNode('node-1'), makeNode('node-2')])).toEqual(
+      undefined
+    )
   })
 
   it('should handle nodes with neighbors', () => {

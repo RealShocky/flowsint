@@ -114,7 +114,15 @@ const GraphMain = () => {
       setEdgeMenu(null)
       setBackgroundMenu(null)
     },
-    [openQuickAdd, linkCreation.mode, cancelLinkCreation, setCurrentNodeId, clearSelectedNodes, clearSelectedEdges, setCurrentEdgeId]
+    [
+      openQuickAdd,
+      linkCreation.mode,
+      cancelLinkCreation,
+      setCurrentNodeId,
+      clearSelectedNodes,
+      clearSelectedEdges,
+      setCurrentEdgeId
+    ]
   )
 
   // Stable ref so ForceGraph2D always calls the latest version
@@ -234,14 +242,24 @@ const GraphMain = () => {
   )
 
   const linkCreationProp = useMemo(
-    () => canCreate ? ({
+    () =>
+      canCreate
+        ? {
+            shiftHeld,
+            sourceNode: linkCreation.sourceNode,
+            onStartLinking: startLinking,
+            onCompleteLinking: handleCompleteLinking,
+            onCancel: cancelLinkCreation
+          }
+        : undefined,
+    [
+      canCreate,
       shiftHeld,
-      sourceNode: linkCreation.sourceNode,
-      onStartLinking: startLinking,
-      onCompleteLinking: handleCompleteLinking,
-      onCancel: cancelLinkCreation
-    }) : undefined,
-    [canCreate, shiftHeld, linkCreation.sourceNode, startLinking, handleCompleteLinking, cancelLinkCreation]
+      linkCreation.sourceNode,
+      startLinking,
+      handleCompleteLinking,
+      cancelLinkCreation
+    ]
   )
 
   const handleGraphRef = useCallback((ref: any) => {

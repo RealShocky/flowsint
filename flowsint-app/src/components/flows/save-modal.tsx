@@ -22,7 +22,14 @@ interface SaveModalProps {
   initialDescription?: string
 }
 
-export function SaveModal({ open, onOpenChange, onSave, isLoading, initialName, initialDescription }: SaveModalProps) {
+export function SaveModal({
+  open,
+  onOpenChange,
+  onSave,
+  isLoading,
+  initialName,
+  initialDescription
+}: SaveModalProps) {
   const [name, setName] = useState(initialName || 'My Enricher')
   const [description, setDescription] = useState(initialDescription || '')
   const [nameError, setNameError] = useState('')

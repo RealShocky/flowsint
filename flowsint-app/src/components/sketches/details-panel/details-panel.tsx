@@ -106,13 +106,7 @@ const formatDate = (value: unknown): string => {
 
 // ── Sub-components ────────────────────────────────────────────────────────────
 
-function TitleInput({
-  value,
-  onChange
-}: {
-  value: string
-  onChange: (val: string) => void
-}) {
+function TitleInput({ value, onChange }: { value: string; onChange: (val: string) => void }) {
   const [editing, setEditing] = useState(false)
   const [draft, setDraft] = useState(value)
   const inputRef = useRef<HTMLInputElement>(null)
@@ -132,10 +126,7 @@ function TitleInput({
 
   if (!editing) {
     return (
-      <button
-        onClick={() => setEditing(true)}
-        className="min-w-0 flex-1 text-left"
-      >
+      <button onClick={() => setEditing(true)} className="min-w-0 flex-1 text-left">
         <span className="block truncate text-2xl font-bold">
           {value || <span className="text-muted-foreground/40">Untitled</span>}
         </span>
@@ -182,11 +173,7 @@ function CollapsibleSection({
         onClick={() => setOpen((o) => !o)}
         className="flex w-full items-center gap-2 px-6 py-2.5 text-sm font-medium text-muted-foreground hover:bg-muted/50 transition-colors"
       >
-        {open ? (
-          <ChevronDown className="size-3.5" />
-        ) : (
-          <ChevronRightIcon className="size-3.5" />
-        )}
+        {open ? <ChevronDown className="size-3.5" /> : <ChevronRightIcon className="size-3.5" />}
         {label}
       </button>
       {open && children}
@@ -276,9 +263,9 @@ const DetailsPanel = memo(() => {
   const currentNodeType = findActionItemByKey(node!.nodeType, actionItems)
 
   const getNodePropertyType = (propertyName: string): FieldType | undefined => {
-    const field = currentNodeType?.fields.find((f: FormField) => f.name === propertyName);
+    const field = currentNodeType?.fields.find((f: FormField) => f.name === propertyName)
 
-    return field?.type;
+    return field?.type
   }
 
   const [formData, setFormData] = useState<FormData>({
@@ -466,12 +453,9 @@ const DetailsPanel = memo(() => {
   )
 
   const copyField = (value: any): string | undefined => {
-    if (typeof value === 'string') 
-      return value
-    else if (Array.isArray(value) && value.length > 0)
-      return value.join(',')
-    else 
-      return undefined
+    if (typeof value === 'string') return value
+    else if (Array.isArray(value) && value.length > 0) return value.join(',')
+    else return undefined
   }
 
   // ── Empty state ─────────────────────────────────────────────────────────────
@@ -503,7 +487,9 @@ const DetailsPanel = memo(() => {
               <IconComponent size={24} />
             </button>
           ) : (
-            <div className="shrink-0 mt-1.5"><IconComponent size={24} /></div>
+            <div className="shrink-0 mt-1.5">
+              <IconComponent size={24} />
+            </div>
           )}
           {canEdit ? (
             <TitleInput value={formData.nodeLabel} onChange={handleLabelCommit} />
@@ -532,7 +518,10 @@ const DetailsPanel = memo(() => {
       )}
 
       {/* Tabs */}
-      <Tabs defaultValue="properties" className="flex-1 min-h-0 flex flex-col overflow-hidden gap-0">
+      <Tabs
+        defaultValue="properties"
+        className="flex-1 min-h-0 flex flex-col overflow-hidden gap-0"
+      >
         <div className="px-3 pb-0 shrink-0 border-b">
           <TabsList className="w-full h-9 bg-transparent rounded-none p-0 gap-0">
             <TabsTrigger
@@ -569,11 +558,7 @@ const DetailsPanel = memo(() => {
           <CollapsibleSection label="Properties" defaultOpen noBorderTop>
             {propertiesFields.length > 0 ? (
               propertiesFields.map(([key, value]) => (
-                <PropertyRow
-                  key={key}
-                  label={key}
-                  copyValue={copyField(value)}
-                >
+                <PropertyRow key={key} label={key} copyValue={copyField(value)}>
                   {typeof value === 'boolean' ? (
                     canEdit ? (
                       <Switch
@@ -603,11 +588,13 @@ const DetailsPanel = memo(() => {
                       <TagsInput
                         value={value || []}
                         onChange={(tags) => handlePropertyBlur(key, tags)}
-                        orientation='vertical'
-                        placeholder={value?.length === 0 ? "Empty" : `Enter ${key.toLowerCase()}`}
+                        orientation="vertical"
+                        placeholder={value?.length === 0 ? 'Empty' : `Enter ${key.toLowerCase()}`}
                       />
                     ) : (
-                      <span className="text-muted-foreground truncate">{Array.isArray(value) ? value.join(', ') : formatValue(value)}</span>
+                      <span className="text-muted-foreground truncate">
+                        {Array.isArray(value) ? value.join(', ') : formatValue(value)}
+                      </span>
                     )
                   ) : canEdit ? (
                     <PropertyInput
@@ -630,7 +617,7 @@ const DetailsPanel = memo(() => {
                 value={formData.notes}
                 onChange={canEdit ? handleNotesChange : undefined}
                 output="html"
-                placeholder={canEdit ? "Write something..." : ""}
+                placeholder={canEdit ? 'Write something...' : ''}
                 showToolbar={false}
                 editorContentClassName="px-6 py-3 !max-w-none prose-sm"
                 immediatelyRender={false}

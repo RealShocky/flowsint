@@ -40,8 +40,8 @@ const InfoDialog = () => {
                   <strong>investigative graph</strong>.
                 </li>
                 <li>
-                  Offers <strong>visual enrichers</strong> to pivot from one entity to related
-                  ones: find <strong>connected individuals</strong>, discover{' '}
+                  Offers <strong>visual enrichers</strong> to pivot from one entity to related ones:
+                  find <strong>connected individuals</strong>, discover{' '}
                   <strong>infrastructure</strong>, uncover <strong>aliases</strong>.
                 </li>
                 <li>

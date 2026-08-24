@@ -10,7 +10,7 @@ interface UseLayoutProps {
 
 interface LayoutOptions {
   layoutType: 'force' | 'hierarchy'
-  nodes: GraphNode[],
+  nodes: GraphNode[]
   edges: GraphEdge[]
 }
 
@@ -18,16 +18,15 @@ export function useLayout({
   forceSettings,
   containerSize,
   saveAllNodePositions,
-  onProgress,
+  onProgress
 }: UseLayoutProps) {
   const workerRef = useRef<Worker | null>(null)
 
   // Initialize worker once
   useEffect(() => {
-    workerRef.current = new Worker(
-      new URL('../workers/layout.worker.ts', import.meta.url),
-      { type: 'module' }
-    )
+    workerRef.current = new Worker(new URL('../workers/layout.worker.ts', import.meta.url), {
+      type: 'module'
+    })
     return () => {
       // Cleanup worker on unmount
       workerRef.current?.terminate()
@@ -90,11 +89,11 @@ export function useLayout({
         if (layoutType === 'hierarchy') {
           worker.postMessage({
             type: 'dagre',
-            nodes: nodes.map(n => ({ ...n })), // Clone to avoid reference issues
-            edges: edges.map(e => ({ ...e })),
+            nodes: nodes.map((n) => ({ ...n })), // Clone to avoid reference issues
+            edges: edges.map((e) => ({ ...e })),
             options: {
-              dagLevelDistance: forceSettings.dagLevelDistance?.value ?? 50,
-            },
+              dagLevelDistance: forceSettings.dagLevelDistance?.value ?? 50
+            }
           })
         } else {
           const width = containerSize.width || 800
@@ -104,8 +103,8 @@ export function useLayout({
 
           worker.postMessage({
             type: 'force',
-            nodes: nodes.map(n => ({ ...n })),
-            edges: edges.map(e => ({ ...e })),
+            nodes: nodes.map((n) => ({ ...n })),
+            edges: edges.map((e) => ({ ...e })),
             options: {
               width,
               height,
@@ -118,9 +117,9 @@ export function useLayout({
               iterations: forceSettings.cooldownTicks?.value ?? 300,
               collisionRadius: forceSettings.collisionRadius?.value ?? 22,
               collisionStrength: forceSettings.collisionStrength?.value ?? 0.95,
-              centerGravity: forceSettings.centerGravity?.value ?? 0.15,
+              centerGravity: forceSettings.centerGravity?.value ?? 0.15
               // maxRadius,
-            },
+            }
           })
         }
       })

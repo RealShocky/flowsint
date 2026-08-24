@@ -577,7 +577,9 @@ export default function GlobalSettings() {
               label="Description"
               description="A brief description of what this sketch represents"
               value={formData.description}
-              onValueChange={canEdit ? (value) => handleInputChange('description', value) : () => {}}
+              onValueChange={
+                canEdit ? (value) => handleInputChange('description', value) : () => {}
+              }
               placeholder="Enter sketch description"
               rows={4}
             />

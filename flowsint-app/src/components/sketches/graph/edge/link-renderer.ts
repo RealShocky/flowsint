@@ -57,7 +57,7 @@ export const renderLink = ({
   const isHighlighted = highlightLinks.has(linkKey)
   const isSelected = rc.selectedEdgeIds.has(link.id)
   const isCurrent = currentEdge?.id === link.id
-  let linkWidthBase = forceSettings?.linkWidth?.value ?? 2
+  const linkWidthBase = forceSettings?.linkWidth?.value ?? 2
 
   const linkWidth = rc.shouldRenderDetails
     ? linkWidthBase
@@ -159,9 +159,12 @@ export const renderLink = ({
   // Arrow
   if (arrowLength && arrowLength > 0) {
     const endTan = bezierTangentAt1(
-      adjustedStartX, adjustedStartY,
-      ctrlX, ctrlY,
-      adjustedEndX, adjustedEndY,
+      adjustedStartX,
+      adjustedStartY,
+      ctrlX,
+      ctrlY,
+      adjustedEndX,
+      adjustedEndY,
       isCurved
     )
     const angle = Math.atan2(endTan.y, endTan.x)

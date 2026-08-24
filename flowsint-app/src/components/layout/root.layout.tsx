@@ -65,7 +65,7 @@ export default function RootLayout({ children }: LayoutProps) {
             minSize={16}
             maxSize={40}
             onCollapse={closeDetails}
-            onExpand={() => { }} // No auto-open here
+            onExpand={() => {}} // No auto-open here
             collapsible={true}
             collapsedSize={2}
           >
@@ -90,7 +90,7 @@ export default function RootLayout({ children }: LayoutProps) {
             minSize={16}
             maxSize={40}
             onCollapse={closeDetails}
-            onExpand={() => { }} // No auto-open here
+            onExpand={() => {}} // No auto-open here
             collapsible={true}
             collapsedSize={2}
           >

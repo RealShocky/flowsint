@@ -2,10 +2,10 @@ import { createFileRoute, useLoaderData, useNavigate } from '@tanstack/react-rou
 import { analysisService } from '@/api/analysis-service'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { toast } from 'sonner'
-import { CaseOverviewPage } from "@/components/dashboard/investigation/case-overview-page"
+import { CaseOverviewPage } from '@/components/dashboard/investigation/case-overview-page'
 
 export const Route = createFileRoute('/_auth/dashboard/investigations/$investigationId/')({
-  component: InvestigationPage,
+  component: InvestigationPage
 })
 
 function InvestigationPage() {
@@ -43,7 +43,5 @@ function InvestigationPage() {
     }
   })
 
-  return (
-    <CaseOverviewPage investigation={investigation} />
-  )
+  return <CaseOverviewPage investigation={investigation} />
 }

@@ -3,12 +3,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { useNavigate } from '@tanstack/react-router'
 import { parse as parseYaml, stringify as stringifyYaml } from 'yaml'
 import { toast } from 'sonner'
-import {
-  FileCode2,
-  FlaskConical,
-  CheckCircle2,
-  XCircle
-} from 'lucide-react'
+import { FileCode2, FlaskConical, CheckCircle2, XCircle } from 'lucide-react'
 import type { editor } from 'monaco-editor'
 
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs'

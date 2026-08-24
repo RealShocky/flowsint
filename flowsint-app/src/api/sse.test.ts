@@ -8,11 +8,11 @@ const fetchEventSourceMock = vi.fn((url: string, opts: any) => {
 })
 
 vi.mock('@microsoft/fetch-event-source', () => ({
-  fetchEventSource: (url: string, opts: any) => fetchEventSourceMock(url, opts),
+  fetchEventSource: (url: string, opts: any) => fetchEventSourceMock(url, opts)
 }))
 
 vi.mock('@/stores/auth-store', () => ({
-  useAuthStore: { getState: () => ({ token: 'tok123' }) },
+  useAuthStore: { getState: () => ({ token: 'tok123' }) }
 }))
 
 import { connectSSE } from './sse'
@@ -20,7 +20,7 @@ import { connectSSE } from './sse'
 const lastOpts = () => calls[calls.length - 1].opts
 
 const fakeResponse = (status: number, contentType: string) =>
-  ({ ok: status >= 200 && status < 300, status, headers: { get: () => contentType } } as any)
+  ({ ok: status >= 200 && status < 300, status, headers: { get: () => contentType } }) as any
 
 beforeEach(() => {
   calls.length = 0
@@ -66,9 +66,7 @@ describe('connectSSE', () => {
 
   it('accepts a valid event-stream open', async () => {
     connectSSE({ url: 'http://x', onMessage: () => {} })
-    await expect(
-      lastOpts().onopen(fakeResponse(200, 'text/event-stream'))
-    ).resolves.toBeUndefined()
+    await expect(lastOpts().onopen(fakeResponse(200, 'text/event-stream'))).resolves.toBeUndefined()
   })
 
   it('returns increasing backoff for transient errors', () => {

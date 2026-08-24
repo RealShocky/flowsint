@@ -46,7 +46,7 @@ export const useGraphControls = create<GraphControlsStore>()(
       setCurrentLayoutType: (layoutType) => set({ currentLayoutType: layoutType }),
       setView: (view) => set({ view }),
       setIsSelectorModeActive: (active) => set({ isSelectorModeActive: active }),
-      setSelectionMode: (mode) => set({ selectionMode: mode }),
+      setSelectionMode: (mode) => set({ selectionMode: mode })
     }),
     {
       name: 'graph-controls-storage',

@@ -243,7 +243,7 @@ export function getAvatarColor(name: string): string {
 }
 
 export const flattenObj = (ob: Record<string, any>) => {
-  let result: Record<string, any> = {}
+  const result: Record<string, any> = {}
   for (const i in ob) {
     if (ob[i] && typeof ob[i] === 'object' && !Array.isArray(ob[i])) {
       const temp = flattenObj(ob[i])

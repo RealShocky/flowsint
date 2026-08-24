@@ -99,7 +99,17 @@ export const ResizableContainer: React.FC<ResizableContainerProps> = ({
       setSize({ width: newWidth, height: newHeight })
       onResize?.(newWidth, newHeight)
     },
-    [isResizing, resizeDirection, startPos, startDimensions, minWidth, minHeight, maxWidth, maxHeight, onResize]
+    [
+      isResizing,
+      resizeDirection,
+      startPos,
+      startDimensions,
+      minWidth,
+      minHeight,
+      maxWidth,
+      maxHeight,
+      onResize
+    ]
   )
 
   const handleMouseUp = useCallback(() => {

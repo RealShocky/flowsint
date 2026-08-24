@@ -63,7 +63,6 @@ const AnalysisList = () => {
     queryFn: () => analysisService.getByInvestigationId(investigationId || ''),
     enabled: !!investigationId
   })
-  
 
   const [searchQuery, setSearchQuery] = useState('')
 

@@ -133,11 +133,7 @@ const getNodeVisual = (node: GraphNode, iconColor: string): NodeVisual => {
 
 // --- Flag drawing (single shared helper) ---
 
-const drawFlag = (
-  ctx: CanvasRenderingContext2D,
-  node: GraphNode,
-  size: number
-) => {
+const drawFlag = (ctx: CanvasRenderingContext2D, node: GraphNode, size: number) => {
   const flagColor = FLAG_COLORS[node.nodeFlag!]
   if (!flagColor) return
 
@@ -366,13 +362,7 @@ const drawCardFlag = (
   const fSize = 6 * s
   const prevAlpha = ctx.globalAlpha
   ctx.globalAlpha = 1
-  ctx.drawImage(
-    cachedFlag,
-    cardX + cardWidth - fSize * 0.6,
-    cardY - fSize * 0.4,
-    fSize,
-    fSize
-  )
+  ctx.drawImage(cachedFlag, cardX + cardWidth - fSize * 0.6, cardY - fSize * 0.4, fSize, fSize)
   ctx.globalAlpha = prevAlpha
 }
 
@@ -582,8 +572,16 @@ const renderDotNode = (params: NodeRenderParams) => {
   // Icons
   if (showIcons) {
     drawNodeIcon(
-      ctx, node, node.x, node.y, size, shape,
-      isOutlined, isHighlighted, rc.hasAnyHighlight, theme
+      ctx,
+      node,
+      node.x,
+      node.y,
+      size,
+      shape,
+      isOutlined,
+      isHighlighted,
+      rc.hasAnyHighlight,
+      theme
     )
   }
 
@@ -622,7 +620,7 @@ const squareEdgeDistance = (angle: number, size: number): number => {
 
 const hexEdgeDistance = (angle: number, size: number): number => {
   const apothem = (size * SQRT3) / 2
-  let a = ((angle % (Math.PI * 2)) + Math.PI * 2) % (Math.PI * 2)
+  const a = ((angle % (Math.PI * 2)) + Math.PI * 2) % (Math.PI * 2)
   const sectorCenter = Math.round(a / (Math.PI / 3)) * (Math.PI / 3)
   const offset = a - sectorCenter
   return apothem / Math.cos(offset)

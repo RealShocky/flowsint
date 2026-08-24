@@ -12,9 +12,7 @@ import { useGraphStore } from '@/stores/graph-store'
 import { Switch } from '../ui/switch'
 import { Label } from '../ui/label'
 import type { MapRef } from 'react-map-gl/maplibre'
-import type {
-  StyleSpecification
-} from 'maplibre-gl'
+import type { StyleSpecification } from 'maplibre-gl'
 
 export type LocationPoint = {
   nodeId?: string
@@ -203,9 +201,9 @@ export const MapFromAddress: React.FC<MapFromAddressProps> = ({
       setIconsReady(true)
       return
     }
-    Promise.all(
-      Array.from(uniqueTypes).map((t) => preloadImage(t, '#ffffff'))
-    ).then(() => setIconsReady(true)).catch(() => setIconsReady(true))
+    Promise.all(Array.from(uniqueTypes).map((t) => preloadImage(t, '#ffffff')))
+      .then(() => setIconsReady(true))
+      .catch(() => setIconsReady(true))
   }, [validLocations])
 
   // Fly to markers on data load
@@ -241,7 +239,7 @@ export const MapFromAddress: React.FC<MapFromAddressProps> = ({
   const setCurrentNodeId = useGraphStore((s) => s.setCurrentNodeId)
 
   const onMarkerClick = useCallback(
-    (loc: typeof validLocations[number]) => {
+    (loc: (typeof validLocations)[number]) => {
       const lat = Number(loc.coordinates!.lat)
       const lon = Number(loc.coordinates!.lon)
       if (loc.nodeId) setCurrentNodeId(loc.nodeId)
@@ -432,7 +430,8 @@ export const MapFromAddress: React.FC<MapFromAddressProps> = ({
           const lat = Number(loc.coordinates!.lat)
           const lon = Number(loc.coordinates!.lon)
           const color = loc.color || DEFAULT_MARKER_COLOR
-          const cachedImg = showDetails && loc.nodeType ? getCachedImage(loc.nodeType, '#ffffff') : undefined
+          const cachedImg =
+            showDetails && loc.nodeType ? getCachedImage(loc.nodeType, '#ffffff') : undefined
           const dotSize = showDetails ? 24 : 10
           const glowSize = showDetails ? 36 : 16
           return (
@@ -463,9 +462,7 @@ export const MapFromAddress: React.FC<MapFromAddressProps> = ({
                   transition: 'width 0.2s, height 0.2s, box-shadow 0.2s'
                 }}
               >
-                {cachedImg && (
-                  <img src={cachedImg.src} width={14} height={14} alt="" />
-                )}
+                {cachedImg && <img src={cachedImg.src} width={14} height={14} alt="" />}
               </div>
             </Marker>
           )
