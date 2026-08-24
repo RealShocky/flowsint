@@ -10,7 +10,12 @@ import { queryKeys } from '@/api/query-keys'
 import ErrorState from '../shared/error-state'
 
 const InvestigationList = () => {
-  const { data, isLoading, error, refetch } = useQuery({
+  const {
+    data = [],
+    isLoading,
+    error,
+    refetch
+  } = useQuery({
     queryKey: queryKeys.investigations.list,
     queryFn: investigationService.get
   })

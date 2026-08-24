@@ -142,7 +142,7 @@ export default function NewInvestigation({ children, noDropDown = false }: NewIn
   const createInvestigationMutation = useMutation({
     mutationFn: investigationService.create,
     onSuccess: (result) => {
-      if (result.id) {
+      if ('id' in result && result.id) {
         toast.success('New investigation created.')
         router.navigate({ to: `/dashboard/investigations/${result.id}` })
         // Invalidate investigations list
@@ -150,7 +150,7 @@ export default function NewInvestigation({ children, noDropDown = false }: NewIn
           queryKey: queryKeys.investigations.list
         })
       } else {
-        toast.error(result.error || 'Failed to create investigation')
+        toast.error(('error' in result && result.error) || 'Failed to create investigation')
       }
     },
     onError: (error) => {
