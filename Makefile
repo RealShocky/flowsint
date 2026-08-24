@@ -166,11 +166,27 @@ lint-fix:
 # lie from day one. Ratchet instead: block only on files this branch touches,
 # so new code is held to the strict config and the backlog shrinks as files
 # get touched, without a red CI on every unrelated PR.
+#
+# "Touches" means semantically, not cosmetically: a repo-wide `ruff format`
+# adoption (or any future bulk reformat) diffs every file against BASE_REF
+# without changing what any of them mean — if that gets counted as "changed",
+# the ratchet degrades into gating the whole backlog on whichever PR happens
+# to run the formatter first. A file only counts if re-running ruff on the
+# BASE_REF version doesn't reproduce today's content byte-for-byte.
 BASE_REF ?= origin/main
 typecheck:
 	@changed=$$(git diff --name-only --diff-filter=ACMR $(BASE_REF)...HEAD -- '*.py' 2>/dev/null); \
+	meaningful=""; \
+	for f in $$changed; do \
+		if git cat-file -e $(BASE_REF):$$f 2>/dev/null; then \
+			old_reformatted=$$(git show $(BASE_REF):$$f | uv run ruff format --stdin-filename "$$f" - 2>/dev/null | uv run ruff check --fix --stdin-filename "$$f" - 2>/dev/null); \
+			if [ "$$old_reformatted" = "$$(cat "$$f")" ]; then continue; fi; \
+		fi; \
+		meaningful="$$meaningful $$f"; \
+	done; \
+	changed=$$(printf '%s\n' $$meaningful); \
 	if [ -z "$$changed" ]; then \
-		echo "No changed Python files vs $(BASE_REF) — skipping mypy."; \
+		echo "No semantically changed Python files vs $(BASE_REF) — skipping mypy."; \
 		exit 0; \
 	fi; \
 	echo "$$changed"; \
