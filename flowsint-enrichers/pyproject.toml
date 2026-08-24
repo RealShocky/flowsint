@@ -54,6 +54,11 @@ python_version = "3.11"
 warn_return_any = true
 warn_unused_configs = true
 disallow_untyped_defs = true
+# See the matching disable's rationale in flowsint-core/pyproject.toml:
+# none of the 4 workspace packages ship a py.typed marker, so every
+# cross-package import collapses to Any — a workspace-wide gap, not a
+# per-file bug.
+disable_error_code = ["import-untyped"]
 # Without this, mypy doesn't understand Field()'s required/optional
 # semantics and flags every pydantic model construction that omits a
 # field with a default as a "missing named argument" false positive.
