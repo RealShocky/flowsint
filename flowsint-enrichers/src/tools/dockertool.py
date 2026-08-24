@@ -1,5 +1,6 @@
-from docker import from_env, DockerClient
-from docker.errors import ImageNotFound, APIError, DockerException
+from docker import from_env
+from docker.errors import APIError, DockerException, ImageNotFound
+
 from .base import Tool
 
 
@@ -46,7 +47,14 @@ class DockerTool(Tool):
         except ImageNotFound:
             return False
 
-    def launch(self, command, volumes: dict = None, timeout: int = 30, environment: dict = None, entrypoint=None):
+    def launch(
+        self,
+        command,
+        volumes: dict = None,
+        timeout: int = 30,
+        environment: dict = None,
+        entrypoint=None,
+    ):
         self.install()
         # Merge default environment with custom environment
         env = {"TERM": "dumb"}  # Set terminal type to avoid TTY issues
@@ -81,7 +89,7 @@ class DockerTool(Tool):
                 try:
                     error_json = e.response.json()
                     error_detail = f"{str(e)} - Details: {error_json}"
-                except:
+                except Exception:
                     pass
 
             # Check if it's a container exit error

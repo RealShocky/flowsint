@@ -1,13 +1,14 @@
 import json
 import os
-import requests
-
 from typing import Any, Dict, List, Optional
+
+import requests
 from flowsint_core.core.enricher_base import Enricher
-from flowsint_enrichers.registry import flowsint_enricher
-from flowsint_types.username import Username
-from flowsint_types.individual import Individual
 from flowsint_core.core.logger import Logger
+from flowsint_enrichers.registry import flowsint_enricher
+from flowsint_types.individual import Individual
+from flowsint_types.username import Username
+
 
 @flowsint_enricher
 class UsernameToDehashed(Enricher):
@@ -41,7 +42,7 @@ class UsernameToDehashed(Enricher):
         """Declare required parameters for this enricher"""
         return [
             {
-                "name": "DEHASHED_API_KEY", # Get your API key from dehashed.com/api
+                "name": "DEHASHED_API_KEY",  # Get your API key from dehashed.com/api
                 "type": "vaultSecret",
                 "description": "Your Dehashed API key.",
                 "required": True,
@@ -63,14 +64,22 @@ class UsernameToDehashed(Enricher):
     async def scan(self, data: List[InputType]) -> List[OutputType]:
         results: List[OutputType] = []
 
-        api_key = self.get_secret("DEHASHED_API_KEY", os.getenv("DEHASHED_API_KEY")) 
+        api_key = self.get_secret("DEHASHED_API_KEY", os.getenv("DEHASHED_API_KEY"))
 
         for username in data:
             try:
-                headers = {'Dehashed-Api-Key': api_key, 'Content-Type': 'application/json'}
+                headers = {
+                    "Dehashed-Api-Key": api_key,
+                    "Content-Type": "application/json",
+                }
                 raw_data = json.dumps({"query": f"username:{username.value}"})
 
-                api_request = requests.post(f'https://api.dehashed.com/v2/search', data=raw_data, headers=headers, timeout=30)
+                api_request = requests.post(
+                    "https://api.dehashed.com/v2/search",
+                    data=raw_data,
+                    headers=headers,
+                    timeout=30,
+                )
 
                 if api_request.status_code != 200:
                     if api_request.status_code == 401:
@@ -92,23 +101,30 @@ class UsernameToDehashed(Enricher):
                 try:
                     response_json = api_request.json()
                 except Exception as e:
-                    Logger.error(None, {"message": f"(UsernameToDehashed) Failed to parse JSON for {username.value}: {e}"})
+                    Logger.error(
+                        None,
+                        {
+                            "message": f"(UsernameToDehashed) Failed to parse JSON for {username.value}: {e}"
+                        },
+                    )
                     continue
 
                 dehashed_entries = response_json.get("entries", [])
                 if not dehashed_entries:
                     Logger.error(
-                            self.sketch_id,
-                            {
-                                "message": f"(UsernameToDehashed) failed for the username: '{username.value}': {api_request.text}"
-                            },
-                        )
+                        self.sketch_id,
+                        {
+                            "message": f"(UsernameToDehashed) failed for the username: '{username.value}': {api_request.text}"
+                        },
+                    )
                     continue
-
 
                 api_balance = response_json.get("balance")
                 if api_balance:
-                    Logger.info(self.sketch_id, f'(UsernameToDehashed) Your remaining API balance is {api_balance}.')
+                    Logger.info(
+                        self.sketch_id,
+                        f"(UsernameToDehashed) Your remaining API balance is {api_balance}.",
+                    )
 
                 for entry in dehashed_entries:
                     entry_email = entry.get("email")
@@ -121,18 +137,25 @@ class UsernameToDehashed(Enricher):
 
                     results.append(
                         Individual(
-                            full_name=entry_name[0] if entry_name else None, 
-                            birth_date=entry_dob[0] if entry_dob else None, 
-                            email_addresses=entry_email if entry_email else None, 
-                            phone_numbers=entry_phone if entry_phone else None, 
-                            social_media_profiles=entry_socialmedia if entry_socialmedia else None, 
-                            ip_addresses=entry_ip if entry_ip else None, 
-                            usernames=entry_username if entry_username else None
-                            )
+                            full_name=entry_name[0] if entry_name else None,
+                            birth_date=entry_dob[0] if entry_dob else None,
+                            email_addresses=entry_email if entry_email else None,
+                            phone_numbers=entry_phone if entry_phone else None,
+                            social_media_profiles=(
+                                entry_socialmedia if entry_socialmedia else None
+                            ),
+                            ip_addresses=entry_ip if entry_ip else None,
+                            usernames=entry_username if entry_username else None,
                         )
+                    )
             except Exception as e:
-                Logger.error(self.sketch_id, {"message": f"(UsernameToDehashed) Exception while querying username {username.value}: {e}"})
-        
+                Logger.error(
+                    self.sketch_id,
+                    {
+                        "message": f"(UsernameToDehashed) Exception while querying username {username.value}: {e}"
+                    },
+                )
+
         return results
 
     def postprocess(

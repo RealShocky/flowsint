@@ -1,10 +1,10 @@
-from typing import Any, Dict, List, Optional, Union
+from typing import Any, Dict, List, Optional
+
 from flowsint_core.core.enricher_base import Enricher
+from flowsint_core.core.logger import Logger
 from flowsint_enrichers.registry import flowsint_enricher
 from flowsint_types.ip import Ip
 from flowsint_types.port import Port
-from flowsint_core.utils import is_valid_ip
-from flowsint_core.core.logger import Logger
 from tools.network.naabu import NaabuTool
 
 
@@ -133,9 +133,7 @@ class IpToPortsEnricher(Enricher):
             try:
                 Logger.info(
                     self.sketch_id,
-                    {
-                        "message": f"[NAABU] Scanning {ip.address} in {mode} mode..."
-                    },
+                    {"message": f"[NAABU] Scanning {ip.address} in {mode} mode..."},
                 )
 
                 # Launch naabu scan
@@ -197,8 +195,7 @@ class IpToPortsEnricher(Enricher):
                 ip_address = getattr(port, "_ip_address", None)
                 if not ip_address:
                     continue
-                
-                port_id = f"{ip_address}:{port.number}"
+
                 self.create_node(port)
 
                 # Create relationship from IP to Port

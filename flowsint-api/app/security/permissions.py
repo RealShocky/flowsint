@@ -20,9 +20,6 @@ def can_user(roles: list[Role], actions: list[str]) -> bool:
     return False
 
 
-from fastapi import HTTPException
-
-
 def check_investigation_permission(
     user_id: UUID, investigation_id: str, actions: list[str], db
 ):

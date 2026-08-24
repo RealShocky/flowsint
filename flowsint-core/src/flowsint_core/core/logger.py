@@ -13,7 +13,7 @@ import atexit
 import threading
 import time
 from datetime import datetime, timezone
-from queue import Queue
+from queue import Empty, Queue
 from typing import Dict, Optional, Union
 from uuid import UUID
 
@@ -132,7 +132,7 @@ class LoggerSingleton:
         ):
             try:
                 logs_to_insert.append(self._log_queue.get_nowait())
-            except:
+            except Empty:
                 break
 
         if not logs_to_insert:
