@@ -414,8 +414,12 @@ class Enricher(ABC):
             return values
         return cleaned
 
+    # input_data's real element type is whatever the subclass's InputType
+    # is (same as results/InputType/OutputType elsewhere in this class) —
+    # Any here for the same reason, not a str-typed default that happened
+    # to be wrong.
     def postprocess(
-        self, results: List[Dict[str, Any]], input_data: Optional[List[str]] = None
+        self, results: List[Dict[str, Any]], input_data: Optional[List[Any]] = None
     ) -> List[Dict[str, Any]]:
         return results
 

@@ -85,7 +85,7 @@ class ASN(FlowsintType):
         return self
 
     @classmethod
-    def from_string(cls, line: str):
+    def from_string(cls, line: str) -> "ASN":
         """Parse an ASN from a raw string."""
         return cls(asn_str=line.strip())
 

@@ -1,6 +1,6 @@
 import ipaddress
 import re
-from typing import Any, Optional, Set
+from typing import Any, Dict, Optional, Set
 from urllib.parse import urlparse
 
 import yaml
@@ -212,7 +212,7 @@ class YamlLoader:
         Returns:
             New dictionary with all placeholders substituted
         """
-        result = {}
+        result: Dict[str, Any] = {}
         for key, value in data.items():
             if isinstance(value, str):
                 result[key] = YamlLoader.render_template(value, values, sanitize)

@@ -54,6 +54,10 @@ python_version = "3.11"
 warn_return_any = true
 warn_unused_configs = true
 disallow_untyped_defs = true
+# Without this, mypy doesn't understand Field()'s required/optional
+# semantics and flags every pydantic model construction that omits a
+# field with a default as a "missing named argument" false positive.
+plugins = ["pydantic.mypy"]
 
 # Every enricher declares InputType/OutputType as plain class attributes
 # (see Enricher.InputType = NotImplemented in enricher_base.py, overridden

@@ -30,12 +30,12 @@ def create_test_template(
     output_type: str = "Ip",
     url: str = "https://api.example.com/{{address}}",
     method: str = "GET",
-    headers: dict = None,
-    params: dict = None,
+    headers: Optional[dict] = None,
+    params: Optional[dict] = None,
     body: Optional[str] = None,
-    response_map: dict = None,
+    response_map: Optional[dict] = None,
     response_expect: str = "json",
-    secrets: list = None,
+    secrets: Optional[list] = None,
     retry: Optional[TemplateRetryConfig] = None,
     is_array: bool = False,
     array_path: Optional[str] = None,
@@ -70,7 +70,7 @@ def create_test_template(
 class MockVault:
     """Mock vault for testing secret resolution."""
 
-    def __init__(self, secrets: dict = None):
+    def __init__(self, secrets: Optional[dict] = None):
         self._secrets = secrets or {}
 
     def get_secret(self, name: str) -> Optional[str]:
