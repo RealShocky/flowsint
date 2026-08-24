@@ -148,19 +148,21 @@ PY_SRC := flowsint-core/src flowsint-core/tests \
 	flowsint-enrichers/src flowsint-enrichers/tests \
 	flowsint-types/src flowsint-types/tests
 
-# Full-repo, blocking: formatting and flake8 are 100% clean today, so any
-# regression here is new debt — no reason to let it in.
+# Full-repo, blocking: formatting and lint are 100% clean today, so any
+# regression here is new debt — no reason to let it in. ruff replaces
+# black+isort+flake8 (one tool, one config — see [tool.ruff] in the root
+# pyproject.toml, which every package's ruff invocation inherits by walking
+# up the directory tree to find it).
 lint:
-	uv run black --check $(PY_SRC)
-	uv run isort --check $(PY_SRC)
-	uv run flake8 $(PY_SRC)
+	uv run ruff format --check $(PY_SRC)
+	uv run ruff check $(PY_SRC)
 
 lint-fix:
-	uv run black $(PY_SRC)
-	uv run isort $(PY_SRC)
+	uv run ruff format $(PY_SRC)
+	uv run ruff check --fix $(PY_SRC)
 
 # mypy has ~2200 pre-existing errors across the workspace (real, not fixed
-# blindly in one pass — see .flake8 / CI notes). Gating full-repo would be a
+# blindly in one pass — see CI notes). Gating full-repo would be a
 # lie from day one. Ratchet instead: block only on files this branch touches,
 # so new code is held to the strict config and the backlog shrinks as files
 # get touched, without a red CI on every unrelated PR.

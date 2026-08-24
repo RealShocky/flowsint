@@ -196,7 +196,9 @@ class TypeRegistryService(BaseService):
                 label_key = (
                     required[0]
                     if required
-                    else list(properties.keys())[0] if properties else "value"
+                    else list(properties.keys())[0]
+                    if properties
+                    else "value"
                 )
 
                 custom_type_obj = {

@@ -24,9 +24,8 @@
   },
   "lint-staged": {
     "**/*.py": [
-      "uv run black",
-      "uv run isort",
-      "uv run flake8"
+      "uv run ruff format",
+      "uv run ruff check --fix"
     ],
     "flowsint-app/**/*.{ts,tsx,js,jsx}": [
       "prettier --write"

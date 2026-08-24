@@ -30,9 +30,7 @@ dependencies = [
 dev = [
     "pytest>=9.0.3,<10.0.0",
     "pytest-asyncio>=0.21,<2.0",
-    "black>=26.3.1,<27.0",
-    "isort>=6.0,<7.0",
-    "flake8>=7.0,<8.0",
+    "ruff>=0.16,<1.0",
     "mypy>=1.17,<2.0",
 ]
 
@@ -50,19 +48,6 @@ maigret = { git = "https://github.com/soxoj/maigret" }
 recontrack = { git = "https://github.com/reconurge/recontrack.git" }
 reconcrawl = { git = "https://github.com/reconurge/reconcrawl.git" }
 reconspread = { git = "https://github.com/reconurge/reconspread.git" }
-
-[tool.black]
-line-length = 88
-target-version = ['py311']
-
-[tool.isort]
-profile = "black"
-multi_line_output = 3
-# Explicit, not auto-detected: isort's first-party detection depends on which
-# files it's invoked with, so "flowsint_enrichers" gets grouped differently
-# when sorted alone vs alongside the other packages (as CI/make lint does).
-# Same list must be kept in sync across all 4 packages' pyproject.toml.
-known_first_party = ["flowsint_core", "flowsint_types", "flowsint_enrichers", "flowsint_api", "app"]
 
 [tool.mypy]
 python_version = "3.11"

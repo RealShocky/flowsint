@@ -6,7 +6,6 @@ from ..base import Tool
 
 
 class WhoisXmlTool(Tool):
-
     whoisxml_api_endpoint = "https://whois-history.whoisxmlapi.com/api/v1"
 
     @classmethod

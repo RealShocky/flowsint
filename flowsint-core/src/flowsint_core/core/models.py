@@ -7,9 +7,6 @@ from sqlalchemy import (
     Boolean,
     Column,
     DateTime,
-)
-from sqlalchemy import Enum as SQLEnum
-from sqlalchemy import (
     Float,
     ForeignKey,
     Index,
@@ -20,6 +17,7 @@ from sqlalchemy import (
     Uuid,
     func,
 )
+from sqlalchemy import Enum as SQLEnum
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship
 from sqlalchemy.types import TypeDecorator
 

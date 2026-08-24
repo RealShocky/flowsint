@@ -6,7 +6,6 @@ from ..base import Tool
 
 
 class SireneTool(Tool):
-
     @classmethod
     def name(cls) -> str:
         return "sirene"

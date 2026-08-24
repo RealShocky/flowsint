@@ -12,7 +12,6 @@ from flowsint_types.phone import Phone
 
 @flowsint_enricher
 class IgnorantEnricher(Enricher):
-
     # Define types as class attributes - base class handles schema generation automatically
     InputType = Phone  # Phone objects
     OutputType = Dict[str, Any]  # Results as dictionaries

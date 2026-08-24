@@ -4,7 +4,6 @@ from ..base import Tool
 
 
 class ReconCrawlTool(Tool):
-
     def __init__(self):
         super().__init__()
 
