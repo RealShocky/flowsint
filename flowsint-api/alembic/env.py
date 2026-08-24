@@ -2,15 +2,15 @@ import os
 import sys
 from logging.config import fileConfig
 
-from sqlalchemy import engine_from_config, pool
 from alembic import context
 from dotenv import load_dotenv
+from sqlalchemy import engine_from_config, pool
 
 load_dotenv()
 
 sys.path.append(os.path.join(os.path.dirname(__file__), ".."))
 
-from flowsint_core.core.models import *  # noqa
+from flowsint_core.core.models import *
 
 config = context.config
 if config.config_file_name is not None:

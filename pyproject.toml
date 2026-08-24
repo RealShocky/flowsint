@@ -78,6 +78,12 @@ known-first-party = ["flowsint_core", "flowsint_types", "flowsint_enrichers", "f
 # Tracked for a real fix (explicit imports + __all__); not blind-fixed here
 # because it risks breaking every downstream `from flowsint_core import X`.
 "flowsint-core/src/flowsint_core/__init__.py" = ["F401", "F403"]
+# Standard Alembic env.py pattern: star-imports all models so their metadata
+# gets picked up for autogenerate. F405 fires on the later `Base.metadata`
+# usage, not just the import line, so a line-scoped noqa can't cover it.
+# E402: the import has to come after sys.path.append(..) above it, which
+# is itself required so the package is importable at all in this context.
+"flowsint-api/alembic/env.py" = ["F403", "F405", "E402"]
 
 [tool.ruff.format]
 # Matches black's defaults, which this replaces.
