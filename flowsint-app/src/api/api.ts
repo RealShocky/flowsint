@@ -22,22 +22,18 @@ export async function fetchWithAuth(endpoint: string, options: RequestInit = {})
     }
   }
 
-  try {
-    const response = await fetch(`${API_URL}${endpoint}`, config)
-    if (response.status === 401) {
-      useAuthStore.getState().logout()
-      window.location.href = '/login'
-      throw new Error('Session expired, login again.')
-    }
-    if (!response.ok) {
-      const errorData = await response.json().catch(() => ({}))
-      throw new Error(errorData.detail || `Erreur ${response.status}`)
-    }
-    if (response.status === 204) {
-      return null
-    }
-    return await response.json()
-  } catch (error) {
-    throw error
+  const response = await fetch(`${API_URL}${endpoint}`, config)
+  if (response.status === 401) {
+    useAuthStore.getState().logout()
+    window.location.href = '/login'
+    throw new Error('Session expired, login again.')
   }
+  if (!response.ok) {
+    const errorData = await response.json().catch(() => ({}))
+    throw new Error(errorData.detail || `Erreur ${response.status}`)
+  }
+  if (response.status === 204) {
+    return null
+  }
+  return await response.json()
 }

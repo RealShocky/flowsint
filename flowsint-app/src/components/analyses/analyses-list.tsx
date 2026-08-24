@@ -88,11 +88,12 @@ const AnalysisList = () => {
         queryKey: queryKeys.analyses.byInvestigation(investigationId || '')
       })
       toast.success('Analysis created successfully')
-      investigationId &&
+      if (investigationId) {
         navigate({
           to: '/dashboard/investigations/$investigationId/$type/$id',
           params: { investigationId, type: 'analysis', id: data.id }
         })
+      }
     },
     onError: (error) => {
       toast.error(

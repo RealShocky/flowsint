@@ -16,7 +16,9 @@ function loadPersistedSize(
         return parsed
       }
     }
-  } catch {}
+  } catch {
+    // invalid or missing stored value — fall back to defaults below
+  }
   return { width: defaultWidth, height: defaultHeight }
 }
 

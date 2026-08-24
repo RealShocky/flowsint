@@ -319,7 +319,8 @@ export function deepObjectDiff(obj1: Dictionary, obj2: Dictionary): Dictionary {
   // We map over the obj2 key:value duos to retrieve new keys that obj2 might have
   Object.entries(obj2).forEach(([key, value]) => {
     // We check for additional keys
-    if (!obj1.hasOwnProperty(key)) diffObject = { ...diffObject, [key]: { value, new: true } }
+    if (!Object.prototype.hasOwnProperty.call(obj1, key))
+      diffObject = { ...diffObject, [key]: { value, new: true } }
     else {
       diffObject = {
         ...diffObject,
@@ -336,7 +337,8 @@ export function deepObjectDiff(obj1: Dictionary, obj2: Dictionary): Dictionary {
   // We map over the obj1 key:value duos to retrieve keys that might have disapeared
   Object.entries(obj1).forEach(([key, value]) => {
     // We check for additional keys
-    if (!obj2.hasOwnProperty(key)) diffObject = { ...diffObject, [key]: { value, removed: true } }
+    if (!Object.prototype.hasOwnProperty.call(obj2, key))
+      diffObject = { ...diffObject, [key]: { value, removed: true } }
   })
   return diffObject
 }

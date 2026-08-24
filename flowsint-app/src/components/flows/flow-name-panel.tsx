@@ -73,7 +73,8 @@ export const FlowNamePanel = ({ flow, onUpdate, disabled = false }: FlowNamePane
       (field === 'name' && trimmedValue === flow.name) ||
       (field === 'description' && trimmedValue === flow.description)
     ) {
-      field === 'name' ? setIsEditingName(false) : setIsEditingDesc(false)
+      if (field === 'name') setIsEditingName(false)
+      else setIsEditingDesc(false)
       return
     }
 
@@ -93,7 +94,8 @@ export const FlowNamePanel = ({ flow, onUpdate, disabled = false }: FlowNamePane
       }
     } finally {
       setIsSaving(false)
-      field === 'name' ? setIsEditingName(false) : setIsEditingDesc(false)
+      if (field === 'name') setIsEditingName(false)
+      else setIsEditingDesc(false)
     }
   }
 
