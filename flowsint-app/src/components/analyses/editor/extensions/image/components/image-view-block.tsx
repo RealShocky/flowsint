@@ -72,6 +72,12 @@ export const ImageViewBlock: React.FC<NodeViewProps> = ({
   // after mount instead. containerRef.current is null on the first render,
   // so Infinity is the correct starting value regardless.
   const [containerMaxWidth, setContainerMaxWidth] = React.useState(Infinity)
+  // Deliberately no dependency array: --editor-width is a CSS custom
+  // property with no React-observable trigger (no prop/state changes when
+  // it does), so re-reading it after every commit is the only way to stay
+  // current — matches what reading it directly during render used to do,
+  // just moved somewhere safe to read the DOM from.
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   React.useLayoutEffect(() => {
     if (!containerRef.current) return
     setContainerMaxWidth(
