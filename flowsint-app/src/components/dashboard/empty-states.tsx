@@ -202,7 +202,7 @@ export function EmptySearchResults() {
       </div>
       <h3 className="text-sm font-medium text-foreground mb-1">No results found</h3>
       <p className="text-sm text-muted-foreground text-center max-w-[220px]">
-        Try adjusting your search or filters to find what you're looking for
+        Try adjusting your search or filters to find what you&apos;re looking for
       </p>
     </div>
   )

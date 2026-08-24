@@ -471,7 +471,7 @@ export const useGraphSettingsStore = create<GraphGeneralSettingsStore>()(
 
       getCategorySettings: (category: string) => {
         const categorySettings: Record<string, any> = {}
-        // @ts-ignore
+        // @ts-expect-error indexing the settings schema with a runtime string key
         const settings = get().settings[category]
         if (settings) {
           Object.entries(settings as Record<string, any>).forEach(([key, setting]) => {

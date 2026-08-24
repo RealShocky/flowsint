@@ -26,7 +26,7 @@ const InfoDialog = () => {
               </p>
 
               <p>
-                Whether you're conducting <strong>cyber investigations</strong>, mapping out{' '}
+                Whether you&apos;re conducting <strong>cyber investigations</strong>, mapping out{' '}
                 <strong>fraud networks</strong>, or gathering intelligence for{' '}
                 <strong>threat assessments</strong>, Flowsint helps you collect, visualize, and
                 understand fragmented data points in a structured and interactive way.
@@ -94,8 +94,8 @@ const InfoDialog = () => {
               <p>
                 Flowsint is designed for <strong>professionals</strong> who need{' '}
                 <strong>full control</strong> over their investigation logic, from how data is
-                structured to how relationships are interpreted. It's not just a tool — it's a{' '}
-                <strong>flexible workspace</strong> for building intelligence.
+                structured to how relationships are interpreted. It&apos;s not just a tool —
+                it&apos;s a <strong>flexible workspace</strong> for building intelligence.
               </p>
             </div>
           </div>

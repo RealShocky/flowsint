@@ -117,7 +117,7 @@ const VirtualCell = React.memo<{
   return (
     <td
       className={cellClassName}
-      //@ts-ignore
+      //@ts-expect-error cellStyle carries CSS custom properties, not in the Properties type
       style={cellStyle}
     >
       {flexRender(cell.column.columnDef.cell, cell.getContext())}

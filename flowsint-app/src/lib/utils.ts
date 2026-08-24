@@ -125,9 +125,9 @@ export const getForceLayoutedElements = (
 
   // Create simulation links
   const simLinks = edges.map((edge) => ({
-    // @ts-ignore
+    // @ts-expect-error edge.source is typed as string only, but can be an object with .id at runtime
     source: typeof edge.source === 'object' ? edge.source.id : edge.source,
-    // @ts-ignore
+    // @ts-expect-error edge.target is typed as string only, but can be an object with .id at runtime
     target: typeof edge.target === 'object' ? edge.target.id : edge.target
   }))
 

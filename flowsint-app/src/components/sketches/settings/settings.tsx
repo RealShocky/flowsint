@@ -250,7 +250,7 @@ function NodeColorsSection() {
   }, [randomizeColors])
 
   const handleIconSelect = (iconType: string, iconName: string) => {
-    // @ts-ignore
+    // @ts-expect-error iconName is a plain string, not narrowed to the Lucide icon-name union
     setIcon(iconType, iconName)
     clearIconTypeCache(iconType)
   }
@@ -318,7 +318,7 @@ function NodeColorsSection() {
         </div>
       </div>
       <IconPicker
-        // @ts-ignore
+        // @ts-expect-error handleIconSelect takes a plain string, IconPicker expects a Lucide icon name
         onIconChange={handleIconSelect}
         open={openIconPicker}
         setOpen={setOpenIconPicker}
@@ -625,7 +625,7 @@ export default function GlobalSettings() {
     }
 
     // For all other sections, use the dynamic renderer
-    // @ts-ignore
+    // @ts-expect-error indexing the settings schema with a runtime string key
     const category = settings[sectionId]
     if (category) {
       return (

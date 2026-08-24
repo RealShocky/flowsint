@@ -94,7 +94,6 @@ type MentionItemProps = {
 }
 const MentionListItem = ({ item, index, selectedIndex, selectItem }: MentionItemProps) => {
   const SourceIcon = useIcon(item.nodeType, {
-    // @ts-ignore
     nodeIcon: item.nodeIcon,
     nodeImage: item.nodeImage
   })

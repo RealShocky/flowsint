@@ -93,7 +93,7 @@ function CustomTypesPage() {
       actions={
         <Button
           size="sm"
-          // @ts-ignore
+          // @ts-expect-error 'new' is a $typeId param value handled by that route, not a route path itself
           onClick={() => navigate({ to: '/dashboard/custom-types/new' })}
         >
           <PlusIcon className="w-4 h-4 mr-2" />
@@ -114,7 +114,7 @@ function CustomTypesPage() {
           <Button
             onClick={() =>
               navigate({
-                // @ts-ignore
+                // @ts-expect-error 'new' is a $typeId param value handled by that route, not a route path itself
                 to: '/dashboard/custom-types/new'
               })
             }

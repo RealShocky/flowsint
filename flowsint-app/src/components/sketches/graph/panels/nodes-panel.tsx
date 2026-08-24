@@ -329,7 +329,7 @@ const NodesPanel = memo(({ nodes, isLoading }: { nodes: GraphNode[]; isLoading?:
         {!isLoading && filteredNodes?.length === 0 && searchQuery === '' && (
           <div className="text-sm p-4 text-center">
             <p className="border rounded-md border-dashed p-4 text-center">
-              Drag and drop you first node in the "items" section.
+              Drag and drop you first node in the &quot;items&quot; section.
             </p>
           </div>
         )}

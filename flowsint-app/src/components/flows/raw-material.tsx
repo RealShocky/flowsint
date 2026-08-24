@@ -28,7 +28,7 @@ export default function RawMaterial() {
     const term = searchTerm.toLowerCase()
 
     Object.entries(materials?.items).forEach(([category, items]) => {
-      // @ts-ignore
+      // @ts-expect-error materials.items is typed unknown
       const filtered = items.filter(
         (item: any) =>
           item.name.toLowerCase().includes(term) ||
@@ -78,7 +78,7 @@ export default function RawMaterial() {
           <div key={category} className="space-y-2 w-full">
             <h3 className="text-sm font-medium capitalize mt-4">{category.replace('_', ' ')}</h3>
             <div className="space-y-2">
-              {/* @ts-ignore */}
+              {/* @ts-expect-error enrichers is typed unknown */}
               {enrichers.map((enricher: Enricher) => (
                 <EnricherItem
                   key={enricher.name}
@@ -91,7 +91,7 @@ export default function RawMaterial() {
         ))}
         {Object.keys(filteredEnrichers).length === 0 && (
           <div className="text-center py-4 text-muted-foreground">
-            No enrichers found matching "{searchTerm}"
+            No enrichers found matching &quot;{searchTerm}&quot;
           </div>
         )}
       </div>

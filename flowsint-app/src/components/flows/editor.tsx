@@ -230,7 +230,6 @@ const FlowEditor = memo(({ initialEdges, initialNodes, theme, flow }: FlowEditor
   }, [])
 
   const onDrop = useCallback(
-    //@ts-ignore
     (event: React.DragEvent<HTMLDivElement>) => {
       event.preventDefault()
       if (!reactFlowWrapper.current || !reactFlowInstance) return
@@ -260,7 +259,7 @@ const FlowEditor = memo(({ initialEdges, initialNodes, theme, flow }: FlowEditor
           class_name: enricherData.class_name,
           module: enricherData.module || '',
           key: enricherData.name,
-          // @ts-ignore
+          // @ts-expect-error colors is keyed by ItemType, category is a plain string
           color: colors[enricherData.category.toLowerCase()] || '#94a3b8',
           name: enricherData.name,
           category: enricherData.category,

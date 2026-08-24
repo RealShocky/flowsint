@@ -344,7 +344,9 @@ export default function RelationshipsTable() {
           <Link className="mx-auto h-12 w-12 text-muted-foreground" />
           <div>
             <h3 className="text-lg font-semibold">No relationships found</h3>
-            <p className="text-muted-foreground">This sketch doesn't have any relationships yet.</p>
+            <p className="text-muted-foreground">
+              This sketch doesn&apos;t have any relationships yet.
+            </p>
           </div>
         </div>
       </div>

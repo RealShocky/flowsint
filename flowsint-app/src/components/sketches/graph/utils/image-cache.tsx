@@ -1,5 +1,5 @@
 import { TYPE_TO_ICON, useNodesDisplaySettings } from '@/stores/node-display-settings'
-//@ts-ignore
+//@ts-expect-error lucide-react ships no types for this deep icons path
 import * as lucideIcons from 'lucide-react/dist/esm/icons'
 import { renderToStaticMarkup } from 'react-dom/server'
 

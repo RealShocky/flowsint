@@ -35,13 +35,7 @@ const ChatHistory = ({
       <div className="flex items-center justify-between p-3 border-b w-full">
         <div className="flex w-full items-center justify-between gap-1">
           <div className="flex items-center gap-2">
-            <Button
-              variant="ghost"
-              size="icon"
-              className="h-6 w-6"
-              //@ts-ignore
-              onClick={() => setView('chat')}
-            >
+            <Button variant="ghost" size="icon" className="h-6 w-6" onClick={() => setView('chat')}>
               <ArrowLeft className="h-3 w-3" />
             </Button>
             <span className="opacity-60">Chat history</span>

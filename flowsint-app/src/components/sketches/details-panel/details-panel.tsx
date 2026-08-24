@@ -741,7 +741,7 @@ const DetailsPanel = memo(() => {
       </Tabs>
 
       <IconPicker
-        // @ts-ignore
+        // @ts-expect-error handleIconSelect takes a plain string, IconPicker expects a Lucide icon name
         onIconChange={handleIconSelect}
         open={openIconPicker}
         setOpen={setOpenIconPicker}
