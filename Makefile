@@ -152,14 +152,19 @@ PY_SRC := flowsint-core/src flowsint-core/tests \
 # regression here is new debt — no reason to let it in. ruff replaces
 # black+isort+flake8 (one tool, one config — see [tool.ruff] in the root
 # pyproject.toml, which every package's ruff invocation inherits by walking
-# up the directory tree to find it).
+# up the directory tree to find it). Frontend prettier/eslint are just as
+# clean today (0 errors — eslint's ~130 remaining findings are all
+# warnings, e.g. no-explicit-any, not failures), so they're blocking here
+# too rather than living only in flowsint-app's own yarn scripts.
 lint:
 	uv run ruff format --check $(PY_SRC)
 	uv run ruff check $(PY_SRC)
+	cd flowsint-app && yarn format:check && yarn lint:check
 
 lint-fix:
 	uv run ruff format $(PY_SRC)
 	uv run ruff check --fix $(PY_SRC)
+	cd flowsint-app && yarn format && yarn lint
 
 # mypy has ~2200 pre-existing errors across the workspace (real, not fixed
 # blindly in one pass — see CI notes). Gating full-repo would be a

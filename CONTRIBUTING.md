@@ -11,7 +11,7 @@ Run the checks for whatever you touched, not just the file you think is affected
 From the repo root:
 
 ```bash
-make lint        # ruff format --check + ruff check, whole repo
+make lint        # ruff format --check + ruff check (whole repo) + frontend prettier/eslint check
 make typecheck    # mypy, ratcheted to files this branch touches vs origin/main
 ```
 
@@ -21,16 +21,14 @@ Then, for whichever package(s) you changed:
 cd <package> && uv run pytest -q
 ```
 
-`make lint-fix` applies ruff's safe autofixes if `make lint` complains.
+`make lint-fix` applies ruff's safe autofixes, plus `yarn format`/`yarn lint` for the frontend, if `make lint` complains.
 
 ### Frontend (`flowsint-app`)
 
-From `flowsint-app/`:
+`make lint`/`make lint-fix` from the repo root already cover prettier + eslint for `flowsint-app`. The rest, from `flowsint-app/`:
 
 ```bash
 npx tsc --noEmit                    # types
-npx eslint <files you touched>      # lint must be 0 errors (warnings are fine)
-npx prettier --check <files>        # format (--write to fix)
 npx vitest run                      # unit tests
 yarn build                          # full build
 ```
