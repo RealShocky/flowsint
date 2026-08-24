@@ -23,7 +23,7 @@ import React, {
 const defaultFunction = (): Promise<boolean> => Promise.resolve(true)
 
 // Define the props that the ConfirmDialog will use
-interface ConfirmProps {
+export interface ConfirmProps {
   title: string
   message: string
 }
