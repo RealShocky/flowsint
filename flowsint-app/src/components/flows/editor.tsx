@@ -28,6 +28,7 @@ import { useConfirm } from '@/components/use-confirm-dialog'
 import { useParams, useRouter } from '@tanstack/react-router'
 import { flowService } from '@/api/flow-service'
 import { useFlowStore, type FlowNode, type FlowEdge } from '@/stores/flow-store'
+import type { Flow, FlowBranch } from '@/types/flow'
 import type { CSSProperties } from 'react'
 import {
   Select,
@@ -53,7 +54,7 @@ interface FlowEditorProps {
   theme?: ColorMode
   initialEdges: FlowEdge[]
   initialNodes: FlowNode[]
-  flow?: any
+  flow?: Flow
 }
 
 const defaultEdgeStyle: CSSProperties = { stroke: '#64748b' }
@@ -80,7 +81,7 @@ const FlowEditor = memo(({ initialEdges, initialNodes, theme, flow }: FlowEditor
   const [isSimulating, setIsSimulating] = useState(false)
   const [currentStepIndex, setCurrentStepIndex] = useState(0)
   const [simulationSpeed, setSimulationSpeed] = useState(1000) // ms per step
-  const [flowBranches, setFlowBranches] = useState<any[]>([])
+  const [flowBranches, setFlowBranches] = useState<FlowBranch[]>([])
 
   // #### Enricher Store State ####
   const nodes = useFlowStore((state) => state.nodes)

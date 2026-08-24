@@ -27,13 +27,12 @@ export default function RawMaterial() {
     }
     const term = searchTerm.toLowerCase()
 
-    Object.entries(materials?.items).forEach(([category, items]) => {
-      // @ts-expect-error materials.items is typed unknown
+    Object.entries(materials.items).forEach(([category, items]) => {
       const filtered = items.filter(
-        (item: any) =>
+        (item) =>
           item.name.toLowerCase().includes(term) ||
           item.class_name.toLowerCase().includes(term) ||
-          (item.doc && item.doc.toLowerCase().includes(term))
+          (item.documentation && item.documentation.toLowerCase().includes(term))
       )
       if (filtered.length > 0) {
         result[category] = filtered
@@ -41,7 +40,7 @@ export default function RawMaterial() {
     })
 
     return result
-  }, [searchTerm, materials?.items])
+  }, [searchTerm, materials])
 
   if (error) return <div>error</div>
 
@@ -78,7 +77,6 @@ export default function RawMaterial() {
           <div key={category} className="space-y-2 w-full">
             <h3 className="text-sm font-medium capitalize mt-4">{category.replace('_', ' ')}</h3>
             <div className="space-y-2">
-              {/* @ts-expect-error enrichers is typed unknown */}
               {enrichers.map((enricher: Enricher) => (
                 <EnricherItem
                   key={enricher.name}
