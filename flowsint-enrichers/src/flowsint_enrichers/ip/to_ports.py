@@ -4,6 +4,7 @@ from tools.network.naabu import NaabuTool
 
 from flowsint_core.core.enricher_base import Enricher
 from flowsint_core.core.logger import Logger
+from flowsint_core.core.vault import VaultProtocol
 from flowsint_enrichers.registry import flowsint_enricher
 from flowsint_types.ip import Ip
 from flowsint_types.port import Port
@@ -21,7 +22,7 @@ class IpToPortsEnricher(Enricher):
         self,
         sketch_id: Optional[str] = None,
         scan_id: Optional[str] = None,
-        vault=None,
+        vault: Optional[VaultProtocol] = None,
         params: Optional[Dict[str, Any]] = None,
     ):
         super().__init__(
@@ -187,7 +188,7 @@ class IpToPortsEnricher(Enricher):
         return results
 
     def postprocess(
-        self, results: List[OutputType], input_data: List[InputType] = None
+        self, results: List[OutputType], input_data: Optional[List[InputType]] = None
     ) -> List[OutputType]:
         """Create Neo4j nodes for ports and relationships with IP addresses"""
         if self._graph_service and results:

@@ -5,6 +5,7 @@ import requests
 from dotenv import load_dotenv
 
 from flowsint_core.core.enricher_base import Enricher
+from flowsint_core.core.vault import VaultProtocol
 from flowsint_enrichers.registry import flowsint_enricher
 from flowsint_types.wallet import CryptoNFT, CryptoWallet
 
@@ -23,7 +24,7 @@ class CryptoWalletAddressToNFTs(Enricher):
         self,
         sketch_id: Optional[str] = None,
         scan_id: Optional[str] = None,
-        vault=None,
+        vault: Optional[VaultProtocol] = None,
         params: Optional[Dict[str, Any]] = None,
     ):
         super().__init__(
@@ -90,7 +91,7 @@ class CryptoWalletAddressToNFTs(Enricher):
     def _get_nfts(self, address: str, api_key: str, api_url: str) -> List[CryptoNFT]:
         nfts = []
         """Get nfts for a wallet address."""
-        params = {
+        params: Dict[str, Any] = {
             "module": "account",
             "action": "tokennfttx",
             "address": address,

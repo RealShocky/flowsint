@@ -75,3 +75,13 @@ disable_error_code = ["valid-type", "attr-defined", "name-defined"]
 [[tool.mypy.overrides]]
 module = "tests.*"
 disallow_untyped_defs = false
+
+# Tool.launch's abstract signature is deliberately loose
+# (self, value: str, *args, **kwargs) -> Any — every subclass (dnsx,
+# httpx, subfinder, whoxy, sirene, ...) defines its own real,
+# tool-specific launch() signature instead. Same shape as the Enricher
+# InputType/OutputType pattern above: intentional flexibility mypy's
+# override checking can't express, not a mistake to fix per-subclass.
+[[tool.mypy.overrides]]
+module = "tools.*"
+disable_error_code = ["override"]

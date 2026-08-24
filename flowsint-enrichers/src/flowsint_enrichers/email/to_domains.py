@@ -7,6 +7,7 @@ from tools.network.whoxy import WhoxyTool
 
 from flowsint_core.core.enricher_base import Enricher
 from flowsint_core.core.logger import Logger
+from flowsint_core.core.vault import VaultProtocol
 from flowsint_enrichers.registry import flowsint_enricher
 from flowsint_types.address import Location
 from flowsint_types.domain import Domain
@@ -31,7 +32,7 @@ class EmailToDomainsEnricher(Enricher):
         self,
         sketch_id: Optional[str] = None,
         scan_id: Optional[str] = None,
-        vault=None,
+        vault: Optional[VaultProtocol] = None,
         params: Optional[Dict[str, Any]] = None,
     ):
         super().__init__(
@@ -280,7 +281,7 @@ class EmailToDomainsEnricher(Enricher):
         processed_emails: Set[str],
         processed_phones: Set[str],
         processed_addresses: Set[str],
-    ):
+    ) -> None:
         """Process a contact and create all related entities and relationships."""
 
         # Extract individual

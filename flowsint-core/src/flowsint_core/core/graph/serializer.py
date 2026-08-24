@@ -27,9 +27,9 @@ class GraphSerializer:
     """
 
     @staticmethod
-    def _clean_empty_values(data: Dict[str, Any]) -> dict:
+    def _clean_empty_values(data: Dict[str, Any]) -> Dict[str, Any]:
         """Remove empty string values from dict to avoid Pydantic validation errors."""
-        cleaned = {}
+        cleaned: Dict[str, Any] = {}
         for key, value in data.items():
             if value == "" or value is None:
                 continue
@@ -54,7 +54,7 @@ class GraphSerializer:
         return cleaned
 
     @staticmethod
-    def flatten(dict: Dict[str, Any]):
+    def flatten(dict: Dict[str, Any]) -> Dict[str, Any]:
         return flatten(dict, remove_empty=False)
 
     @staticmethod

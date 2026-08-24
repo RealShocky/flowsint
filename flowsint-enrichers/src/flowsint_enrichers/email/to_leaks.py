@@ -7,6 +7,7 @@ from dotenv import load_dotenv
 
 from flowsint_core.core.enricher_base import Enricher
 from flowsint_core.core.logger import Logger
+from flowsint_core.core.vault import VaultProtocol
 from flowsint_enrichers.registry import flowsint_enricher
 from flowsint_types.breach import Breach
 from flowsint_types.email import Email
@@ -28,7 +29,7 @@ class EmailToBreachesEnricher(Enricher):
         self,
         sketch_id: Optional[str] = None,
         scan_id: Optional[str] = None,
-        vault=None,
+        vault: Optional[VaultProtocol] = None,
         params: Optional[Dict[str, Any]] = None,
     ):
         super().__init__(

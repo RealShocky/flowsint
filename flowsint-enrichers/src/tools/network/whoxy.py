@@ -1,5 +1,5 @@
 import time
-from typing import Dict
+from typing import Any, Dict, Optional
 
 import requests
 
@@ -28,8 +28,11 @@ class WhoxyTool(Tool):
     def category(cls) -> str:
         return "Network intelligence"
 
-    def launch(self, params: Dict[str, str] = {}) -> list[Dict]:
-        last_exception = None
+    # Whoxy's response is a single JSON object (status/total_results/
+    # search_result keys, see below) — was declared list[Dict], which
+    # never matched `return data` here or callers reading it as a dict.
+    def launch(self, params: Dict[str, str] = {}) -> Dict[str, Any]:
+        last_exception: Optional[Exception] = None
 
         for attempt in range(self.MAX_RETRIES):
             try:
@@ -45,7 +48,7 @@ class WhoxyTool(Tool):
                     continue
 
                 resp.raise_for_status()
-                data = resp.json()
+                data: Dict[str, Any] = resp.json()
                 if data.get("status") != 1:
                     raise RuntimeError(
                         f"Error querying Whoxy API: {str(data.get('status_reason'))}"
