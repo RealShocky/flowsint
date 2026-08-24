@@ -85,7 +85,7 @@ export const FlowNamePanel = ({ flow, onUpdate, disabled = false }: FlowNamePane
         flowId: flow.id,
         body: JSON.stringify(updates)
       })
-    } catch (error) {
+    } catch {
       // Revert local state on error
       if (field === 'name') {
         setName(flow.name)

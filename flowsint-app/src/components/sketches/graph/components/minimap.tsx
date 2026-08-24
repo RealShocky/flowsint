@@ -142,7 +142,7 @@ const MinimapCanvas = ({
         ctx.roundRect(rectX, rectY, rectWidth, rectHeight, 2)
         ctx.fill()
         ctx.stroke()
-      } catch (error) {
+      } catch {
         // Silent fail if graph not ready
         return
       }

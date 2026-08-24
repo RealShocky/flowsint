@@ -268,7 +268,7 @@ export function DynamicForm({
               defaultValue={
                 Array.isArray(initialData?.[field.name]) ? initialData?.[field.name] : []
               }
-              render={({ field: { onChange, value, ref } }) => (
+              render={({ field: { onChange, value } }) => (
                 <TagsInput
                   value={Array.isArray(value) ? value : []}
                   onChange={(tags) => onChange(tags)}
@@ -319,7 +319,7 @@ export function DynamicForm({
             <Controller
               control={control}
               name={field.name}
-              render={({ field: { onChange, value, ref } }) => (
+              render={({ field: { onChange, value } }) => (
                 <Select onValueChange={onChange} value={value || ''} defaultValue={value || ''}>
                   <SelectTrigger
                     ref={ref}

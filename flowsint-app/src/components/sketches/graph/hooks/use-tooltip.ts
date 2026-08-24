@@ -47,7 +47,7 @@ export const useTooltip = (graphRef: React.RefObject<any>) => {
           },
           visible: true
         })
-      } catch (error) {
+      } catch {
         setTooltip((prev) => ({ ...prev, visible: false }))
       }
     },

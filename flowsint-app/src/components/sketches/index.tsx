@@ -101,7 +101,7 @@ const GraphPanel = ({ graphData, isLoading }: GraphPanelProps) => {
       try {
         const parsedData = JSON.parse(data)
         handleOpenFormModal(findActionItemByKey(parsedData.itemKey, actionItems))
-      } catch (error) {
+      } catch {
         return
       }
     }

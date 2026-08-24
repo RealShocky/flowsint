@@ -119,7 +119,7 @@ export const MapFromAddress: React.FC<MapFromAddressProps> = ({
   } | null>(null)
   const [isGlobe, setIsGlobe] = useState(true)
   const isGlobeRef = useRef(true)
-  const [styleVariant, setStyleVariant] = useState<MapStyleVariant>('standard')
+  const [styleVariant, _setStyleVariant] = useState<MapStyleVariant>('standard')
   const [zoomLevel, setZoomLevel] = useState(2)
   const isDarkStyle = resolvedTheme === 'dark' || styleVariant === 'satellite'
   const showDetails = zoomLevel >= 6
@@ -195,7 +195,7 @@ export const MapFromAddress: React.FC<MapFromAddressProps> = ({
   const DEFAULT_MARKER_COLOR = '#6366f1'
 
   // Preload icons for all unique node types
-  const [iconsReady, setIconsReady] = useState(false)
+  const [_iconsReady, setIconsReady] = useState(false)
   useEffect(() => {
     const uniqueTypes = new Set<string>()
     validLocations.forEach((loc) => {
@@ -437,7 +437,6 @@ export const MapFromAddress: React.FC<MapFromAddressProps> = ({
           const cachedImg =
             showDetails && loc.nodeType ? getCachedImage(loc.nodeType, '#ffffff') : undefined
           const dotSize = showDetails ? 24 : 10
-          const glowSize = showDetails ? 36 : 16
           return (
             <Marker
               key={loc.nodeId || `${lat}-${lon}-${i}`}

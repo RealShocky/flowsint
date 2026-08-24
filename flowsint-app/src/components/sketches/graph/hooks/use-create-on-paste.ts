@@ -32,7 +32,7 @@ export function useCreateOnPaste(sketchId: string) {
         }
 
         await createNode(nodeWithTempId, sketchId, addNode, replaceNode)
-      } catch (e) {
+      } catch {
         toast.error(e.message)
       }
     },
@@ -62,7 +62,7 @@ export function useCreateOnPaste(sketchId: string) {
           nodeMetadata: {}
         }
         await createNode(nodeWithTempId, sketchId, addNode, replaceNode)
-      } catch (e) {
+      } catch {
         toast.error(e.message)
       }
     },
@@ -91,7 +91,7 @@ const createNode = async (
     if (newNode) {
       replaceNode(node.id, newNode.id, newNode.nodeProperties)
     }
-  } catch (e) {
+  } catch {
     toast.error('Could not create node.')
   }
 }

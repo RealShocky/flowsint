@@ -16,7 +16,7 @@ const createSvgFromIconName = (iconName: string, color: string): string => {
   if (IconComponent) {
     try {
       svgString = renderToStaticMarkup(<IconComponent color={color} />)
-    } catch (err) {
+    } catch {
       console.warn('[icon] Failed to render icon:', iconName)
       svgString = FALLBACK_SVG(color)
     }

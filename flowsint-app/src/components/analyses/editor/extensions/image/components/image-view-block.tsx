@@ -179,7 +179,7 @@ export const ImageViewBlock: React.FC<NodeViewProps> = ({
         }))
 
         updateAttributes(normalizedData)
-      } catch (error) {
+      } catch {
         setImageState((prev) => ({
           ...prev,
           error: true,

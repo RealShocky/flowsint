@@ -134,7 +134,7 @@ export const Toolbar = memo(function Toolbar({ isLoading }: { isLoading: boolean
   const handleRefresh = useCallback(() => {
     try {
       refetchGraph()
-    } catch (error) {
+    } catch {
       toast.error('Failed to refresh graph data')
     }
   }, [refetchGraph])

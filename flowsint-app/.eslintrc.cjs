@@ -18,7 +18,14 @@ module.exports = {
   rules: {
     // TS already checks unused vars/undefined names better than eslint's base rules.
     'no-unused-vars': 'off',
-    '@typescript-eslint/no-unused-vars': ['warn', { argsIgnorePattern: '^_' }],
+    '@typescript-eslint/no-unused-vars': [
+      'warn',
+      {
+        argsIgnorePattern: '^_',
+        varsIgnorePattern: '^_',
+        destructuredArrayIgnorePattern: '^_'
+      }
+    ],
     // ~290 pre-existing `any` uses. Real debt, but not a hazard on the level of
     // an unchecked hook — downgrade to visible-not-blocking rather than pretend
     // it's fixed. Tighten to 'error' once the backlog is paid down.

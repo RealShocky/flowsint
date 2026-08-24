@@ -17,7 +17,7 @@ const MemoizedMarkdownBlock = memo(
     return (
       <ReactMarkdown
         components={{
-          code({ node, className, children, ...props }) {
+          code({ node: _node, className, children, ...props }) {
             const match = /language-(\w+)/.exec(className || '')
             return match ? (
               <div className="relative">

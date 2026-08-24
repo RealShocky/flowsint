@@ -51,8 +51,10 @@ export default function ContextMenu({
   bottom,
   wrapperWidth,
   wrapperHeight,
-  onEdit,
-  onDelete,
+  // onEdit/onDelete: accepted for interface compatibility with callers, but
+  // this menu implements its own delete flow internally — not wired up here.
+  onEdit: _onEdit,
+  onDelete: _onDelete,
   setMenu,
   ...props
 }: GraphContextMenuProps) {

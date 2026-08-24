@@ -50,15 +50,18 @@ interface GraphContextMenuProps {
 }
 
 export default function BackgroundContextMenu({
-  nodes,
+  // nodes/onEdit/onDelete: accepted for interface compatibility with
+  // callers, but this menu reads selection from the store directly and
+  // implements its own delete flow — not wired up here.
+  nodes: _nodes,
   top,
   left,
   right,
   bottom,
   wrapperWidth,
   wrapperHeight,
-  onEdit,
-  onDelete,
+  onEdit: _onEdit,
+  onDelete: _onDelete,
   setMenu,
   ...props
 }: GraphContextMenuProps) {
