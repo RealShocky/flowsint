@@ -84,6 +84,10 @@ const AnalysisList = () => {
       return analysisService.create(JSON.stringify(newAnalysis))
     },
     onSuccess: async (data) => {
+      if (!('id' in data)) {
+        toast.error(data.error || 'Failed to create analysis')
+        return
+      }
       queryClient.invalidateQueries({
         queryKey: queryKeys.analyses.byInvestigation(investigationId || '')
       })

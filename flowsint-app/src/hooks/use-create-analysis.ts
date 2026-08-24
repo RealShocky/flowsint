@@ -5,7 +5,10 @@ import default_content from '@/components/analyses/default_content.json'
 import { queryKeys } from '@/api/query-keys'
 import { toast } from 'sonner'
 
-export const useCreateAnalysis = (investigationId: string, onAnalysisCreate?: any) => {
+export const useCreateAnalysis = (
+  investigationId: string,
+  onAnalysisCreate?: (investigationId: string) => void
+) => {
   const queryClient = useQueryClient()
 
   return useMutation({

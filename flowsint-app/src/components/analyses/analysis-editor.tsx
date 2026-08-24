@@ -109,6 +109,7 @@ export const AnalysisEditor = ({
       )
     },
     onSuccess: async (data) => {
+      if (!data) return
       // Use more specific query invalidation with query key factory
       queryClient.setQueryData(
         queryKeys.analyses.byInvestigation(investigationId || ''),
@@ -185,6 +186,7 @@ export const AnalysisEditor = ({
       )
     },
     onSuccess: async (data) => {
+      if (!data) return
       // Use more specific query invalidation
       queryClient.setQueryData(['analyses', investigationId], (oldData: Analysis[] | undefined) => {
         if (!oldData) return oldData
