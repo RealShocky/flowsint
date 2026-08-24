@@ -40,7 +40,14 @@ describe('getListOfAllChildrenFromNodes', () => {
   })
 
   it('should handle nodes with links', () => {
-    const nodes = [makeNode('node-1', { links: [{ target: 'node-2' }, { target: 'node-3' }] })]
+    const nodes = [
+      makeNode('node-1', {
+        links: [
+          { source: 'node-1', target: 'node-2' },
+          { source: 'node-1', target: 'node-3' }
+        ]
+      })
+    ]
     expect(getListOfAllChildrenFromNodes(nodes)).toEqual(undefined)
   })
 })

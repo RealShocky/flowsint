@@ -604,10 +604,14 @@ const DetailsPanel = memo(() => {
                   ) : getNodePropertyType(key) === 'list' ? (
                     canEdit ? (
                       <TagsInput
-                        value={value || []}
+                        value={(value as string[] | undefined) || []}
                         onChange={(tags) => handlePropertyBlur(key, tags)}
                         orientation="vertical"
-                        placeholder={value?.length === 0 ? 'Empty' : `Enter ${key.toLowerCase()}`}
+                        placeholder={
+                          (value as string[] | undefined)?.length === 0
+                            ? 'Empty'
+                            : `Enter ${key.toLowerCase()}`
+                        }
                       />
                     ) : (
                       <span className="text-muted-foreground truncate">

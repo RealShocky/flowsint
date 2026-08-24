@@ -128,7 +128,7 @@ const NodeItem = memo(function NodeItem({
           <Calendar className="h-3 w-3" />
           <span className="truncate">
             {node.nodeMetadata?.created_at
-              ? formatCreatedAt(node.nodeMetadata?.created_at)
+              ? formatCreatedAt(node.nodeMetadata.created_at as string)
               : 'Unknown'}
           </span>
         </div>

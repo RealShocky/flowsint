@@ -1,7 +1,11 @@
 import type * as LucideIcons from 'lucide-react'
 
+// Field shape is genuinely dynamic — driven by whichever custom type schema
+// the backend defines for this node's nodeType, not a fixed TS shape. Callers
+// narrow with typeof/Array.isArray/an explicit cast at the point they read a
+// specific field, same as any other JSON-from-the-backend value.
 export type NodeProperties = {
-  [key: string]: any
+  [key: string]: unknown
 }
 
 export const flagColors = {
@@ -14,8 +18,9 @@ export const flagColors = {
 
 type flagColor = keyof typeof flagColors
 
+// Same as NodeProperties above — backend-defined, not statically shaped.
 export type NodeMetadata = {
-  [key: string]: any
+  [key: string]: unknown
 }
 
 export type NodeShape = 'circle' | 'square' | 'hexagon' | 'triangle'
@@ -35,8 +40,19 @@ export type GraphNode = {
   x: number
   y: number
   val?: number
-  neighbors?: any[]
-  links?: any[]
+  // Populated by transformGraphData (graph-data-transformer.ts) after the
+  // initial fetch — every consumer only ever reads .id off a neighbor and
+  // .source.id/.target.id off a link, so that's all this declares. Not
+  // GraphNode[]/GraphEdge[]: neighbors briefly holds react-force-graph's
+  // own runtime node objects mid-transform, and a fully accurate type would
+  // have to be self-referential for no benefit nothing here reads.
+  neighbors?: { id: string }[]
+  // source/target start as plain id strings on the raw edge and get mutated
+  // into node-object references by react-force-graph after it renders —
+  // both forms show up here depending on when a consumer reads it (see the
+  // `typeof x === 'object' ? x.id : x` guard used elsewhere for the edge
+  // itself).
+  links?: { source: string | { id: string }; target: string | { id: string } }[]
 }
 
 export type GraphEdge = {
