@@ -5,9 +5,9 @@ This module provides utilities for serializing complex Python objects
 into Neo4j-compatible primitive types, following the Single Responsibility Principle.
 """
 
-from typing import Any, Callable, Dict, List, Optional, Type
+from typing import Any, Callable, Dict, List, Optional, Type, Union
 
-from pydantic import BaseModel, ValidationError
+from pydantic import ValidationError
 
 from flowsint_core.utils import flatten, unflatten
 from flowsint_types import FlowsintType
@@ -180,7 +180,9 @@ class GraphSerializer:
 
     @staticmethod
     def graph_edge_to_neo4j_dict(
-        from_obj: BaseModel, to_obj: BaseModel, label: str
+        from_obj: Union[FlowsintType, GraphNode],
+        to_obj: Union[FlowsintType, GraphNode],
+        label: str,
     ) -> Dict[str, Any]:
         """Build a Neo4j relationship dict for matching nodes by type and label.
 

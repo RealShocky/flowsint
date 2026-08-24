@@ -21,7 +21,9 @@ if not database_url:
     raise RuntimeError("DATABASE_URL is not defined in .env")
 config.set_main_option("sqlalchemy.url", database_url)
 
-target_metadata = Base.metadata
+# Base comes from the `import *` above (models.py isn't py.typed, so mypy
+# can't see it) — same standard Alembic autogenerate pattern noted there.
+target_metadata = Base.metadata  # type: ignore[name-defined]
 
 
 def run_migrations_offline() -> None:

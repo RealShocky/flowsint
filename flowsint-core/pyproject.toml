@@ -55,3 +55,10 @@ python_version = "3.11"
 warn_return_any = true
 warn_unused_configs = true
 disallow_untyped_defs = true
+
+# Test fixtures (MockEnricher etc.) use the same InputType/OutputType
+# class-attribute pattern real enrichers do — see the matching override
+# and its rationale in flowsint-enrichers/pyproject.toml.
+[[tool.mypy.overrides]]
+module = "tests.*"
+disable_error_code = ["valid-type", "attr-defined", "name-defined"]
