@@ -104,6 +104,46 @@ const formatDate = (value: unknown): string => {
   }
 }
 
+const EMPTY_FORM_DATA: FormData = {
+  nodeLabel: '',
+  nodeColor: null,
+  nodeIcon: null,
+  nodeImage: null,
+  nodeFlag: null,
+  nodeShape: null,
+  nodeSize: 0,
+  nodeProperties: {},
+  nodeMetadata: {},
+  notes: ''
+}
+
+const buildFormData = (node: GraphNode | null | undefined): FormData => {
+  if (!node) return EMPTY_FORM_DATA
+  const {
+    nodeLabel,
+    nodeImage,
+    nodeIcon,
+    nodeFlag,
+    nodeColor,
+    nodeShape,
+    nodeMetadata,
+    nodeProperties,
+    nodeSize
+  } = node
+  return {
+    nodeLabel: nodeLabel || '',
+    nodeProperties: nodeProperties || {},
+    nodeMetadata: nodeMetadata || {},
+    nodeColor,
+    nodeIcon,
+    nodeImage,
+    nodeFlag,
+    nodeShape,
+    nodeSize,
+    notes: (nodeMetadata?.notes as string) || ''
+  }
+}
+
 // ── Sub-components ────────────────────────────────────────────────────────────
 
 function TitleInput({ value, onChange }: { value: string; onChange: (val: string) => void }) {
@@ -274,19 +314,11 @@ const DetailsPanel = memo(() => {
     return field?.type
   }
 
-  const [formData, setFormData] = useState<FormData>({
-    nodeLabel: '',
-    nodeColor: null,
-    nodeIcon: null,
-    nodeImage: null,
-    nodeFlag: null,
-    nodeShape: null,
-    nodeSize: 0,
-    nodeProperties: {},
-    nodeMetadata: {},
-    notes: ''
-  })
-  const [nodeSize, setNodeSize] = useState<number>(0)
+  // Lazy initializers derive from `node` directly so the panel is
+  // populated on mount too, not just on later node switches (see the
+  // render-time sync below, which only fires on a node *change*).
+  const [formData, setFormData] = useState<FormData>(() => buildFormData(node))
+  const [nodeSize, setNodeSize] = useState<number>(() => node?.nodeSize ?? 0)
 
   // Refs to always read latest values without stale closures. Handlers below
   // also write these synchronously so a value is available immediately
@@ -313,31 +345,8 @@ const DetailsPanel = memo(() => {
   if (node !== prevNode) {
     setPrevNode(node)
     if (node) {
-      const {
-        nodeLabel,
-        nodeImage,
-        nodeIcon,
-        nodeFlag,
-        nodeColor,
-        nodeShape,
-        nodeMetadata,
-        nodeProperties,
-        nodeSize: ns
-      } = node
-      const fd: FormData = {
-        nodeLabel: nodeLabel || '',
-        nodeProperties: nodeProperties || {},
-        nodeMetadata: nodeMetadata || {},
-        nodeColor,
-        nodeIcon,
-        nodeImage,
-        nodeFlag,
-        nodeShape,
-        nodeSize: ns,
-        notes: (nodeMetadata?.notes as string) || ''
-      }
-      setFormData(fd)
-      setNodeSize(ns ?? 0)
+      setFormData(buildFormData(node))
+      setNodeSize(node.nodeSize ?? 0)
     }
   }
 

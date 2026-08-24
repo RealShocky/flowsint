@@ -88,7 +88,9 @@ export const AnalysisEditor = ({
   const queryClient = useQueryClient()
   // State/refs for editor
   const editorContentRef = useRef<any>('')
-  const [titleValue, setTitleValue] = useState('')
+  // Lazy initializer: analysis can already be loaded on mount, and the
+  // render-time sync below only fires on later id *changes*.
+  const [titleValue, setTitleValue] = useState(() => analysis?.title || '')
   const [editor, setEditor] = useState<Editor | undefined>(undefined)
   const [isEditingTitle, setIsEditingTitle] = useState(false)
   const [saveStatus, setSaveStatus] = useState<'saved' | 'saving' | 'unsaved'>('saved')

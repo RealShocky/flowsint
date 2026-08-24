@@ -37,35 +37,27 @@ function CustomTypeEditor() {
   const queryClient = useQueryClient()
   const isNew = id === 'new'
 
-  // Form state
-  const [name, setName] = useState('')
-  const [description, setDescription] = useState('')
-  const [status, setStatus] = useState<'draft' | 'published'>('draft')
-  const [category, setCategory] = useState<string>('custom_types_category')
-  const [icon, setIcon] = useState(DEFAULT_ICON)
-  const [color, setColor] = useState(DEFAULT_COLOR)
-  const [fields, setFields] = useState<SchemaField[]>([])
-  const [showPreview, setShowPreview] = useState(true)
-
-  const parseSchemaToFields = (schema: any) => {
+  const parseSchemaToFields = (schema: any): SchemaField[] => {
     const properties = schema.properties || {}
     const required = schema.required || []
-    const parsedFields: SchemaField[] = Object.entries(properties).map(
-      ([key, value]: [string, any]) => ({
-        id: Math.random().toString(36).substr(2, 9),
-        key,
-        title: value.title || key,
-        type: value.type || 'string',
-        format: value.format,
-        description: value.description,
-        required: required.includes(key)
-      })
-    )
-    setFields(parsedFields)
+    return Object.entries(properties).map(([key, value]: [string, any]) => ({
+      id: Math.random().toString(36).substr(2, 9),
+      key,
+      title: value.title || key,
+      type: value.type || 'string',
+      format: value.format,
+      description: value.description,
+      required: required.includes(key)
+    }))
   }
 
-  // Hooks
-  const { actionItems, isLoading: actionLoading } = useActionItems()
+  const emptyField = (): SchemaField => ({
+    id: Math.random().toString(36).substr(2, 9),
+    key: '',
+    title: '',
+    type: 'string',
+    required: false
+  })
 
   // Load existing type if editing
   const { data: existingType, isLoading } = useQuery<CustomType>({
@@ -74,20 +66,35 @@ function CustomTypeEditor() {
     enabled: !isNew
   })
 
+  // Form state. Lazy initializers derive from `existingType` directly — it
+  // can already be populated on mount (query cache), and the render-time
+  // sync below only fires on later *changes*. For a brand new type
+  // (existingType always undefined, query disabled) this also fixes
+  // `fields` starting genuinely empty instead of relying on the sync
+  // block's addField() call, which — same reasoning — would never fire.
+  const [name, setName] = useState(() => existingType?.name.replaceAll(' ', '') ?? '')
+  const [description, setDescription] = useState(() => existingType?.description ?? '')
+  const [status, setStatus] = useState<'draft' | 'published'>(() =>
+    existingType?.status === 'archived' ? 'draft' : (existingType?.status ?? 'draft')
+  )
+  const [category, setCategory] = useState<string>(
+    () => existingType?.category ?? 'custom_types_category'
+  )
+  const [icon, setIcon] = useState(() => existingType?.icon ?? DEFAULT_ICON)
+  const [color, setColor] = useState(() => existingType?.color ?? DEFAULT_COLOR)
+  const [fields, setFields] = useState<SchemaField[]>(() =>
+    existingType ? parseSchemaToFields(existingType.schema) : isNew ? [emptyField()] : []
+  )
+  const [showPreview, setShowPreview] = useState(true)
+
+  // Hooks
+  const { actionItems, isLoading: actionLoading } = useActionItems()
+
   // Stable (functional state update, no closure over `fields`) so it's
   // safe to depend on below without re-running this effect after every
   // field it adds.
   const addField = useCallback(() => {
-    setFields((prev) => [
-      ...prev,
-      {
-        id: Math.random().toString(36).substr(2, 9),
-        key: '',
-        title: '',
-        type: 'string',
-        required: false
-      }
-    ])
+    setFields((prev) => [...prev, emptyField()])
   }, [])
 
   // Adjusted during render rather than in an effect.
@@ -101,7 +108,7 @@ function CustomTypeEditor() {
       setCategory(existingType.category || 'custom_types_category')
       setIcon(existingType.icon || DEFAULT_ICON)
       setColor(existingType.color || DEFAULT_COLOR)
-      parseSchemaToFields(existingType.schema)
+      setFields(parseSchemaToFields(existingType.schema))
     } else if (isNew) {
       addField()
     }

@@ -25,11 +25,13 @@ function ProfilePage() {
     queryFn: authService.getCurrentUser
   })
 
-  const [form, setForm] = useState({
-    first_name: '',
-    last_name: '',
-    avatar_url: ''
-  })
+  // Lazy initializer: profile can already be loaded on mount (query
+  // cache), and the render-time sync below only fires on later changes.
+  const [form, setForm] = useState(() => ({
+    first_name: profile?.first_name ?? '',
+    last_name: profile?.last_name ?? '',
+    avatar_url: profile?.avatar_url ?? ''
+  }))
 
   // Adjusted during render rather than in an effect.
   const [prevProfile, setPrevProfile] = useState(profile)

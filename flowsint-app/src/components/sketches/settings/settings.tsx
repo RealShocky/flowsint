@@ -447,12 +447,15 @@ export default function GlobalSettings() {
     enabled: Boolean(id)
   })
 
-  // Form state
-  const [formData, setFormData] = useState({
-    title: '',
-    description: '',
-    status: 'active'
-  })
+  // Form state. Lazy initializer derives from `sketch` directly (it can
+  // already be populated on mount, e.g. from the query cache) — the sync
+  // below only fires on later *changes*, so a hardcoded empty default
+  // here would never get overwritten if the cache already had data.
+  const [formData, setFormData] = useState(() => ({
+    title: sketch?.title || '',
+    description: sketch?.description || '',
+    status: sketch?.status || 'active'
+  }))
 
   // Update form data when sketch data changes — adjusted during render
   // rather than in an effect.
