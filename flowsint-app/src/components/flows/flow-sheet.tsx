@@ -173,12 +173,13 @@ const EnricherItem = memo(({ enricher, onClick }: { enricher: Enricher; onClick:
   const colors = useNodesDisplaySettings((s) => s.colors)
   const borderInputColor = colors[enricher.inputs.type.toLowerCase()]
   const borderOutputColor = colors[enricher.outputs.type.toLowerCase()]
-  const Icon =
-    enricher.type === 'type'
-      ? useIcon(enricher.outputs.type.toLowerCase() as string)
-      : enricher.icon
-        ? useIcon(enricher.icon)
-        : null
+  // useIcon must be called unconditionally (Rules of Hooks) — resolve the icon
+  // key first, then decide whether to use the result.
+  const wantsIcon = enricher.type === 'type' || Boolean(enricher.icon)
+  const iconType =
+    enricher.type === 'type' ? (enricher.outputs.type.toLowerCase() as string) : enricher.icon || ''
+  const iconRenderer = useIcon(iconType)
+  const Icon = wantsIcon ? iconRenderer : null
 
   return (
     <TooltipProvider>
