@@ -172,14 +172,19 @@ lint-fix:
 # without changing what any of them mean — if that gets counted as "changed",
 # the ratchet degrades into gating the whole backlog on whichever PR happens
 # to run the formatter first. A file only counts if re-running ruff on the
-# BASE_REF version doesn't reproduce today's content byte-for-byte.
+# BASE_REF version doesn't reproduce today's content byte-for-byte. Resolve
+# the ruff binary once up front and call it directly in the loop below —
+# invoking `uv run ruff` per file (up to ~2x per changed file) was flaky,
+# occasionally producing a spurious empty result that made a purely
+# reformatted file look "meaningful".
 BASE_REF ?= origin/main
 typecheck:
-	@changed=$$(git diff --name-only --diff-filter=ACMR $(BASE_REF)...HEAD -- '*.py' 2>/dev/null); \
+	@ruff_bin=$$(uv run which ruff); \
+	changed=$$(git diff --name-only --diff-filter=ACMR $(BASE_REF)...HEAD -- '*.py' 2>/dev/null); \
 	meaningful=""; \
 	for f in $$changed; do \
 		if git cat-file -e $(BASE_REF):$$f 2>/dev/null; then \
-			old_reformatted=$$(git show $(BASE_REF):$$f | uv run ruff format --stdin-filename "$$f" - 2>/dev/null | uv run ruff check --fix --stdin-filename "$$f" - 2>/dev/null); \
+			old_reformatted=$$(git show $(BASE_REF):$$f | "$$ruff_bin" format --stdin-filename "$$f" - 2>/dev/null | "$$ruff_bin" check --fix --stdin-filename "$$f" - 2>/dev/null); \
 			if [ "$$old_reformatted" = "$$(cat "$$f")" ]; then continue; fi; \
 		fi; \
 		meaningful="$$meaningful $$f"; \
