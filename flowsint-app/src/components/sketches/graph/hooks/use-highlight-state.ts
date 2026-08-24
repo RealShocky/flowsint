@@ -1,15 +1,21 @@
 import { useState, useCallback, useRef, useEffect } from 'react'
+import type { LinkObject } from 'react-force-graph-2d'
 import type { GraphNode } from '@/types'
 
-// react-force-graph's own onLinkHover/edge.source/edge.target types are
-// `string | number | NodeObject` — the library mutates a plain edge's
-// source/target from an id string into the actual node object once it's
-// resolved the graph, and callers see whichever form depending on timing.
-// Same duality already reflected on GraphNode.links in types/graph.ts.
-type HoveredLink = { source: string | { id: string }; target: string | { id: string } }
+// LinkObject's own source/target type — `string | number | NodeObject` — is
+// the library's real duality: a plain edge's source/target starts as an id
+// and gets mutated into the actual node object once it's resolved the
+// graph, and callers see whichever form depending on timing. Same duality
+// already reflected on GraphNode.links in types/graph.ts.
+type LinkEndpoint = LinkObject['source']
 
-const linkEndpointId = (endpoint: string | { id: string }): string =>
-  typeof endpoint === 'object' ? endpoint.id : endpoint
+// App ids are always strings (GraphNode.id: string) — coerce the library's
+// string|number id here rather than leaking a number through to callers
+// that only ever deal in string ids.
+const linkEndpointId = (endpoint: LinkEndpoint): string | undefined => {
+  const id = typeof endpoint === 'object' ? endpoint?.id : endpoint
+  return id === undefined ? undefined : String(id)
+}
 
 export const useHighlightState = () => {
   const [highlightNodes, setHighlightNodes] = useState<Set<string>>(new Set())
@@ -49,7 +55,7 @@ export const useHighlightState = () => {
     })
   }, [])
 
-  const handleLinkHover = useCallback((link: HoveredLink | null) => {
+  const handleLinkHover = useCallback((link: LinkObject | null) => {
     if (hoverFrameRef.current) {
       cancelAnimationFrame(hoverFrameRef.current)
     }
@@ -62,8 +68,8 @@ export const useHighlightState = () => {
         const sourceId = linkEndpointId(link.source)
         const targetId = linkEndpointId(link.target)
         newHighlightLinks.add(`${sourceId}-${targetId}`)
-        newHighlightNodes.add(sourceId)
-        newHighlightNodes.add(targetId)
+        if (sourceId !== undefined) newHighlightNodes.add(sourceId)
+        if (targetId !== undefined) newHighlightNodes.add(targetId)
       }
 
       setHoverNode(null)

@@ -13,7 +13,7 @@ import BackgroundContextMenu from '../context-menu/background-context-menu'
 import EdgeContextMenu from '../context-menu/edge-context-menu'
 import { PathPanel } from '../actions/path-finder'
 import { useParams } from '@tanstack/react-router'
-import { type GraphNode, GraphEdge } from '@/types'
+import { type GraphNode, GraphEdge, type GraphViewerRef } from '@/types'
 import { useLinkCreation } from '../hooks/use-link-creation'
 import { useQuickAdd } from '../hooks/use-quick-add'
 import { QuickAddOverlay } from './quick-add-overlay'
@@ -58,7 +58,7 @@ const GraphMain = () => {
   const selectedNodes = useGraphStore((s) => s.selectedNodes)
   const selectedEdges = useGraphStore((s) => s.selectedEdges)
 
-  const graphRef = useRef<any>(null)
+  const graphRef = useRef<GraphViewerRef>(undefined)
   const containerRef = useRef<HTMLDivElement>(null)
   const [nodeMenu, setNodeMenu] = React.useState<NodeContextMenuProps | null>(null)
   const [edgeMenu, setEdgeMenu] = React.useState<EdgeContextMenuProps | null>(null)
@@ -78,7 +78,7 @@ const GraphMain = () => {
     useQuickAdd(sketchId)
 
   const handleNodeClick = useCallback(
-    (node: any, event: MouseEvent) => {
+    (node: GraphNode, event: MouseEvent) => {
       const isMultiSelect = event.ctrlKey || event.shiftKey
       if (isMultiSelect) {
         toggleNodeSelection(node, true)
@@ -143,7 +143,7 @@ const GraphMain = () => {
   }, [])
 
   const onNodeContextMenu = useCallback(
-    (node: any, event: MouseEvent) => {
+    (node: GraphNode, event: MouseEvent) => {
       if (!containerRef.current || !node) return
 
       const pane = containerRef.current.getBoundingClientRect()
@@ -177,7 +177,7 @@ const GraphMain = () => {
   )
 
   const onEdgeContextMenu = useCallback(
-    (edge: any, event: MouseEvent) => {
+    (edge: GraphEdge, event: MouseEvent) => {
       if (!containerRef.current || !edge) return
 
       const pane = containerRef.current.getBoundingClientRect()
@@ -275,7 +275,7 @@ const GraphMain = () => {
     ]
   )
 
-  const handleGraphRef = useCallback((ref: any) => {
+  const handleGraphRef = useCallback((ref: GraphViewerRef) => {
     graphRef.current = ref
   }, [])
 

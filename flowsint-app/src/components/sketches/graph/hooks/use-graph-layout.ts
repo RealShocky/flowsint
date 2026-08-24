@@ -1,12 +1,15 @@
 import { useState, useCallback } from 'react'
 import { useLayout } from '@/hooks/use-layout'
+import type { GraphNode, GraphViewerRef } from '@/types'
+import type { GraphForceSettings } from '@/stores/graph-settings-store'
+import type { GraphData } from '../utils/types'
 
 interface UseGraphLayoutParams {
-  forceSettings: any
+  forceSettings: GraphForceSettings
   containerSize: { width: number; height: number }
-  saveAllNodePositions: (nodes: any[]) => void
-  graphRef: React.RefObject<any>
-  graphData: any
+  saveAllNodePositions: (nodes: GraphNode[]) => void
+  graphRef: React.RefObject<GraphViewerRef>
+  graphData: GraphData
 }
 
 export const useGraphLayout = ({

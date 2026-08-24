@@ -1,4 +1,5 @@
 import type * as LucideIcons from 'lucide-react'
+import type { ForceGraphMethods, NodeObject, LinkObject } from 'react-force-graph-2d'
 
 // Field shape is genuinely dynamic — driven by whichever custom type schema
 // the backend defines for this node's nodeType, not a fixed TS shape. Callers
@@ -40,6 +41,13 @@ export type GraphNode = {
   x: number
   y: number
   val?: number
+  // Pinning coordinates react-force-graph itself reads/writes (its own
+  // NodeObject type declares these) to freeze a node's position instead of
+  // letting the force simulation keep moving it — set after drag-end and
+  // after layout runs. Not part of the backend payload; only ever present
+  // once the graph has rendered at least once.
+  fx?: number
+  fy?: number
   // Populated by transformGraphData (graph-data-transformer.ts) after the
   // initial fetch — every consumer only ever reads .id off a neighbor and
   // .source.id/.target.id off a link, so that's all this declares. Not
@@ -66,6 +74,17 @@ export type GraphEdge = {
   weight?: number
   confidence_level?: number | string
 }
+
+// The imperative handle exposed by <ForceGraph2D<GraphNode, GraphEdge>
+// ref={...} />. Every call site across the graph subsystem (index.tsx,
+// graph-main.tsx, the layout/tooltip/minimap hooks) holds a ref to the same
+// underlying instance and used to type it `React.RefObject<any>` — one
+// shared alias instead of re-guessing the shape at each site. Parametrized
+// with GraphNode/GraphEdge to match the concrete generic instantiation used
+// where <ForceGraph2D> is actually rendered.
+export type GraphViewerRef =
+  | ForceGraphMethods<NodeObject<GraphNode>, LinkObject<GraphNode, GraphEdge>>
+  | undefined
 
 export type PathNode = {
   id: string

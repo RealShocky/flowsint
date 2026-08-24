@@ -409,7 +409,8 @@ export default function RelationshipsTable() {
               checked={isAllSelected}
               ref={(el) => {
                 if (el && 'indeterminate' in el) {
-                  ;(el as HTMLInputElement).indeterminate = isIndeterminate
+                  const input = el as HTMLInputElement
+                  input.indeterminate = isIndeterminate
                 }
               }}
               onCheckedChange={handleSelectAll}

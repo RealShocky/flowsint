@@ -1,10 +1,11 @@
 import { useCallback, useRef, useEffect } from 'react'
 import { GraphEdge, GraphNode } from '@/types'
+import type { GraphForceSettings } from '@/stores/graph-settings-store'
 
 interface UseLayoutProps {
-  forceSettings: any
+  forceSettings: GraphForceSettings
   containerSize: { width: number; height: number }
-  saveAllNodePositions: (nodes: any[], force?: boolean) => void
+  saveAllNodePositions: (nodes: GraphNode[], force?: boolean) => void
   onProgress?: (progress: number) => void
 }
 
@@ -39,7 +40,7 @@ export function useLayout({
         throw new Error('Layout worker not initialized')
       }
       // Remove fx and fy from all nodes to allow repositioning
-      nodes.forEach((node: any) => {
+      nodes.forEach((node) => {
         delete node.fx
         delete node.fy
       })
@@ -50,10 +51,14 @@ export function useLayout({
           if (event.data.type === 'progress') {
             onProgress?.(event.data.progress)
           } else if (event.data.type === 'complete') {
-            const { nodes: layoutedNodes } = event.data.result
+            // Worker result crosses postMessage's structured-clone boundary —
+            // only .id/.x/.y are ever read off it, so that's all it declares.
+            const { nodes: layoutedNodes } = event.data.result as {
+              nodes: { id: string; x?: number; y?: number }[]
+            }
             // // Apply the calculated positions to the graph nodes
-            layoutedNodes.forEach((layoutedNode: any) => {
-              const graphNode = nodes.find((n: any) => n.id === layoutedNode.id) as any
+            layoutedNodes.forEach((layoutedNode) => {
+              const graphNode = nodes.find((n) => n.id === layoutedNode.id)
               if (graphNode && layoutedNode.x !== undefined && layoutedNode.y !== undefined) {
                 graphNode.x = layoutedNode.x
                 graphNode.y = layoutedNode.y

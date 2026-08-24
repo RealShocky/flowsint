@@ -1,11 +1,11 @@
 import { useEffect, useRef } from 'react'
-import { GraphNode } from '@/types'
+import { GraphNode, type GraphViewerRef } from '@/types'
 
 interface MinimapCanvasProps {
   nodes: GraphNode[]
   width?: number
   height?: number
-  graphRef: React.RefObject<any>
+  graphRef: React.RefObject<GraphViewerRef>
   canvasWidth: number
   canvasHeight: number
 }

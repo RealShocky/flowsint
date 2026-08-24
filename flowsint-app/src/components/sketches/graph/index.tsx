@@ -7,6 +7,8 @@ import { useGraphStore } from '@/stores/graph-store'
 import { useNodesDisplaySettings } from '@/stores/node-display-settings'
 import { useTheme } from '@/components/theme-provider'
 import { useSaveNodePositions } from '@/hooks/use-save-node-positions'
+import type { LinkObject } from 'react-force-graph-2d'
+import type { GraphViewerRef, GraphNode, GraphEdge } from '@/types'
 import { CONSTANTS } from './utils/constants'
 import { GraphViewerProps } from './utils/types'
 import {
@@ -62,7 +64,7 @@ const GraphViewer: React.FC<GraphViewerProps> = ({
   linkCreation: linkCreationProp
 }) => {
   const [containerSize, setContainerSize] = useState({ width: 0, height: 0 })
-  const graphRef = useRef<any>(null)
+  const graphRef = useRef<GraphViewerRef>(undefined)
   const containerRef = useRef<HTMLDivElement>(null)
 
   // Notify parent when graphRef becomes available
@@ -143,7 +145,7 @@ const GraphViewer: React.FC<GraphViewerProps> = ({
 
   const isSelected = useCallback((nodeId: string) => selectedNodeIds.has(nodeId), [selectedNodeIds])
 
-  const graph2ScreenCoords = useCallback((node: any) => {
+  const graph2ScreenCoords = useCallback((node: GraphNode) => {
     if (!graphRef.current) return { x: 0, y: 0 }
     return graphRef.current.graph2ScreenCoords(node.x, node.y)
   }, [])
@@ -263,8 +265,14 @@ const GraphViewer: React.FC<GraphViewerProps> = ({
 
     nodeSet.add(currentNodeId)
     edges.forEach((edge) => {
-      const sourceId = typeof edge.source === 'object' ? (edge.source as any).id : edge.source
-      const targetId = typeof edge.target === 'object' ? (edge.target as any).id : edge.target
+      // GraphEdge.source/target are typed as plain id strings, but at
+      // runtime this array can be the same reference react-force-graph
+      // mutates source/target into node objects on (same duality as
+      // GraphNode.links — see types/graph.ts).
+      const sourceId =
+        typeof edge.source === 'object' ? (edge.source as { id: string }).id : edge.source
+      const targetId =
+        typeof edge.target === 'object' ? (edge.target as { id: string }).id : edge.target
       if (sourceId === currentNodeId) {
         nodeSet.add(targetId)
         linkSet.add(`${sourceId}-${targetId}`)
@@ -298,7 +306,7 @@ const GraphViewer: React.FC<GraphViewerProps> = ({
   const { tooltip, showTooltip, hideTooltip } = useTooltip(graphRef)
 
   const handleNodeHoverWithTooltip = useCallback(
-    (node: any) => {
+    (node: GraphNode | null) => {
       if (node) {
         showTooltip(node)
       } else {
@@ -336,7 +344,7 @@ const GraphViewer: React.FC<GraphViewerProps> = ({
   })
 
   const wrappedHandleNodeDragEnd = useCallback(
-    (node: any) => {
+    (node: GraphNode) => {
       handleNodeDragEnd(node, graphData)
     },
     [handleNodeDragEnd, graphData]
@@ -360,9 +368,7 @@ const GraphViewer: React.FC<GraphViewerProps> = ({
   }, [sketchId])
 
   const handleZoomToFitLocal = useCallback(() => {
-    if (typeof graphRef.current.zoomToFit === 'function') {
-      graphRef.current.zoomToFit(400)
-    }
+    graphRef.current?.zoomToFit(400)
   }, [])
 
   useGraphInitialization({
@@ -436,7 +442,7 @@ const GraphViewer: React.FC<GraphViewerProps> = ({
   )
 
   const renderNodeCallback = useCallback(
-    (node: any, ctx: CanvasRenderingContext2D, globalScale: number) => {
+    (node: GraphNode, ctx: CanvasRenderingContext2D, globalScale: number) => {
       const rc = getOrCreateRC(globalScale)
       renderNode({
         node,
@@ -469,32 +475,29 @@ const GraphViewer: React.FC<GraphViewerProps> = ({
   )
 
   const renderLinkCallback = useCallback(
-    (link: any, ctx: CanvasRenderingContext2D, globalScale: number) => {
+    (
+      // See link-renderer.ts's LinkRenderParams for why source/target are
+      // omitted from the GraphEdge generic param here.
+      link: LinkObject<GraphNode, Omit<GraphEdge, 'source' | 'target'>>,
+      ctx: CanvasRenderingContext2D,
+      globalScale: number
+    ) => {
       const rc = getOrCreateRC(globalScale)
+      // theme/highlightNodes/selectedEdges aren't passed here: renderLink
+      // doesn't read them — theme and selection are already baked into `rc`
+      // (rc.themeEdgeLabelBg, rc.selectedEdgeIds) by getOrCreateRC above.
       renderLink({
         link,
         ctx,
         globalScale,
         forceSettings,
-        theme,
         highlightLinks,
-        highlightNodes,
-        selectedEdges,
         currentEdge,
         autoColorLinksByNodeType,
         rc
       })
     },
-    [
-      forceSettings,
-      theme,
-      highlightLinks,
-      highlightNodes,
-      selectedEdges,
-      currentEdge,
-      autoColorLinksByNodeType,
-      getOrCreateRC
-    ]
+    [forceSettings, highlightLinks, currentEdge, autoColorLinksByNodeType, getOrCreateRC]
   )
 
   if (!nodes.length) {
@@ -539,7 +542,7 @@ const GraphViewer: React.FC<GraphViewerProps> = ({
           canvasHeight={containerSize.height}
         />
       )}
-      <ForceGraph2D
+      <ForceGraph2D<GraphNode, GraphEdge>
         ref={graphRef}
         width={containerSize.width}
         height={containerSize.height}

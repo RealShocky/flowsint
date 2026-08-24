@@ -1,4 +1,5 @@
 import { GraphNode, NodeShape } from '@/types'
+import type { GraphForceSettings } from '@/stores/graph-settings-store'
 import { CONSTANTS, GRAPH_COLORS } from '../utils/constants'
 import {
   getCachedImage,
@@ -220,7 +221,7 @@ const drawNodeLabel = (
   node: GraphNode,
   size: number,
   isHighlighted: boolean,
-  forceSettings: any,
+  forceSettings: GraphForceSettings,
   rc: RenderContext
 ) => {
   const label = truncateText(node.nodeLabel || node.id, 58)
@@ -288,7 +289,7 @@ export interface NodeRenderParams {
   node: GraphNode
   ctx: CanvasRenderingContext2D
   globalScale: number
-  forceSettings: any
+  forceSettings: GraphForceSettings
   showLabels: boolean
   showIcons: boolean
   isCurrent: (nodeId: string) => boolean
@@ -313,12 +314,16 @@ const CARD_BASE = {
   accentWidth: 1.5
 } as const
 
-const getCardScale = (node: GraphNode, forceSettings: any) => {
+const getCardScale = (node: GraphNode, forceSettings: GraphForceSettings) => {
   const size = calculateNodeSize(node, forceSettings, true, 1)
   return Math.max(0.5, size / 5)
 }
 
-const getCardDimensions = (node: GraphNode, ctx: CanvasRenderingContext2D, forceSettings: any) => {
+const getCardDimensions = (
+  node: GraphNode,
+  ctx: CanvasRenderingContext2D,
+  forceSettings: GraphForceSettings
+) => {
   const s = getCardScale(node, forceSettings)
   const label = truncateText(node.nodeLabel || node.id, 40)
   const typeText = node.nodeType || ''
@@ -671,9 +676,9 @@ const shapeEdgeDistance = (angle: number, size: number, shape: NodeShape): numbe
 }
 
 export const getNodeEdgeDistance = (
-  node: any,
+  node: GraphNode,
   angle: number,
-  forceSettings: any,
+  forceSettings: GraphForceSettings,
   ctx: CanvasRenderingContext2D,
   shouldRenderDetails: boolean
 ): number => {
@@ -700,7 +705,7 @@ export const paintNodePointerArea = (
   node: GraphNode,
   color: string,
   ctx: CanvasRenderingContext2D,
-  forceSettings: any
+  forceSettings: GraphForceSettings
 ) => {
   const isDotStyle = forceSettings?.dotStyle?.value ?? true
 
