@@ -256,6 +256,11 @@ export default function IconPicker({ iconType, open, setOpen, onIconChange }: Ic
 
   const rows = Math.ceil(filteredIcons.length / COLUMNS)
 
+  // TanStack Virtual's useVirtualizer() is a documented React Compiler
+  // incompatibility (it returns functions that can't be safely memoized) —
+  // there's no code change here that fixes it, the compiler correctly skips
+  // optimizing this component.
+  // eslint-disable-next-line react-hooks/incompatible-library
   const virtualizer = useVirtualizer({
     count: rows,
     getScrollElement: () => parentRef.current,

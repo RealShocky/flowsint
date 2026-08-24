@@ -405,7 +405,7 @@ const DetailsPanel = memo(() => {
       setFormData(newFd)
       saveState(newFd, nodeSizeRef.current)
     },
-    [saveState]
+    [saveState, setFormData]
   )
 
   const handleChange = useCallback(
@@ -415,7 +415,7 @@ const DetailsPanel = memo(() => {
       setFormData(newFd)
       saveState(newFd, nodeSizeRef.current)
     },
-    [saveState]
+    [saveState, setFormData]
   )
 
   const handlePropertyBlur = useCallback(
@@ -448,7 +448,7 @@ const DetailsPanel = memo(() => {
       setFormData(newFd)
       scheduleSave(newFd, nodeSizeRef.current)
     },
-    [scheduleSave]
+    [scheduleSave, setFormData]
   )
 
   const handleIconSelect = useCallback(
@@ -458,7 +458,7 @@ const DetailsPanel = memo(() => {
       setFormData(newFd)
       saveState(newFd, nodeSizeRef.current)
     },
-    [saveState]
+    [saveState, setFormData]
   )
 
   const copyField = (value: any): string | undefined => {

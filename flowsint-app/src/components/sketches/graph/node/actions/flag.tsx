@@ -41,7 +41,6 @@ export function NodeFlag({ sketchId, node }: { sketchId: string; node: GraphNode
     async (value: string) => {
       // Click the same color and it removes it
       const val = value === flagValue ? null : (value as flagColor)
-      node.nodeFlag = flagValue
       setFlagValue(val)
       try {
         updateNode(nodeId, { nodeFlag: val })

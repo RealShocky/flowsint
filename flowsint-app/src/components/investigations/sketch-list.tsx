@@ -33,7 +33,7 @@ const SketchList = () => {
     return investigation.sketches.filter((sketch: Sketch) =>
       sketch.title.toLowerCase().includes(query)
     )
-  }, [investigation?.sketches, searchQuery])
+  }, [investigation, searchQuery])
 
   if (error)
     return (
@@ -70,6 +70,7 @@ const SketchList = () => {
           <ul className="p-2">
             {filteredSketches.map((sketch: Sketch) => (
               <Link
+                key={sketch.id}
                 to="/dashboard/investigations/$investigationId/$type/$id"
                 params={{
                   investigationId: sketch.investigation_id,

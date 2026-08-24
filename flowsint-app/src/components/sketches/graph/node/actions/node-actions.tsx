@@ -92,7 +92,6 @@ const NodeActions = memo(
     const handleUpdateFlag = useCallback(
       async (value: FlagColor) => {
         const val = value === flagValue ? null : value
-        node.nodeFlag = flagValue
         setFlagValue(val)
         try {
           updateNode(node.id, { nodeFlag: val })
