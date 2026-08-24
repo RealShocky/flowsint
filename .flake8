@@ -1,0 +1,25 @@
+[flake8]
+# Aligned with black (line-length=88) and isort (profile=black).
+# E203/W503 conflict with black's formatting choices — standard black+flake8 pairing.
+# E501 dropped: black is the sole authority on code line length. What's left after
+# black runs is long comments/docstrings/string literals (URLs, mostly) — style
+# noise, not a correctness signal. Don't duplicate what black already enforces.
+max-line-length = 88
+extend-ignore = E203,W503,E501
+exclude =
+    .venv,
+    .git,
+    __pycache__,
+    build,
+    dist,
+    *.egg-info,
+    migrations,
+    neo4j-migrations
+
+per-file-ignores =
+    # Known debt, not a green-light: package re-exports its entire public API via
+    # wildcard imports from 11 submodules, no explicit __all__. Works today, but
+    # nothing stops two submodules from silently shadowing each other's names.
+    # Tracked for a real fix (explicit imports + __all__); not blind-fixed here
+    # because it risks breaking every downstream `from flowsint_core import X`.
+    flowsint-core/src/flowsint_core/__init__.py:F401,F403

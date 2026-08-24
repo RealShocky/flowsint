@@ -13,7 +13,8 @@ COMPOSE_PROD   := docker compose -f docker-compose.prod.yml
 	api frontend celery \
 	test install clean check-env open-browser-dev open-browser-prod \
 	logs-dev logs-prod status \
-	regenerate-router
+	regenerate-router \
+	lint lint-fix typecheck
 
 ENV_DIRS := . flowsint-api flowsint-core flowsint-app
 
@@ -141,6 +142,44 @@ test:
 	cd flowsint-core && uv run pytest
 	cd flowsint-enrichers && uv run pytest
 	cd flowsint-api && uv run pytest
+
+PY_SRC := flowsint-core/src flowsint-core/tests \
+	flowsint-api/app flowsint-api/tests \
+	flowsint-enrichers/src flowsint-enrichers/tests \
+	flowsint-types/src flowsint-types/tests
+
+# Full-repo, blocking: formatting and flake8 are 100% clean today, so any
+# regression here is new debt — no reason to let it in.
+lint:
+	uv run black --check $(PY_SRC)
+	uv run isort --check $(PY_SRC)
+	uv run flake8 $(PY_SRC)
+
+lint-fix:
+	uv run black $(PY_SRC)
+	uv run isort $(PY_SRC)
+
+# mypy has ~2200 pre-existing errors across the workspace (real, not fixed
+# blindly in one pass — see .flake8 / CI notes). Gating full-repo would be a
+# lie from day one. Ratchet instead: block only on files this branch touches,
+# so new code is held to the strict config and the backlog shrinks as files
+# get touched, without a red CI on every unrelated PR.
+BASE_REF ?= origin/main
+typecheck:
+	@changed=$$(git diff --name-only --diff-filter=ACMR $(BASE_REF)...HEAD -- '*.py' 2>/dev/null); \
+	if [ -z "$$changed" ]; then \
+		echo "No changed Python files vs $(BASE_REF) — skipping mypy."; \
+		exit 0; \
+	fi; \
+	echo "$$changed"; \
+	mypy_status=0; \
+	for pkg in flowsint-core flowsint-api flowsint-enrichers flowsint-types; do \
+		files=$$(echo "$$changed" | grep "^$$pkg/" | sed "s|^$$pkg/||"); \
+		[ -z "$$files" ] && continue; \
+		echo "== mypy: $$pkg =="; \
+		(cd $$pkg && echo "$$files" | xargs -r uv run mypy) || mypy_status=1; \
+	done; \
+	exit $$mypy_status
 
 install:
 	$(MAKE) infra-dev
