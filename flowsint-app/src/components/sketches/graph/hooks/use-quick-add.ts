@@ -2,22 +2,10 @@ import { useCallback, useEffect, useState } from 'react'
 import { useGraphStore } from '@/stores/graph-store'
 import { sketchService } from '@/api/sketch-service'
 import { type GraphNode, type NodeProperties } from '@/types/graph'
+import { type DetectionResult } from '@/types/sketch'
 import { useDebounce } from '@/hooks/use-debounce'
 import { toast } from 'sonner'
 import { v4 as uuidv4 } from 'uuid'
-
-interface DetectionResult {
-  type: string
-  key: string
-  fields: Array<{
-    name: string
-    label: string
-    description: string
-    required: boolean
-    primary: boolean
-    value: string | null
-  }>
-}
 
 interface QuickAddState {
   active: boolean

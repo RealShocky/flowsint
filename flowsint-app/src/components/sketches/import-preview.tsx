@@ -18,18 +18,15 @@ import { useActionItems } from '@/hooks/use-action-items'
 import { toast } from 'sonner'
 import { useGraphControls } from '@/stores/graph-controls-store'
 import { v4 as uuidv4 } from 'uuid'
-
-interface EntityMapping {
-  id: string
-  entity_type: string
-  include: boolean
-  nodeLabel: string
-  node_id?: string
-  data: Record<string, any>
-}
+import type {
+  EntityMapping,
+  ImportAnalysisResult,
+  ImportExecutionResult,
+  PreviewEdge
+} from '@/types'
 
 interface ImportPreviewProps {
-  analysisResult: any
+  analysisResult: ImportAnalysisResult
   sketchId: string
   onSuccess: () => void
   onCancel: () => void
@@ -180,7 +177,7 @@ const EntityRow = memo(
           <div key={field} className="px-3 py-2 border-r w-[200px] shrink-0">
             <DebouncedInput
               className="h-8 w-full text-xs"
-              value={mapping.data[field] || ''}
+              value={String(mapping.data[field] ?? '')}
               onChange={(value) => onFieldChange(mapping.id, field, value)}
               disabled={!mapping.include}
               placeholder="-"
@@ -368,14 +365,10 @@ export function ImportPreview({
     actionItems.forEach((item) => {
       if (item.children) {
         item.children.forEach((child) => {
-          fields[child.label] = child.fields
-            .filter((f: any) => f.name !== 'label')
-            .map((f: any) => f.name)
+          fields[child.label] = child.fields.filter((f) => f.name !== 'label').map((f) => f.name)
         })
       } else if (item.fields) {
-        fields[item.label] = item.fields
-          .filter((f: any) => f.name !== 'label')
-          .map((f: any) => f.name)
+        fields[item.label] = item.fields.filter((f) => f.name !== 'label').map((f) => f.name)
       }
     })
 
@@ -394,12 +387,12 @@ export function ImportPreview({
     const newMappingsById = new Map<string, EntityMapping>()
     const newMappingIdsByType: Record<string, string[]> = {}
 
-    Object.entries(analysisResult.entities).forEach(([typeName, group]: [string, any]) => {
+    Object.entries(analysisResult.entities).forEach(([typeName, group]) => {
       const typeFields = fieldsByType[typeName] || []
       const ids: string[] = []
 
-      group.results.forEach((entity: any) => {
-        const data: Record<string, any> = {}
+      group.results.forEach((entity) => {
+        const data: Record<string, unknown> = {}
         typeFields.forEach((field) => {
           data[field] = entity.obj[field] ?? ''
         })
@@ -455,14 +448,14 @@ export function ImportPreview({
   }, [])
 
   const [isImporting, setIsImporting] = useState(false)
-  const [importResult, setImportResult] = useState<any>(null)
+  const [importResult, setImportResult] = useState<ImportExecutionResult | null>(null)
 
   const entityTypes = useMemo(() => {
     if (!actionItems) return []
     const types: string[] = []
     actionItems.forEach((item) => {
       if (item.children) {
-        item.children.forEach((c: any) => c.label && types.push(c.label))
+        item.children.forEach((c) => c.label && types.push(c.label))
       } else if (item.label) {
         types.push(item.label)
       }
@@ -487,7 +480,7 @@ export function ImportPreview({
         if (!mapping || mapping.entity_type === newType) return prev
 
         const newFields = fieldsByType[newType] || []
-        const newData: Record<string, any> = {}
+        const newData: Record<string, unknown> = {}
         newFields.forEach((field) => {
           newData[field] = mapping.data[field] ?? ''
         })
@@ -725,13 +718,6 @@ export function ImportPreview({
   )
 }
 
-type PreviewEdge = {
-  from_id: string
-  to_id: string
-  from_obj: { label: string }
-  to_obj: { label: string }
-  label: string
-}
 type EdgesPanelProps = {
   edges: PreviewEdge[]
 }

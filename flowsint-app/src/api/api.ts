@@ -2,6 +2,10 @@ import { useAuthStore } from '@/stores/auth-store'
 
 const API_URL = import.meta.env.VITE_API_URL ?? ''
 
+// Return type is genuinely per-endpoint — every sketchService/flowService/...
+// caller declares its own real return type and relies on this resolving
+// structurally against it. A generic here would need an explicit type
+// argument at every call site across the whole app for no real gain.
 export async function fetchWithAuth(endpoint: string, options: RequestInit = {}): Promise<any> {
   const token = useAuthStore.getState().token
 
