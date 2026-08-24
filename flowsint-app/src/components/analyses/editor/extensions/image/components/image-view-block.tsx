@@ -68,9 +68,16 @@ export const ImageViewBlock: React.FC<NodeViewProps> = ({
 
   const aspectRatio = imageState.naturalSize.width / imageState.naturalSize.height
   const maxWidth = MAX_HEIGHT * aspectRatio
-  const containerMaxWidth = containerRef.current
-    ? parseFloat(getComputedStyle(containerRef.current).getPropertyValue('--editor-width'))
-    : Infinity
+  // Reading the DOM (getComputedStyle) during render isn't safe — measure
+  // after mount instead. containerRef.current is null on the first render,
+  // so Infinity is the correct starting value regardless.
+  const [containerMaxWidth, setContainerMaxWidth] = React.useState(Infinity)
+  React.useLayoutEffect(() => {
+    if (!containerRef.current) return
+    setContainerMaxWidth(
+      parseFloat(getComputedStyle(containerRef.current).getPropertyValue('--editor-width'))
+    )
+  })
 
   const { isLink, onView, onDownload, onCopy, onCopyLink, onRemoveImg } = useImageActions({
     editor,

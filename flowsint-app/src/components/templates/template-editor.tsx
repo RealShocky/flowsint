@@ -1,4 +1,4 @@
-import { useState, useCallback, useMemo, useEffect, useRef } from 'react'
+import { useState, useCallback, useMemo, useEffect, useLayoutEffect, useRef } from 'react'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { useNavigate } from '@tanstack/react-router'
 import { parse as parseYaml, stringify as stringifyYaml } from 'yaml'
@@ -117,7 +117,9 @@ export function TemplateEditor({ templateId, initialContent, importedYaml }: Tem
   const paramKeys = Object.keys(templateParams)
 
   const stateRef = useRef({ hasErrors, hasChanges, data: validationResult.data, content })
-  stateRef.current = { hasErrors, hasChanges, data: validationResult.data, content }
+  useLayoutEffect(() => {
+    stateRef.current = { hasErrors, hasChanges, data: validationResult.data, content }
+  })
 
   const createMutation = useMutation({
     mutationFn: (data: TemplateData) =>

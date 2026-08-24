@@ -561,6 +561,10 @@ const DetailsPanel = memo(() => {
                     canEdit ? (
                       <Switch
                         checked={value}
+                        // handlePropertyBlur reads formDataRef.current, but only ever runs
+                        // from this onCheckedChange callback (a real event handler) — never
+                        // during render. The lint rule can't see that from here.
+                        // eslint-disable-next-line react-hooks/refs
                         onCheckedChange={(checked) => handlePropertyBlur(key, checked)}
                         className="scale-75"
                       />

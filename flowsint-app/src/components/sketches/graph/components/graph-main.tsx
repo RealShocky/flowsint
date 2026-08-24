@@ -1,5 +1,12 @@
 import { useGraphStore } from '@/stores/graph-store'
-import React, { useRef, useCallback, useMemo, SetStateAction, Dispatch } from 'react'
+import React, {
+  useRef,
+  useCallback,
+  useMemo,
+  useLayoutEffect,
+  SetStateAction,
+  Dispatch
+} from 'react'
 import GraphViewer from '../index'
 import NodeContextMenu from '../context-menu/node-context-menu'
 import BackgroundContextMenu from '../context-menu/background-context-menu'
@@ -128,7 +135,9 @@ const GraphMain = () => {
 
   // Stable ref so ForceGraph2D always calls the latest version
   const bgClickRef = useRef(handleBackgroundClick)
-  bgClickRef.current = handleBackgroundClick
+  useLayoutEffect(() => {
+    bgClickRef.current = handleBackgroundClick
+  })
   const stableBackgroundClick = useCallback((event?: MouseEvent) => {
     bgClickRef.current(event)
   }, [])

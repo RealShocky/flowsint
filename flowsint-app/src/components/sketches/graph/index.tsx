@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useEffect, useState, useRef } from 'react'
+import React, { useCallback, useMemo, useEffect, useLayoutEffect, useState, useRef } from 'react'
 import { useShallow } from 'zustand/react/shallow'
 import ForceGraph2D from 'react-force-graph-2d'
 import { useGraphControls } from '@/stores/graph-controls-store'
@@ -383,16 +383,19 @@ const GraphViewer: React.FC<GraphViewerProps> = ({
 
   // Render context: created once per frame, shared across all node/link render calls.
   // Invalidated when dependencies change or when the canvas transform changes between frames.
-  const rcRef = useRef<{ rc: RenderContext | null; depsVersion: number; frameKey: string }>({
+  const rcRef = useRef<{ rc: RenderContext | null; frameKey: string }>({
     rc: null,
-    depsVersion: 0,
     frameKey: ''
   })
 
-  // Increment version whenever render context deps change to force recreation
-  const rcDepsVersion = useMemo(() => {
-    rcRef.current.depsVersion++
-    return rcRef.current.depsVersion
+  // Bumped whenever render context deps change, to force cache invalidation in
+  // getOrCreateRC below even when globalScale alone doesn't. This used to be a
+  // ref mutated straight in a useMemo body — invalid (refs can't be written
+  // during render) and only worked by accident. Real state + a layout effect
+  // gets the same "one value per deps change" behavior the correct way.
+  const [rcDepsVersion, setRcDepsVersion] = useState(0)
+  useLayoutEffect(() => {
+    setRcDepsVersion((v) => v + 1)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [highlightNodes, highlightLinks, selectedEdges, theme])
 

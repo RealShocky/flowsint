@@ -14,6 +14,7 @@ import React, {
   type ReactNode,
   useCallback,
   useContext,
+  useLayoutEffect,
   useRef,
   useState
 } from 'react'
@@ -62,12 +63,18 @@ function ConfirmDialogWithContext() {
 
   const { confirmRef } = useContext(ConfirmContext)
 
-  confirmRef.current = (dialogProps: ConfirmProps) =>
-    new Promise<boolean>((resolve) => {
-      setProps(dialogProps)
-      setOpen(true)
-      resolveRef.current = resolve
-    })
+  const confirm = useCallback(
+    (dialogProps: ConfirmProps) =>
+      new Promise<boolean>((resolve) => {
+        setProps(dialogProps)
+        setOpen(true)
+        resolveRef.current = resolve
+      }),
+    []
+  )
+  useLayoutEffect(() => {
+    confirmRef.current = confirm
+  }, [confirmRef, confirm])
 
   const onConfirm = () => {
     resolveRef.current(true)
