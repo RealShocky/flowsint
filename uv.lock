@@ -1047,6 +1047,11 @@ dependencies = [
     { name = "python-multipart" },
 ]
 
+[package.dev-dependencies]
+dev = [
+    { name = "ruff" },
+]
+
 [package.metadata]
 requires-dist = [
     { name = "docker", specifier = ">=7.1.0,<8.0.0" },
@@ -1057,6 +1062,9 @@ requires-dist = [
     { name = "pydantic", extras = ["email"], specifier = ">=2.11.7,<3.0.0" },
     { name = "python-multipart", specifier = ">=0.0.27,<0.1.0" },
 ]
+
+[package.metadata.requires-dev]
+dev = [{ name = "ruff", specifier = ">=0.16,<1.0" }]
 
 [[package]]
 name = "flowsint-api"

@@ -28,6 +28,12 @@ flowsint-types = { workspace = true }
 flowsint-enrichers = { workspace = true }
 flowsint-api = { workspace = true }
 
+# `make lint`/`lint-fix` run `uv run ruff` from the repo root (not per-package
+# like typecheck does), so ruff has to be resolvable from the root project's
+# own environment too, not just each workspace member's dev group.
+[dependency-groups]
+dev = ["ruff>=0.16,<1.0"]
+
 # Single config for the whole workspace: ruff walks up from any file being
 # linted until it finds a pyproject.toml with a [tool.ruff] table, so this
 # root section applies to all four packages — no need to duplicate it the
