@@ -3,7 +3,7 @@ import ipaddress
 import re
 import socket
 import ssl
-from typing import Any, Dict, List, Type
+from typing import Any, Dict, List, Optional, Tuple, Type, cast
 from urllib.parse import urlparse
 
 import phonenumbers
@@ -31,7 +31,7 @@ def is_valid_email(email: str) -> bool:
     return True
 
 
-def is_valid_domain(url_or_domain: str) -> str:
+def is_valid_domain(url_or_domain: str) -> bool:
 
     try:
         parsed = urlparse(
@@ -180,7 +180,7 @@ def is_valid_asn(asn: str) -> bool:
     return 0 <= asn_num <= 4294967295
 
 
-def resolve_type(details: dict, schema_context: dict = None) -> str:
+def resolve_type(details: dict, schema_context: Optional[dict] = None) -> str:
     if "anyOf" in details:
         types = []
         for option in details["anyOf"]:
@@ -199,11 +199,11 @@ def resolve_type(details: dict, schema_context: dict = None) -> str:
         if details["type"] == "array":
             item_type = resolve_type(details.get("items", {}), schema_context)
             return f"{item_type}[]"
-        return details["type"]
+        return str(details["type"])
 
     # Handle $ref in array items or other contexts
     if "$ref" in details and schema_context:
-        ref_path = details["$ref"]
+        ref_path = str(details["$ref"])
         if ref_path.startswith("#/$defs/"):
             ref_name = ref_path.split("/")[-1]
             return ref_name
@@ -244,12 +244,17 @@ def get_domain_from_ssl(ip: str, port: int = 443) -> str | None:
         with socket.create_connection((ip, port), timeout=3) as sock:
             with context.wrap_socket(sock, server_hostname=ip) as ssock:
                 cert = ssock.getpeercert()
-                subject = cert.get("subject", [])
+                if not cert:
+                    return None
+                subject = cast(
+                    Tuple[Tuple[Tuple[str, str], ...], ...],
+                    cert.get("subject", ()),
+                )
                 for entry in subject:
                     if entry[0][0] == "commonName":
                         return entry[0][1]
                 # Alternative: check subjectAltName
-                san = cert.get("subjectAltName", [])
+                san = cast(Tuple[Tuple[str, str], ...], cert.get("subjectAltName", ()))
                 for typ, val in san:
                     if typ == "DNS":
                         return val
@@ -301,7 +306,7 @@ def get_label_color(label: str) -> str:
     return color_map.get(label, color_map["default"])
 
 
-def flatten(data_dict, prefix=""):
+def flatten(data_dict: Any, prefix: str = "") -> Dict[str, Any]:
     """
     Flattens a dictionary to contain only Neo4j-compatible property values.
     Neo4j supports primitive types (string, number, boolean) and arrays of those types.
@@ -310,7 +315,7 @@ def flatten(data_dict, prefix=""):
     Returns:
         dict: Flattened dictionary with only Neo4j-compatible values
     """
-    flattened = {}
+    flattened: Dict[str, Any] = {}
     if not isinstance(data_dict, dict):
         return flattened
     for key, value in data_dict.items():
@@ -325,7 +330,9 @@ def flatten(data_dict, prefix=""):
     return flattened
 
 
-def get_inline_relationships(nodes: List[Any], edges: List[Any]) -> List[str]:
+def get_inline_relationships(
+    nodes: List[Any], edges: List[Any]
+) -> List[Dict[str, Any]]:
     """
     Get the inline relationships for a list of nodes and edges.
     """
@@ -338,7 +345,7 @@ def get_inline_relationships(nodes: List[Any], edges: List[Any]) -> List[str]:
     return relationships
 
 
-def to_json_serializable(obj):
+def to_json_serializable(obj: Any) -> Any:
     """Convert any object to a JSON-serializable format."""
     import json
 
