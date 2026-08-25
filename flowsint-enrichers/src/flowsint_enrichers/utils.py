@@ -240,6 +240,7 @@ def extract_input_schema_flow(model: Type[BaseModel]) -> Dict[str, Any]:
 def get_domain_from_ssl(ip: str, port: int = 443) -> str | None:
     try:
         context = ssl.create_default_context()
+        context.minimum_version = ssl.TLSVersion.TLSv1_2
         with socket.create_connection((ip, port), timeout=3) as sock:
             with context.wrap_socket(sock, server_hostname=ip) as ssock:
                 cert = ssock.getpeercert()
