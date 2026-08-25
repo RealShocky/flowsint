@@ -12,7 +12,7 @@ concurrency:
 
 jobs:
   python-lint:
-    name: Python lint (ruff)
+    name: Lint (ruff, prettier, eslint)
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -21,7 +21,12 @@ jobs:
       - uses: astral-sh/setup-uv@v7
         with:
           enable-cache: true
-      - name: ruff format + check — clean today, any regression is new debt
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: yarn install --frozen-lockfile
+        working-directory: flowsint-app
+      - name: ruff format + check, prettier + eslint — clean today, any regression is new debt
         run: make lint
 
   python-typecheck:
@@ -43,27 +48,6 @@ jobs:
         run: make typecheck
         env:
           BASE_REF: origin/${{ github.base_ref || 'main' }}
-
-  frontend-lint:
-    name: Frontend format & lint
-    runs-on: ubuntu-latest
-    permissions:
-      contents: read
-    defaults:
-      run:
-        working-directory: flowsint-app
-    steps:
-      - uses: actions/checkout@v6
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 22
-      - run: yarn install --frozen-lockfile
-        working-directory: .
-      - name: prettier — clean today, any regression is new debt
-        run: yarn format:check
-      - name: eslint (report) — ~300 pre-existing errors, see eslint-diff for the gate
-        run: yarn lint:check
-        continue-on-error: true
 
   frontend-typecheck:
     name: Frontend typecheck & lint (changed files only)
