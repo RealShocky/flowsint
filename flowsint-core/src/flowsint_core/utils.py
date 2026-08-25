@@ -1,9 +1,7 @@
 import inspect
 import ipaddress
 import re
-import socket
-import ssl
-from typing import Any, Dict, List, Optional, Tuple, Type, cast
+from typing import Any, Dict, List, Optional, Type
 from urllib.parse import urlparse
 
 import phonenumbers
@@ -183,32 +181,6 @@ def extract_input_schema_flow(model: Type[BaseModel]) -> Dict[str, Any]:
         "type": "type",
         "category": model.__name__,
     }
-
-
-def get_domain_from_ssl(ip: str, port: int = 443) -> str | None:
-    try:
-        context = ssl.create_default_context()
-        context.minimum_version = ssl.TLSVersion.TLSv1_2
-        with socket.create_connection((ip, port), timeout=3) as sock:
-            with context.wrap_socket(sock, server_hostname=ip) as ssock:
-                cert = ssock.getpeercert()
-                if not cert:
-                    return None
-                subject = cast(
-                    Tuple[Tuple[Tuple[str, str], ...], ...],
-                    cert.get("subject", ()),
-                )
-                for entry in subject:
-                    if entry[0][0] == "commonName":
-                        return entry[0][1]
-                # Alternative: check subjectAltName
-                san = cast(Tuple[Tuple[str, str], ...], cert.get("subjectAltName", ()))
-                for typ, val in san:
-                    if typ == "DNS":
-                        return val
-    except Exception as e:
-        print(f"SSL extraction failed for {ip}: {e}")
-    return None
 
 
 def extract_enricher(enricher: Dict[str, Any]) -> Dict[str, Any]:
