@@ -1,7 +1,7 @@
 import { useState, useCallback } from 'react'
 import { v4 as uuidv4 } from 'uuid'
 import { Button } from '@/components/ui/button'
-import { ArrowLeft, ArrowRight, Download, Upload } from 'lucide-react'
+import { ArrowLeft, ArrowRight, Download } from 'lucide-react'
 import { toast } from 'sonner'
 import { cn, flattenObj } from '@/lib/utils'
 import { Dialog, DialogContent, DialogDescription, DialogTitle } from '@/components/ui/dialog'
@@ -325,7 +325,7 @@ function ActionCard({ item, onSelect }: ActionCardProps) {
     >
       <CardContent className="p-2 relative flex flex-col items-center text-center h-full">
         <div className="w-8 h-8 rounded-full flex items-center justify-center mb-3 mt-2">
-          <IconComponent />
+          {IconComponent({})}
         </div>
         <div className="font-medium text-sm">{item.label}</div>
         {!item.children && <div className="text-sm mt-2 opacity-60">{item.description}</div>}

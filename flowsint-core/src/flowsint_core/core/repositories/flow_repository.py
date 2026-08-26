@@ -1,6 +1,6 @@
 """Repository for Flow model."""
+
 from typing import List, Optional
-from uuid import UUID
 
 from ..models import Flow
 from .base import BaseRepository

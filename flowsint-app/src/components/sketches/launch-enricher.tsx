@@ -26,7 +26,17 @@ import { Search, FileCode2, Zap, PlusIcon, GitBranch, FileX, Sparkles } from 'lu
 import { Enricher, Flow } from '@/types'
 
 const LaunchEnricherOrFlowPanel = memo(
-  ({ values, type, children, disabled }: { values: string[]; type: string; children?: React.ReactNode, disabled?: boolean }) => {
+  ({
+    values,
+    type,
+    children,
+    disabled
+  }: {
+    values: string[]
+    type: string
+    children?: React.ReactNode
+    disabled?: boolean
+  }) => {
     const { launchEnricher } = useLaunchEnricher()
     const { launchFlow } = useLaunchFlow()
     const { id: sketch_id } = useParams({ strict: false })
@@ -84,11 +94,17 @@ const LaunchEnricherOrFlowPanel = memo(
         }
         handleCloseModal()
       }
-    }, [selectedEnricher, activeTab, launchEnricher, launchFlow, values, sketch_id])
+    }, [
+      selectedEnricher,
+      activeTab,
+      launchEnricher,
+      launchFlow,
+      values,
+      sketch_id,
+      handleCloseModal
+    ])
 
-    if (disabled) return (
-      <>{children}</>
-    )
+    if (disabled) return <>{children}</>
     return (
       <div>
         <Sheet open={isOpen} onOpenChange={setIsOpen}>
@@ -179,12 +195,13 @@ const LaunchEnricherOrFlowPanel = memo(
                       filteredEnrichers.map((enricher: Enricher) => (
                         <Card
                           key={enricher.name}
-                          className={`cursor-pointer border py-1 transition-all ${selectedEnricher &&
+                          className={`cursor-pointer border py-1 transition-all ${
+                            selectedEnricher &&
                             'name' in selectedEnricher &&
                             selectedEnricher.name === enricher.name
-                            ? 'border-primary bg-primary/5'
-                            : 'hover:border-primary/50'
-                            }`}
+                              ? 'border-primary bg-primary/5'
+                              : 'hover:border-primary/50'
+                          }`}
                           onClick={() => handleSelectEnricher(enricher)}
                         >
                           <CardHeader className="p-4">
@@ -216,9 +233,7 @@ const LaunchEnricherOrFlowPanel = memo(
                         </div>
                         <div className="space-y-2">
                           <h3 className="text-lg font-semibold">
-                            {enrichersSearchQuery
-                              ? 'No enrichers found'
-                              : 'No enrichers available'}
+                            {enrichersSearchQuery ? 'No enrichers found' : 'No enrichers available'}
                           </h3>
                           <p className="text-sm text-muted-foreground max-w-sm mx-auto">
                             {enrichersSearchQuery
@@ -258,9 +273,7 @@ const LaunchEnricherOrFlowPanel = memo(
                 <div className="p-4 grow overflow-auto">
                   <RadioGroup
                     value={
-                      selectedEnricher && 'id' in selectedEnricher
-                        ? selectedEnricher.id
-                        : undefined
+                      selectedEnricher && 'id' in selectedEnricher ? selectedEnricher.id : undefined
                     }
                     className="space-y-3"
                   >
@@ -290,12 +303,13 @@ const LaunchEnricherOrFlowPanel = memo(
                       filteredFlows.map((flow: Flow) => (
                         <Card
                           key={flow.id}
-                          className={`cursor-pointer border py-1 transition-all ${selectedEnricher &&
+                          className={`cursor-pointer border py-1 transition-all ${
+                            selectedEnricher &&
                             'id' in selectedEnricher &&
                             selectedEnricher.id === flow.id
-                            ? 'border-primary bg-primary/5'
-                            : 'hover:border-primary/50'
-                            }`}
+                              ? 'border-primary bg-primary/5'
+                              : 'hover:border-primary/50'
+                          }`}
                           onClick={() => handleSelectEnricher(flow)}
                         >
                           <CardHeader className="p-4">

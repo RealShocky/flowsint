@@ -3,10 +3,10 @@ import uuid
 from typing import List, Optional
 
 from celery import states
-from flowsint_enrichers import ENRICHER_REGISTRY, load_all_enrichers
 from sqlalchemy.orm import Session
 
 from flowsint_core.utils import to_json_serializable
+from flowsint_enrichers import ENRICHER_REGISTRY, load_all_enrichers
 
 from ..core.celery import celery
 from ..core.enums import EventLevel
@@ -119,15 +119,11 @@ def run_template_enricher(
         try:
             vault = create_vault_service(session).for_user(uuid.UUID(owner_id))
         except Exception as e:
-            Logger.error(
-                sketch_id, {"message": f"Failed to create vault: {str(e)}"}
-            )
+            Logger.error(sketch_id, {"message": f"Failed to create vault: {str(e)}"})
 
         # Load template from database
         template_service = create_enricher_template_service(session)
-        db_template = template_service.find_by_name(
-            template_name, uuid.UUID(owner_id)
-        )
+        db_template = template_service.find_by_name(template_name, uuid.UUID(owner_id))
         if not db_template:
             raise ValueError(
                 f"Template '{template_name}' not found for user {owner_id}"
@@ -155,11 +151,7 @@ def run_template_enricher(
         error_logs = f"An error occurred: {str(ex)}"
         print(f"Error in template task: {error_logs}")
 
-        scan = (
-            session.query(Scan)
-            .filter(Scan.id == uuid.UUID(self.request.id))
-            .first()
-        )
+        scan = session.query(Scan).filter(Scan.id == uuid.UUID(self.request.id)).first()
         if scan:
             scan.status = EventLevel.FAILED
             scan.error = error_logs

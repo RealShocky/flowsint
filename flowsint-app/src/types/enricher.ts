@@ -49,33 +49,6 @@ export interface EnricherNodeData extends Enricher, Record<string, unknown> {
 // DATA STRUCTURES
 // ================================
 
-export interface ScansData {
-  [category: string]: Enricher[]
-}
-
-export interface EnricherData {
-  items: ScansData
-}
-
-// ================================
-// COMPONENT PROPS INTERFACES
-// ================================
-
-export interface EnricherItemProps {
-  enricher: Enricher
-  category: string
-}
-
-export interface EnricherNodeProps {
-  data: EnricherNodeData
-  isConnectable?: boolean
-  selected?: boolean
-}
-
-// ================================
-// ENRICHER DATA STRUCTURES
-// ================================
-
 export interface EnrichersData {
   [category: string]: Enricher[]
 }
@@ -91,4 +64,10 @@ export interface EnricherData {
 export interface EnricherItemProps {
   enricher: Enricher
   category: string
+}
+
+export interface EnricherNodeProps {
+  data: EnricherNodeData
+  isConnectable?: boolean
+  selected?: boolean
 }

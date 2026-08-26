@@ -2,11 +2,12 @@ import json
 import subprocess
 from pathlib import Path
 from typing import List
+
 from flowsint_core.core.enricher_base import Enricher
+from flowsint_core.core.logger import Logger
 from flowsint_enrichers.registry import flowsint_enricher
 from flowsint_types import Username
 from flowsint_types.social_account import SocialAccount
-from flowsint_core.core.logger import Logger
 
 false_positives = ["LeagueOfLegends"]
 
@@ -47,7 +48,9 @@ class MaigretEnricher(Enricher):
             )
         return output_file
 
-    def parse_maigret_output(self, username_obj: Username, output_file: Path) -> List[SocialAccount]:
+    def parse_maigret_output(
+        self, username_obj: Username, output_file: Path
+    ) -> List[SocialAccount]:
         results: List[SocialAccount] = []
         if not output_file.exists():
             return results
@@ -58,7 +61,9 @@ class MaigretEnricher(Enricher):
         except Exception as e:
             Logger.error(
                 self.sketch_id,
-                {"message": f"Failed to load output file for {username_obj.value}: {e}"},
+                {
+                    "message": f"Failed to load output file for {username_obj.value}: {e}"
+                },
             )
             return results
 
@@ -111,7 +116,9 @@ class MaigretEnricher(Enricher):
             except Exception as e:
                 Logger.error(
                     self.sketch_id,
-                    {"message": f"Failed to create SocialAccount for {username_obj.value} on {platform}: {e}"},
+                    {
+                        "message": f"Failed to create SocialAccount for {username_obj.value} on {platform}: {e}"
+                    },
                 )
                 continue
 
@@ -134,7 +141,9 @@ class MaigretEnricher(Enricher):
                 continue
         return results
 
-    def postprocess(self, results: List[OutputType], original_input: List[InputType]) -> List[OutputType]:
+    def postprocess(
+        self, results: List[OutputType], original_input: List[InputType]
+    ) -> List[OutputType]:
         if not self._graph_service:
             return results
 
@@ -145,14 +154,18 @@ class MaigretEnricher(Enricher):
                 # Create social profile node
                 self.create_node(profile)
                 # Create relationship
-                self.create_relationship(profile.username, profile, "HAS_SOCIAL_ACCOUNT")
+                self.create_relationship(
+                    profile.username, profile, "HAS_SOCIAL_ACCOUNT"
+                )
                 self.log_graph_message(
                     f"{profile.username.value} -> account found on {profile.platform}"
                 )
             except Exception as e:
                 Logger.error(
                     self.sketch_id,
-                    {"message": f"Failed to create graph nodes for {profile.username.value} on {profile.platform}: {e}"},
+                    {
+                        "message": f"Failed to create graph nodes for {profile.username.value} on {profile.platform}: {e}"
+                    },
                 )
                 continue
         return results

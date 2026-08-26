@@ -1,12 +1,19 @@
 import { useGraphStore } from '@/stores/graph-store'
-import React, { useRef, useCallback, useMemo, SetStateAction, Dispatch } from 'react'
+import React, {
+  useRef,
+  useCallback,
+  useMemo,
+  useLayoutEffect,
+  SetStateAction,
+  Dispatch
+} from 'react'
 import GraphViewer from '../index'
 import NodeContextMenu from '../context-menu/node-context-menu'
 import BackgroundContextMenu from '../context-menu/background-context-menu'
 import EdgeContextMenu from '../context-menu/edge-context-menu'
 import { PathPanel } from '../actions/path-finder'
 import { useParams } from '@tanstack/react-router'
-import { type GraphNode, GraphEdge } from '@/types'
+import { type GraphNode, GraphEdge, type GraphViewerRef } from '@/types'
 import { useLinkCreation } from '../hooks/use-link-creation'
 import { useQuickAdd } from '../hooks/use-quick-add'
 import { QuickAddOverlay } from './quick-add-overlay'
@@ -51,7 +58,7 @@ const GraphMain = () => {
   const selectedNodes = useGraphStore((s) => s.selectedNodes)
   const selectedEdges = useGraphStore((s) => s.selectedEdges)
 
-  const graphRef = useRef<any>(null)
+  const graphRef = useRef<GraphViewerRef>(undefined)
   const containerRef = useRef<HTMLDivElement>(null)
   const [nodeMenu, setNodeMenu] = React.useState<NodeContextMenuProps | null>(null)
   const [edgeMenu, setEdgeMenu] = React.useState<EdgeContextMenuProps | null>(null)
@@ -71,7 +78,7 @@ const GraphMain = () => {
     useQuickAdd(sketchId)
 
   const handleNodeClick = useCallback(
-    (node: any, event: MouseEvent) => {
+    (node: GraphNode, event: MouseEvent) => {
       const isMultiSelect = event.ctrlKey || event.shiftKey
       if (isMultiSelect) {
         toggleNodeSelection(node, true)
@@ -114,18 +121,29 @@ const GraphMain = () => {
       setEdgeMenu(null)
       setBackgroundMenu(null)
     },
-    [openQuickAdd, linkCreation.mode, cancelLinkCreation, setCurrentNodeId, clearSelectedNodes, clearSelectedEdges, setCurrentEdgeId]
+    [
+      openQuickAdd,
+      linkCreation.mode,
+      cancelLinkCreation,
+      setCurrentNodeId,
+      clearSelectedNodes,
+      clearSelectedEdges,
+      setCurrentEdgeId,
+      canCreate
+    ]
   )
 
   // Stable ref so ForceGraph2D always calls the latest version
   const bgClickRef = useRef(handleBackgroundClick)
-  bgClickRef.current = handleBackgroundClick
+  useLayoutEffect(() => {
+    bgClickRef.current = handleBackgroundClick
+  })
   const stableBackgroundClick = useCallback((event?: MouseEvent) => {
     bgClickRef.current(event)
   }, [])
 
   const onNodeContextMenu = useCallback(
-    (node: any, event: MouseEvent) => {
+    (node: GraphNode, event: MouseEvent) => {
       if (!containerRef.current || !node) return
 
       const pane = containerRef.current.getBoundingClientRect()
@@ -155,11 +173,11 @@ const GraphMain = () => {
         onClick: stableBackgroundClick
       })
     },
-    [selectedNodes]
+    [selectedNodes, stableBackgroundClick]
   )
 
   const onEdgeContextMenu = useCallback(
-    (edge: any, event: MouseEvent) => {
+    (edge: GraphEdge, event: MouseEvent) => {
       if (!containerRef.current || !edge) return
 
       const pane = containerRef.current.getBoundingClientRect()
@@ -190,25 +208,28 @@ const GraphMain = () => {
       setNodeMenu(null)
       setBackgroundMenu(null)
     },
-    [selectedEdges, handleBackgroundClick]
+    [selectedEdges, stableBackgroundClick]
   )
 
-  const onBackgroundContextMenu = useCallback((event: MouseEvent) => {
-    if (!containerRef.current) return
-    const pane = containerRef.current.getBoundingClientRect()
-    const relativeX = event.clientX - pane.left
-    const relativeY = event.clientY - pane.top
+  const onBackgroundContextMenu = useCallback(
+    (event: MouseEvent) => {
+      if (!containerRef.current) return
+      const pane = containerRef.current.getBoundingClientRect()
+      const relativeX = event.clientX - pane.left
+      const relativeY = event.clientY - pane.top
 
-    setBackgroundMenu({
-      nodes: selectedNodes,
-      rawTop: relativeY,
-      rawLeft: relativeX,
-      wrapperWidth: pane.width,
-      wrapperHeight: pane.height,
-      setMenu: setBackgroundMenu,
-      onClick: stableBackgroundClick
-    })
-  }, [])
+      setBackgroundMenu({
+        nodes: selectedNodes,
+        rawTop: relativeY,
+        rawLeft: relativeX,
+        wrapperWidth: pane.width,
+        wrapperHeight: pane.height,
+        setMenu: setBackgroundMenu,
+        onClick: stableBackgroundClick
+      })
+    },
+    [selectedNodes, stableBackgroundClick]
+  )
 
   // On link creation complete: create edge in store, then open edge context menu
   const handleCompleteLinking = useCallback(
@@ -230,21 +251,31 @@ const GraphMain = () => {
         onDismissNew: dismissNewEdge
       })
     },
-    [completeLinking, handleBackgroundClick, submitNewEdge, dismissNewEdge]
+    [completeLinking, stableBackgroundClick, submitNewEdge, dismissNewEdge]
   )
 
   const linkCreationProp = useMemo(
-    () => canCreate ? ({
+    () =>
+      canCreate
+        ? {
+            shiftHeld,
+            sourceNode: linkCreation.sourceNode,
+            onStartLinking: startLinking,
+            onCompleteLinking: handleCompleteLinking,
+            onCancel: cancelLinkCreation
+          }
+        : undefined,
+    [
+      canCreate,
       shiftHeld,
-      sourceNode: linkCreation.sourceNode,
-      onStartLinking: startLinking,
-      onCompleteLinking: handleCompleteLinking,
-      onCancel: cancelLinkCreation
-    }) : undefined,
-    [canCreate, shiftHeld, linkCreation.sourceNode, startLinking, handleCompleteLinking, cancelLinkCreation]
+      linkCreation.sourceNode,
+      startLinking,
+      handleCompleteLinking,
+      cancelLinkCreation
+    ]
   )
 
-  const handleGraphRef = useCallback((ref: any) => {
+  const handleGraphRef = useCallback((ref: GraphViewerRef) => {
     graphRef.current = ref
   }, [])
 

@@ -2,6 +2,11 @@ from typing import Any, Dict, List, Optional
 from uuid import UUID
 
 from fastapi import APIRouter, Depends, HTTPException, Query, status
+from pydantic import BaseModel
+from sqlalchemy.orm import Session
+
+from app.api.deps import get_current_user
+from app.api.schemas.flow import FlowCreate, FlowRead, FlowUpdate
 from flowsint_core.core.celery import celery
 from flowsint_core.core.graph import create_graph_service
 from flowsint_core.core.models import Profile
@@ -36,11 +41,6 @@ from flowsint_types import (
     Username,
     Website,
 )
-from pydantic import BaseModel
-from sqlalchemy.orm import Session
-
-from app.api.deps import get_current_user
-from app.api.schemas.flow import FlowCreate, FlowRead, FlowUpdate
 
 load_all_enrichers()
 

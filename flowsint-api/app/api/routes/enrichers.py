@@ -1,6 +1,10 @@
 from typing import List, Optional
 
 from fastapi import APIRouter, Depends, HTTPException, Query
+from pydantic import BaseModel
+from sqlalchemy.orm import Session
+
+from app.api.deps import get_current_user
 from flowsint_core.core.celery import celery
 from flowsint_core.core.graph import create_graph_service
 from flowsint_core.core.models import Profile
@@ -9,12 +13,10 @@ from flowsint_core.core.services import (
     create_enricher_service,
     create_enricher_template_service,
 )
-from flowsint_core.core.services.type_registry_service import create_type_registry_service
+from flowsint_core.core.services.type_registry_service import (
+    create_type_registry_service,
+)
 from flowsint_enrichers import ENRICHER_REGISTRY, load_all_enrichers
-from pydantic import BaseModel
-from sqlalchemy.orm import Session
-
-from app.api.deps import get_current_user
 
 load_all_enrichers()
 
@@ -51,7 +53,9 @@ async def launch_enricher(
         # Retrieve nodes from Neo4J by their element IDs
         type_registry = create_type_registry_service(db)
         resolver = type_registry.build_type_resolver(current_user.id)
-        graph_service = create_graph_service(sketch_id=payload.sketch_id, type_resolver=resolver)
+        graph_service = create_graph_service(
+            sketch_id=payload.sketch_id, type_resolver=resolver
+        )
         entities = graph_service.get_nodes_by_ids_for_task(payload.node_ids)
 
         # Send deserialized nodes

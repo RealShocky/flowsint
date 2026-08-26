@@ -1,7 +1,7 @@
 import { useFlowStore } from '@/stores/flow-store'
 import { DialogHeader, DialogFooter, Dialog, DialogContent, DialogTitle } from '../ui/dialog'
 import { Button } from '../ui/button'
-import { useCallback, useState, useEffect } from 'react'
+import { useCallback, useState } from 'react'
 import { EnricherParamSchemaItem } from '@/types'
 import { Label } from '../ui/label'
 import { Input } from '../ui/input'
@@ -26,15 +26,18 @@ const ParamsDialog = () => {
     priority: 'medium'
   })
 
-  // Initialize params and settings when selectedNode changes
-  useEffect(() => {
+  // Initialize params and settings when selectedNode changes — adjusted
+  // during render rather than in an effect.
+  const [prevSelectedNode, setPrevSelectedNode] = useState(selectedNode)
+  if (selectedNode !== prevSelectedNode) {
+    setPrevSelectedNode(selectedNode)
     if (selectedNode?.data.params) {
       setParams(selectedNode.data.params)
     }
     if (selectedNode?.data.settings) {
-      setSettings({ ...settings, ...selectedNode.data.settings })
+      setSettings((prev) => ({ ...prev, ...selectedNode.data.settings }))
     }
-  }, [selectedNode])
+  }
 
   // Fetch keys to convert between IDs and Key objects
   const { data: keys = [] } = useQuery<Key[]>({
